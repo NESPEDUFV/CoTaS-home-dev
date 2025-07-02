@@ -218,17 +218,16 @@ int main(int argc, char* argv[])
     tomadaDev = wifi.Install(phy, mac, tomadaNodes);
     interruptorDev = wifi.Install(phy, mac, interruptorNodes);
     CoTDisDev = wifi.Install(phy, mac, CoTDisNode);
-    ApplicationsDev = wifi.Install(phy, mac, CoTDisNode);
+    ApplicationsDev = wifi.Install(phy, mac, ApplicationsNodes);
 
     NetDeviceContainer apDevices;
     mac.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid));
     apDevices = wifi.Install(phy, mac, roteadorNodes.Get(0));
     
 //  ----- Configura outro numero de canal para não dar interferencia ----
-
     phy.Set("ChannelSettings", StringValue("{6, 20, BAND_2_4GHZ, 0}"));
     apDevices.Add(wifi.Install(phy, mac, roteadorNodes.Get(1)));
-
+    
     phy.Set("ChannelSettings", StringValue("{11, 20, BAND_2_4GHZ, 0}"));
     apDevices.Add(wifi.Install(phy, mac, roteadorNodes.Get(2)));
     
@@ -563,7 +562,7 @@ int main(int argc, char* argv[])
     position = roteadorNodes.Get(1)->GetObject<MobilityModel>(); // 101
     position->SetPosition(Vector(4, 5.3, 0.0)); // roteador 2
     
-    position = roteadorNodes.Get(1)->GetObject<MobilityModel>(); // 102
+    position = roteadorNodes.Get(2)->GetObject<MobilityModel>(); // 102
     position->SetPosition(Vector(12, 5.3, 0.0)); // roteador 3
     
 // --------------------------- Aplicações ---------------------------
@@ -659,6 +658,11 @@ int main(int argc, char* argv[])
     Ipv4InterfaceContainer csmaInterfaces = ipv4.Assign(csmaDevices);
     Ipv4InterfaceContainer AppInterfaces = ipv4.Assign(ApplicationsDev);
     
+    for (uint32_t i = 0; i < roteadorNodes.GetN(); ++i)
+    {
+        Ptr<Ipv4> ipv4 = roteadorNodes.Get(i)->GetObject<Ipv4>();
+        ipv4->SetAttribute("IpForward", BooleanValue(true));
+    }
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     // -------------------------- CoTaS APP ---------------------------------
