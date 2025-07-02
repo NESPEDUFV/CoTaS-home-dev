@@ -181,10 +181,9 @@ class ContextConsumer : public SourceApplication
     Ptr<Socket> m_socket;               //!< Socket
     std::optional<uint16_t> m_peerPort; //!< Remote peer port (deprecated) // NS_DEPRECATED_3_44
     EventId m_sendEvent;                //!< Event to send the next packet
-    uint32_t m_objectType;
+    uint32_t m_applicationType;
     uint32_t m_objectId;
-    nlohmann::json m_firstData;
-    nlohmann::json m_updateData;
+    nlohmann::json m_reqData;
     nlohmann::json m_messages;
 
     /// Callbacks for tracing the packet Tx events

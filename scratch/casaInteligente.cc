@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 // ----------------- Configura logs do terminal -------------------------
 
     LogComponentEnable("CoDServiceApplication", LOG_LEVEL_INFO); 
-    LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
+    //LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
@@ -126,6 +126,9 @@ int main(int argc, char* argv[])
     NodeContainer CoTDisNode;
     CoTDisNode.Create(1);
 
+    NodeContainer ApplicationsNodes;
+    ApplicationsNodes.Create(16);
+
 
 // ------------------------ Agrupa todos os nós -------------------------
 
@@ -139,7 +142,8 @@ int main(int argc, char* argv[])
         janelaCortinaNodes, lampadaNodes, lavaLouçasNode, 
         panelaNode, portaNodes, relogioNode, 
         RAPNode, jardimNode, SFumaca, tomadaNodes, 
-        interruptorNodes, roteadorNodes, CoTDisNode
+        interruptorNodes, roteadorNodes, CoTDisNode,
+        ApplicationsNodes
     ); //PisoNodes,
 
 // -------------- Configura pilha de protocolos da internet -------------
@@ -177,7 +181,7 @@ int main(int argc, char* argv[])
     gotejadorDev, janelaCortinaDev, lampadaDev, 
     lavaLouçasDev, panelaDev, portaDev, relogioDev, 
     RAPDev, jardimDev, SFumacaDev, tomadaDev, interruptorDev,
-    CoTDisDev;
+    CoTDisDev, ApplicationsDev;
 
     mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), 
                 "ActiveProbing", BooleanValue(false));
@@ -214,6 +218,7 @@ int main(int argc, char* argv[])
     tomadaDev = wifi.Install(phy, mac, tomadaNodes);
     interruptorDev = wifi.Install(phy, mac, interruptorNodes);
     CoTDisDev = wifi.Install(phy, mac, CoTDisNode);
+    ApplicationsDev = wifi.Install(phy, mac, CoTDisNode);
 
     NetDeviceContainer apDevices;
     mac.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid));
@@ -566,6 +571,54 @@ int main(int argc, char* argv[])
     position = CoTDisNode.Get(0)->GetObject<MobilityModel>(); // 99
     position->SetPosition(Vector(8, 5.5, 0.0)); // aplicação
 
+    position = ApplicationsNodes.Get(0)->GetObject<MobilityModel>(); // 103 ?????????
+    position->SetPosition(Vector(9, 4.0, 0.0)); // aplicação "fallDetection"
+
+    position = ApplicationsNodes.Get(1)->GetObject<MobilityModel>(); // 104
+    position->SetPosition(Vector(9, 4.2, 0.0)); // aplicação "microControl"
+
+    position = ApplicationsNodes.Get(2)->GetObject<MobilityModel>(); // 105
+    position->SetPosition(Vector(9, 4.4, 0.0)); // aplicação "petCare"
+
+    position = ApplicationsNodes.Get(3)->GetObject<MobilityModel>(); // 106
+    position->SetPosition(Vector(9, 4.6, 0.0)); // aplicação "energyManegement"
+
+    position = ApplicationsNodes.Get(4)->GetObject<MobilityModel>(); // 107
+    position->SetPosition(Vector(9, 4.8, 0.0)); // aplicação "waterManegement"
+
+    position = ApplicationsNodes.Get(5)->GetObject<MobilityModel>(); // 108
+    position->SetPosition(Vector(10, 4, 0.0)); // aplicação "security"
+
+    position = ApplicationsNodes.Get(6)->GetObject<MobilityModel>(); // 109
+    position->SetPosition(Vector(10, 4.2, 0.0)); // aplicação "localization"
+
+    position = ApplicationsNodes.Get(7)->GetObject<MobilityModel>(); // 110
+    position->SetPosition(Vector(10, 4.4, 0.0)); // aplicação "gasSec"
+
+    position = ApplicationsNodes.Get(8)->GetObject<MobilityModel>(); // 11
+    position->SetPosition(Vector(10, 4.6, 0.0)); // aplicação "healthCare"
+
+    position = ApplicationsNodes.Get(9)->GetObject<MobilityModel>(); // 112
+    position->SetPosition(Vector(10, 4.8, 0.0)); // aplicação "lightControl"
+
+    position = ApplicationsNodes.Get(10)->GetObject<MobilityModel>(); // 113
+    position->SetPosition(Vector(10, 3, 0.0)); // aplicação "tempControl"
+
+    position = ApplicationsNodes.Get(11)->GetObject<MobilityModel>(); // 114
+    position->SetPosition(Vector(10, 3.2, 0.0)); // aplicação "smartCleaning"
+
+    position = ApplicationsNodes.Get(12)->GetObject<MobilityModel>(); // 115
+    position->SetPosition(Vector(10, 3.4, 0.0)); // aplicação "garden"
+
+    position = ApplicationsNodes.Get(13)->GetObject<MobilityModel>(); // 116
+    position->SetPosition(Vector(10, 3.6, 0.0)); // aplicação "mobility"
+
+    position = ApplicationsNodes.Get(14)->GetObject<MobilityModel>(); // 117
+    position->SetPosition(Vector(10, 3.8, 0.0)); // aplicação "Smart cooking"
+
+    position = ApplicationsNodes.Get(15)->GetObject<MobilityModel>(); // 118
+    position->SetPosition(Vector(9, 3, 0.0)); // aplicação "inventoryManagement"
+
 // ------------------------ Atribuir endereços IP -------------------
 
     Ipv4AddressHelper ipv4;
@@ -604,14 +657,18 @@ int main(int argc, char* argv[])
     Ipv4InterfaceContainer CoTDisInterface = ipv4.Assign(CoTDisDev);
     Ipv4InterfaceContainer apInterfaces = ipv4.Assign(apDevices);
     Ipv4InterfaceContainer csmaInterfaces = ipv4.Assign(csmaDevices);
+    Ipv4InterfaceContainer AppInterfaces = ipv4.Assign(ApplicationsDev);
     
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
+    // -------------------------- CoTaS APP ---------------------------------
     CoDServiceHelper Service(9);
 
     ApplicationContainer serverApp = Service.Install(CoTDisNode.Get(0));
     serverApp.Start(Seconds(1));
     serverApp.Stop(Seconds(20));
+
+    // ------------------------- Clientes provedores -----------------------
 
     ContextProviderHelper ClientProvider(CoTDisInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(6));
@@ -807,6 +864,109 @@ int main(int argc, char* argv[])
 
     tomadaApp.Start(Seconds(10));
     tomadaApp.Stop(Seconds(20));
+
+    // -------------------------- Clientes consumidores ----------------
+    
+    ContextConsumerHelper ClientConsumer(CoTDisInterface.GetAddress(0), 9);
+    ClientConsumer.SetAttribute("MaxPackets", UintegerValue(6));
+    ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(500)));
+    ClientConsumer.SetAttribute("PacketSize", UintegerValue(1024));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(0));
+    ApplicationContainer FallDetection = ClientConsumer.Install(ApplicationsNodes.Get(0));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(1));
+    ApplicationContainer MicroControl = ClientConsumer.Install(ApplicationsNodes.Get(1));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(2));
+    ApplicationContainer PetCare = ClientConsumer.Install(ApplicationsNodes.Get(2));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(3));
+    ApplicationContainer EnergyManegement = ClientConsumer.Install(ApplicationsNodes.Get(3));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(4));
+    ApplicationContainer WaterManegement = ClientConsumer.Install(ApplicationsNodes.Get(4));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(5));
+    ApplicationContainer Security = ClientConsumer.Install(ApplicationsNodes.Get(5));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(6));
+    ApplicationContainer Localization = ClientConsumer.Install(ApplicationsNodes.Get(6));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(7));
+    ApplicationContainer GasSec = ClientConsumer.Install(ApplicationsNodes.Get(7));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(8));
+    ApplicationContainer HealthCare = ClientConsumer.Install(ApplicationsNodes.Get(8));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(9));
+    ApplicationContainer LightControl = ClientConsumer.Install(ApplicationsNodes.Get(9));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(10));
+    ApplicationContainer TempControl = ClientConsumer.Install(ApplicationsNodes.Get(10));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(11));
+    ApplicationContainer SmartCleaning = ClientConsumer.Install(ApplicationsNodes.Get(11));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(12));
+    ApplicationContainer Garden = ClientConsumer.Install(ApplicationsNodes.Get(12));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(13));
+    ApplicationContainer SmartMobility = ClientConsumer.Install(ApplicationsNodes.Get(13));
+
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(14));
+    ApplicationContainer SmartCooking = ClientConsumer.Install(ApplicationsNodes.Get(14));
+    
+    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(15));
+    ApplicationContainer InventoryManagement = ClientConsumer.Install(ApplicationsNodes.Get(15));
+
+    FallDetection.Start(Seconds(12));
+    FallDetection.Stop(Seconds(20));
+
+    MicroControl.Start(Seconds(12));
+    MicroControl.Stop(Seconds(20));
+
+    PetCare.Start(Seconds(12));
+    PetCare.Stop(Seconds(20));
+
+    EnergyManegement.Start(Seconds(12));
+    EnergyManegement.Stop(Seconds(20));
+
+    WaterManegement.Start(Seconds(12));
+    WaterManegement.Stop(Seconds(20));
+
+    Security.Start(Seconds(12));
+    Security.Stop(Seconds(20));
+
+    Localization.Start(Seconds(12));
+    Localization.Stop(Seconds(20));
+
+    GasSec.Start(Seconds(12));
+    GasSec.Stop(Seconds(20));
+
+    HealthCare.Start(Seconds(12));
+    HealthCare.Stop(Seconds(20));
+
+    LightControl.Start(Seconds(12));
+    LightControl.Stop(Seconds(20));
+
+    TempControl.Start(Seconds(12));
+    TempControl.Stop(Seconds(20));
+
+    SmartCleaning.Start(Seconds(12));
+    SmartCleaning.Stop(Seconds(20));
+
+    Garden.Start(Seconds(12));
+    Garden.Stop(Seconds(20));
+
+    SmartMobility.Start(Seconds(12));
+    SmartMobility.Stop(Seconds(20));
+
+    SmartCooking.Start(Seconds(12));
+    SmartCooking.Stop(Seconds(20));
+
+    InventoryManagement.Start(Seconds(12));
+    InventoryManagement.Stop(Seconds(20));
 
     
     Simulator::Stop(Seconds(21.0));

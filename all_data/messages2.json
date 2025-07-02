@@ -2588,67 +2588,83 @@
   ],
   "requestMessages": [
     {
-      "req": "fallDetection",
+      "req": "getContext",
+      "type": "fallDetection",
       "info": "Deteccao de quedas"
     },
     {
-      "req": "microControl",
+      "req": "getContext",
+      "type": "microControl",
       "info": "Controle de microprocessadores"
     },
     {
-      "req": "petCare",
+      "req": "getContext",
+      "type": "petCare",
       "info": "Cuidados com animais de estimacao"
     },
     {
-      "req": "energyManegement",
+      "req": "getContext",
+      "type": "energyManegement",
       "info": "Gerenciamento de gasto de energia"
     },
     {
-      "req": "waterManegement",
+      "req": "getContext",
+      "type": "waterManegement",
       "info": "Gerenciamento de gasto de agua"
     },
     {
-      "req": "security",
+      "req": "getContext",
+      "type": "security",
       "info": "Sistema de segurança"
     },
     {
-      "req": "localization",
+      "req": "getContext",
+      "type": "localization",
       "info": "Sistema de localizacao interno"
     },
     {
-      "req": "gasSec",
+      "req": "getContext",
+      "type": "gasSec",
       "info": "Sistema detector de gases perigosos"
     },
     {
-      "req": "healthCare",
+      "req": "getContext",
+      "type": "healthCare",
       "info": "Sistemas de cuidado com a saude"
     },
     {
-      "req": "lightControl",
+      "req": "getContext",
+      "type": "lightControl",
       "info": "Sistemas de controle de luz"
     },
     {
-      "req": "tempControl",
+      "req": "getContext",
+      "type": "tempControl",
       "info": "Controladores de temperatura e umidade"
     },
     {
-      "req": "smartCleaning",
+      "req": "getContext",
+      "type": "smartCleaning",
       "info": "Servico de limpeza inteligente"
     },
     {
-      "req": "garden",
+      "req": "getContext",
+      "type": "garden",
       "info": "Jardim inteligente"
     },
     {
-      "req": "mobility",
+      "req": "getContext",
+      "type": "mobility",
       "info": "Locomocao inteligente"
     },
     {
-      "req": "Smart cooking",
+      "req": "getContext",
+      "type":"SmartCooking" ,
       "info": "Coccao inteligente"
     },
     {
-      "req": "inventoryManagement",
+      "req": "getContext",
+      "type": "inventoryManagement",
       "info": "Gerenciamento de inventario"
     }
   ]

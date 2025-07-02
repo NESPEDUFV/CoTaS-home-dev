@@ -69,10 +69,10 @@ ContextConsumer::GetTypeId()
                 UintegerValue(100),
                 MakeUintegerAccessor(&ContextConsumer::SetDataSize, &ContextConsumer::GetDataSize),
                 MakeUintegerChecker<uint32_t>())
-            .AddAttribute("ObjectType",
-                          "Which object the node refers to",
+            .AddAttribute("ApplicationType",
+                          "Which Application the node refers to",
                           UintegerValue(1),
-                          MakeUintegerAccessor(&ContextConsumer::m_objectType),
+                          MakeUintegerAccessor(&ContextConsumer::m_applicationType),
                           MakeUintegerChecker<uint32_t>())
             .AddTraceSource("Tx",
                             "A new packet is created and is sent",
@@ -378,16 +378,10 @@ ContextConsumer::Send()
     Ptr<Packet> p;
 
     std::string data;
-    if (m_objectId == 0)
-    {
-        data = m_firstData.dump();
-        NS_LOG_INFO("Enviando dados de inscrição");
-    }
-    else
-    {
-        data = RandomData();
-        NS_LOG_INFO("Enviando dados de atualização");
-    }
+
+    data = m_reqData.dump();
+    NS_LOG_INFO("Enviando dados de requisição consumidor");
+    
 
     p = Create<Packet>((uint8_t*)data.c_str(), data.size());
     m_size = data.size();
@@ -427,6 +421,7 @@ ContextConsumer::Send()
 void
 ContextConsumer::HandleRead(Ptr<Socket> socket)
 {
+    NS_LOG_INFO("lidando com dados consumidor");
     NS_LOG_FUNCTION(this << socket);
     Address from;
     while (auto packet = socket->RecvFrom(from))
@@ -482,15 +477,13 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
 void
 ContextConsumer::SetDataMessage()
 {   
-    m_firstData = m_messages["firstMessages"][m_objectType];
-    m_updateData = m_messages["updateMessages"][m_objectType];
-    
+    m_reqData = m_messages["requestMessages"][m_applicationType];
 }
 
 std::string
 ContextConsumer::RandomData()
 {   
-    nlohmann::json data = m_updateData[RandomInt(0, 3)];
+    nlohmann::json data = m_reqData[RandomInt(0, 3)];
     data["id"] = m_objectId;
     // add dados que variam com ns3 (localização)
     return data.dump();

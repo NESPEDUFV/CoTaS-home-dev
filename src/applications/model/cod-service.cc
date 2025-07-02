@@ -206,9 +206,9 @@ CoDService::HandleRead(Ptr<Socket> socket)
                 NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4() 
                                   << " atualizou dados");
             }
-            else if (req.compare("requisicao") == 0)
+            else if (req.compare("getContext") == 0)
             {
-                /* code */
+                NS_LOG_INFO("Chegou requisição da aplicação");
             }
         }
         // trata no ipv6

@@ -17,7 +17,7 @@ namespace ns3
 {
 
 /**
- * @ingroup udpecho
+ * @ingroup cotas
  * @brief Create a server application which waits for input UDP packets
  *        and sends them back to the original sender.
  */
@@ -42,7 +42,7 @@ class CoDServiceHelper : public ApplicationHelper
 };
 
 /**
- * @ingroup udpecho
+ * @ingroup cotas
  * @brief Create an application which sends a UDP packet and waits for an echo of this packet
  */
 class ContextProviderHelper : public ApplicationHelper
@@ -119,6 +119,10 @@ class ContextProviderHelper : public ApplicationHelper
     void SetFill(Ptr<Application> app, uint8_t* fill, uint32_t fillLength, uint32_t dataLength);
 };
 
+/**
+ * @ingroup cotas
+ * @brief Create an application which sends a UDP packet and waits for an echo of this packet
+ */
 class ContextConsumerHelper : public ApplicationHelper
 {
   public:
