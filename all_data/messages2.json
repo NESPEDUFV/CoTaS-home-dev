@@ -1,0 +1,2655 @@
+{
+  "firstMessages": [
+    {
+      "req": "subscribe",
+      "object": "cot:Computer",
+      "name": "cot:DellXPSDesktop8960",
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface "
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        }
+      ],
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 45.0,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 62.0,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 12.0,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "unit": "kilograms",
+        "cot:value": 1.5
+      },
+      "cot:powerSuply": "a cot:AcPowerSupply",
+      "cot:energyConsumption": {
+        "cot:value": 56.3,
+        "unit": "kilowattHourPerMonth"
+      },
+      "state": {
+        "object": "cot:Computer",
+        "turnedOn": 1,
+        "volume": 100,
+        "localization": {
+          "lat": 12,
+          "long": 13
+        }
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "cot:SmartMirror",
+      "name": "cot:MirrorMiro",
+      "cot:controlInterface": [
+        {
+          "cot:VoiceControlInterface": "descricao"
+        },
+        {
+          "cot:cot:MobileAppInterface": "descricao"
+        }
+      ],
+      "cot:ipRating": {
+        "cot:ipDigit": ["cot:IPSolid4", "cot:IPLiquid4"]
+      },
+      "cot:shape": {
+        "cot:RectBox": {
+          "cot:width": {
+            "cot:value": 45.0,
+            "unit": "centimetre"
+          },
+          "cot:height": {
+            "cot:value": 62.0,
+            "unit": "centimetre"
+          },
+          "cot:length": {
+            "cot:value": 12.0,
+            "unit": "centimetre"
+          }
+        }
+      },
+      "cot:contains": {
+        "cot:cardinality": 3,
+        "cot:component": {
+          "type": "cot:LedLightSource",
+          "cot:colorTemperature": {
+            "type": "cot:DynamicContext",
+            "cot:minInclusive": 2700,
+            "cot:maxInclusive": 6500,
+            "unit": "kelvin"
+          },
+          "cot:brightness": {
+            "cot:value": 180.0,
+            "unit": "lumen"
+          },
+          "cot:energyConsumption": {
+            "cot:value": 11,
+            "unit": "watt"
+          },
+          "cot:colorRenderingIndex": {
+            "cot:minExclusive": 90
+          }
+        }
+      },
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply"
+      },
+      "cot:energyConsumption": {
+        "cot:value": 15,
+        "unit": "watt"
+      },
+      "cot:energyEfficiency": "cot:FEnergyLabel",
+      "cot:durability": {
+        "cot:value": 30000,
+        "unit": "hour"
+      },
+      "state": {
+        "turnedOn": 1,
+        "LightOn": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "cot:SmartTelevision",
+      "name": "cot:TVSamsungNeoQLED4K",
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface"
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        }
+      ],
+      "cot:controlInterface": [
+        {
+          "cot:MobileAppInterface": {
+            "name": "SmartThings",
+            "cot:osSupport": [
+              {
+                "cot:osFamily": "cot:Android"
+              },
+              {
+                "cot:osFamily": "cot:iOS"
+              }
+            ]
+          }
+        }
+      ],
+      "state": {
+        "turnedOn": 1,
+        "volume": 100,
+        "brightness": 100
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "cot:SmartSpeaker",
+      "name": "cot:AmazonEchoStudio",
+      "cot:shape": {
+        "type": "cot:Cylinder",
+        "cot:radius": {
+          "cot:value": 87.5,
+          "unit": "millimetre"
+        },
+        "cot:height": {
+          "cot:value": 206.0,
+          "unit": "millimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 3.5,
+        "unit": "kilogram"
+      },
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:Tweeter",
+            "cot:shape": {
+              "cot:radius": 12.5,
+              "unit": "millimetre"
+            }
+          }
+        },
+        {
+          "cot:cardinality": 3,
+          "cot:component": {
+            "type": "cot:MidRangeSpeaker",
+            "cot:shape": {
+              "cot:radius": 25.5,
+              "unit": "millimetre"
+            }
+          }
+        },
+        {
+          "cot:cardinality": 1,
+          "cot:component": {
+            "type": "cot:Woofer",
+            "cot:shape": {
+              "cot:radius": 66.5,
+              "unit": "millimetre"
+            }
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:AudioAmplifier"
+          }
+        }
+      ],
+      "cot:networkInterface": [
+        {
+          "type": "cot:ZigBeeInterface"
+        },
+        {
+          "type": "cot:MatterInterface"
+        },
+        {
+          "type": "cot:MobileAppInterface"
+        },
+        {
+          "type": "cot:VoiceControlInterface"
+        }
+      ],
+      "cot:warranty": {
+        "cot:value": 1,
+        "unit": "year"
+      },
+      "state": {
+        "turnedOn": 1,
+        "volume": 100
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "cot:SmartCamera",
+      "name": "cot:IME500Intelbras",
+      "cot:resolution": {
+        "cot:width": {
+          "cot:value": 1920,
+          "unit": "pixel"
+        },
+        "cot:height": {
+          "cot:value": 1080,
+          "unit": "pixel"
+        }
+      },
+      "cot:aperture": {
+        "cot:value": 2.8,
+        "unit": "millimetre"
+      },
+      "cot:fieldOfView": {
+        "cot:horizontalAngle": {
+          "cot:value": 97,
+          "unit": "degreeUnitOfAngle"
+        },
+        "cot:verticalAngle": {
+          "cot:value": 52,
+          "unit": "degreeUnitOfAngle"
+        },
+        "cot:diagonalAngle": {
+          "cot:value": 114,
+          "unit": "degreeUnitOfAngle"
+        }
+      },
+      "cot:digitalZoom": {
+        "cot:value": 16.0
+      },
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:LedFloodlight",
+            "cot:range": {
+              "cot:value": 15.0,
+              "unit": "metre"
+            }
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:InfraredSensor",
+            "cot:range": {
+              "cot:value": 20.0,
+              "unit": "metre"
+            }
+          }
+        }
+      ],
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply"
+      },
+      "cot:weight": {},
+      "cot:color": {},
+      "cot:material": {},
+      "cot:ipRating": {},
+      "cot:operatingTemperature": {},
+      "cot:operatingHumidity": {},
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:videoRecording": {},
+      "cot:audioRecording": {},
+      "state": {
+        "turnedOn": 1,
+        "angle": 270
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "cot:SmartCabinet",
+      "name": "cot:LGStyler",
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 44.5,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 185.0,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 58.5,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 78.0,
+        "unit": "kilogram"
+      },
+      "cot:controlInterface": [
+        {
+          "type": "cot:IntegratedControlInterface"
+        },
+        {
+          "type": "cot:MobileAppInterface",
+          "cot:osSupport": [
+            {
+              "cot:osFamily": "cot:Android"
+            },
+            {
+              "cot:osFamily": "cot:iOS"
+            }
+          ]
+        },
+        {
+          "type": "cot:SmartTvAppInterface",
+          "cot:osSupport": {
+            "cot:osFamily": "cot:WebOs"
+          }
+        }
+      ],
+      "state": {
+        "cot:weightCapacity": {
+          "type": "cot:DynamicContext",
+          "cot:maxInclusive": 5.2,
+          "cot:minInclusive": 0.0,
+          "unit": "kilogram: ",
+          "value": 0
+        },
+        "cot:physicalStorage": [
+          {
+            "cot:minInclusive": 0,
+            "cot:maxInclusive": 1,
+            "unit": "item",
+            "value": 0
+          },
+          {
+            "cot:minInclusive": 0,
+            "cot:maxInclusive": 1,
+            "unit": "item",
+            "value": 0
+          }
+        ],
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:SmartKitchenCabinet",
+      "object": "cot:SmartCabinet",
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:WeightSensor"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:RFIDSensor"
+          }
+        }
+      ],
+      "cot:controlInterface": {
+        "type": "cot:TouchscreenInterface"
+      },
+      "state": {
+        "cot:physicalStorage": {
+          "type": "cot:ItemStorage",
+          "value": 0
+        },
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:MirrorCabinet",
+      "object": ["cot:SmartMirror", "cot:SmartCabinet"],
+      "cot:shape": {
+        "type": "cot:RectBox"
+      },
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface"
+        },
+        {
+          "type": "cot:BLEInterface"
+        }
+      ],
+      "cot:controlInterface": [
+        {
+          "type": "cot:IntegratedControlInterface"
+        },
+        {
+          "type": "cot:TouchscreenInterface"
+        }
+      ],
+      "cot:cpu": {
+        "cot:name": "Quad-Core Cortex-A55"
+      },
+      "cot:gpu": {
+        "cot:name": "Mali-G52"
+      },
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:HiFiSpeaker"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Display",
+            "cot:shape": {},
+            "cot:resolution": {}
+          }
+        }
+      ],
+      "cot:osSupport": {
+        "cot:osFamily": "cot:VerconSmartMirrorOs"
+      },
+      "cot:ipRating": {},
+      "state": {
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:WindFree",
+      "object": "cot:SmartAirConditioner",
+      "cot:warranty": {},
+      "cot:controlInterface": {},
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:OutdoorAirConditionerUnit",
+            "cot:shape": {
+              "type": "cot:RectBox",
+              "cot:width": {
+                "cot:value": 28.5,
+                "unit": "centimetre"
+              },
+              "cot:height": {
+                "cot:value": 54.8,
+                "unit": "centimetre"
+              },
+              "cot:length": {
+                "cot:value": 79,
+                "unit": "centimetre"
+              }
+            },
+            "cot:weight": {
+              "cot:value": 42.7,
+              "unit": "kilogram"
+            },
+            "cot:noiseLevel": {
+              "cot:value": 51.0,
+              "unit": "decibel"
+            }
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:IndoorAirConditionerUnit",
+            "cot:shape": {
+              "type": "cot:RectBox",
+              "cot:width": {
+                "cot:value": 21.5,
+                "unit": "centimetre"
+              },
+              "cot:height": {
+                "cot:value": 29.9,
+                "unit": "centimetre"
+              },
+              "cot:length": {
+                "cot:value": 105.5,
+                "unit": "centimetre"
+              }
+            },
+            "cot:weight": {
+              "cot:value": 11.4,
+              "unit": "kilogram"
+            },
+            "cot:noiseLevel": {
+              "type": "cot:DynamicContext",
+              "cot:minInclusive": 25.0,
+              "cot:maxInclusive": 43.0,
+              "unit": "decibel"
+            }
+          }
+        }
+      ],
+      "cot:coolingCapacity": {
+        "cot:oneOf": [12000, 18000, 22000],
+        "unit": "btu"
+      },
+      "state": {
+        "turnedOn": 1,
+        "temperature": 24
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:OuraRingGeneration3",
+      "object": "cot:SmartRing",
+      "cot:shape": {
+        "type": "cot:CylindricalShell",
+        "cot:width": {
+          "cot:value": 7.9,
+          "unit": "millimetre"
+        },
+        "cot:thickness": {
+          "cot:value": 2.55,
+          "unit": "millimetre"
+        }
+      },
+      "cot:networkInterface": {
+        "type": "cot:BLEInterface"
+      },
+      "cot:languageAvailability": {
+        "cot:language": [
+          "lang:en",
+          "lang:fi",
+          "lang:ja",
+          "lang:de",
+          "lang:fr",
+          "lang:es",
+          "lang:it"
+        ]
+      },
+      "cot:powerSupply": {
+        "type": "cot:BatterySupply",
+        "cot:cardinality": 1,
+        "cot:batteryCell": {
+          "type": "cot:LiPoBattery",
+          "cot:energyStorage": {
+            "cot:maxInclusive": 15.0,
+            "unit": "milliampereHour"
+          }
+        }
+      },
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:Sensor"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Accelerometer"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:OpticalHeartRateSensor"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:InfraredSensor"
+          }
+        }
+      ],
+      "cot:material": {},
+      "state": {
+        "turnedOn": 1,
+        "heartBeat": 0,
+        "bloodOxygenation": 0,
+        "battery": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "cafeteira",
+      "functions": ["chocolate", "latte", "coffee", "expresso"],
+      "state": {
+        "turnedOn": 1,
+        "running": "coffee"
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:Ducali",
+      "object": "cot:SmartShower",
+      "cot:powerSupply": [
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 127,
+            "unit": "volt"
+          },
+          "cot:acInputPower": {
+            "cot:value": 5500,
+            "unit": "wattHour"
+          },
+          "cot:acInputAmpere": {
+            "cot:value": 34.09,
+            "unit": "ampere"
+          }
+        },
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 220,
+            "unit": "volt"
+          },
+          "cot:acInputPower": {
+            "cot:value": 7500,
+            "unit": "wattHour"
+          },
+          "cot:acInputAmpere": {
+            "cot:value": 34.09,
+            "unit": "ampere"
+          }
+        }
+      ],
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface",
+          "cot:frequency": {
+            "cot:value": 2.4,
+            "unit": "gigahertz"
+          }
+        },
+        {
+          "type": "cot:BLEInterface",
+          "cot:version": {
+            "cot:value": 4.2
+          }
+        }
+      ],
+      "cot:model": {
+        "cot:name": "Ducali Premium"
+      },
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:name": "Smart Banho"
+      },
+      "cot:ipRating": {
+        "cot:ipDigit": ["cot:IPSolid2", "cot:IPLiquid4"]
+      },
+      "cot:waterPressure": {},
+      "state": {
+        "turnedOn": 1,
+        "volume": 0,
+        "temperature": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:TeslaModelSPlaid",
+      "object": "cot:SmartCar",
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:Display",
+            "cot:resolution": {},
+            "cot:brightness": {}
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Camera"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Loudspeaker"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Tire"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:CargoCompartment",
+            "cot:physicalStorage": {}
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Sensor"
+          }
+        }
+      ],
+      "cot:shape": {
+        "type": "cot:RectBox"
+      },
+      "cot:weight": {},
+      "cot:powerSupply": {
+        "type": "cot:BatterySupply",
+        "cot:energyConsumption": {}
+      },
+      "cot:controlInterface": {
+        "type": "cot:IntegratedControlInterface"
+      },
+      "state": {
+        "turnedOn": 1,
+        "volume": 100,
+        "tirePressure": 30,
+        "battery": 100,
+        "CargoCompartment": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:RTPUYTR",
+      "object": "cot:SmartNecklace",
+      "cot:networkInterface": {
+        "type": "cot:BluetoothInterface",
+        "cot:version": {
+          "cot:value": 4.0,
+          "type": "cot:WiFiInterface"
+        }
+      },
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:osSupport": [
+          {
+            "cot:osFamily": "cot:Android"
+          },
+          {
+            "cot:osFamily": "cot:iOS"
+          }
+        ]
+      },
+      "cot:powerSupply": {
+        "type": "cot:BatterySupply",
+        "cot:cardinality": 1,
+        "cot:batteryCell": {
+          "type": "cot:LiPoBattery",
+          "cot:energyStorage": {
+            "cot:maxInclusive": 10.0,
+            "unit": "milliampereHour"
+          }
+        }
+      },
+      "cot:shape": {},
+      "cot:color": {
+        "cot:name": "Silver"
+      },
+      "cot:material": {
+        "type": "cot:MetalAlloy"
+      },
+      "state": {
+        "turnedOn": 1,
+        "battery": 100
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:Guardian",
+      "object": "cot:SmartCollar",
+      "cot:geopositioning": {
+        "cot:precision": {},
+        "cot:navigationSystem": "cot:GpsSatnav"
+      },
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:shape": {
+        "type": "cot:CylindricalShell",
+        "cot:radius": {
+          "cot:minInclusive": 38.1,
+          "cot:maxInclusive": 71.12
+        }
+      },
+      "state": {
+        "turnedOn": 1,
+        "battery": 100
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:HoneyGuardian",
+      "object": "cot:SmartFeeder",
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface",
+        "cot:frequency": {
+          "cot:value": 2.4,
+          "unit": "gigahertz"
+        }
+      },
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:name": "HGsmart",
+        "cot:osSupport": [
+          {
+            "cot:osFamily": "cot:Android"
+          },
+          {
+            "cot:osFamily": "cot:iOS"
+          }
+        ]
+      },
+
+      "cot:dataStorage": {
+        "type": "cot:AudioRecordStorage",
+        "cot:maxInclusive": 10.0,
+        "cot:minInclusive": 0.0,
+        "unit": "second"
+      },
+      "cot:powerSupply": [
+        {
+          "type": "cot:UsbCSupply"
+        },
+        {
+          "type": "cot:BatterySupply",
+          "cot:cardinality": 3,
+          "cot:batteryCell": {
+            "type": "cot:DBattery"
+          }
+        }
+      ],
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 20.32,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 17.78,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 27.94,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 1.88,
+        "unit": "kilogram"
+      },
+      "cot:color": {
+        "type": ["cot:WhiteColor", "cot:BlackColor"]
+      },
+      "cot:material": {
+        "type": "cot:StainlessSteel"
+      },
+      "state": {
+        "turnedOn": 1,
+        "cot:physicalStorage": {
+          "type": "cot:DynamicContext",
+          "cot:maxInclusive": 5.0,
+          "cot:minInclusive": 0.0,
+          "unit": "litre",
+          "value": 5
+        },
+        "cot:feedingControl": {
+          "cot:mealFrequency": {
+            "cot:maxInclusive": 6,
+            "unit": "perDay",
+            "value": 0
+          },
+          "cot:servingSize": {
+            "cot:value": 6.0,
+            "unit": "gram",
+            "value": 0
+          },
+          "cot:servingsPerMeal": {
+            "type": "cot:DynamicContext",
+            "cot:maxInclusive": 24,
+            "cot:minInclusive": 0,
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "toothbrush",
+      "state": {
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:FlexDuo",
+      "object": "cot:SmartStove",
+      "cot:controlInterface": {
+        "type": "cot:TouchscreenInterface"
+      },
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply"
+      },
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 91.5,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 29.9,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 69.9,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 105,
+        "unit": "kilogram"
+      },
+      "state": {
+        "turnedOn": 1,
+        "cot:contains": [
+          {
+            "cot:component": {
+              "type": "cot:UpperOvenChamber",
+              "cot:physicalStorage": {
+                "cot:maxInclusive": 3.4,
+                "unit": "cubicFoot"
+              },
+              "turnedOn": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:LowerOvenChamber",
+              "cot:physicalStorage": {
+                "cot:maxInclusive": 2.7,
+                "unit": "cubicFoot"
+              },
+              "turnedOn": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:FrontLeftBurner",
+              "cot:heatingCapacity": {
+                "cot:value": 16000,
+                "unit": "btu"
+              },
+              "turnedOn": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:FrontRightBurner",
+              "cot:heatingCapacity": {
+                "cot:value": 23000,
+                "unit": "btu"
+              },
+              "turnedOn": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:BackLeftBurner",
+              "cot:heatingCapacity": {
+                "cot:value": 9500,
+                "unit": "btu"
+              },
+              "turnedOn": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:BackRightBurner",
+              "cot:heatingCapacity": {
+                "cot:value": 5000,
+                "unit": "btu"
+              },
+              "turnedOn": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:CentralBurner",
+              "cot:heatingCapacity": {
+                "cot:value": 10000,
+                "unit": "btu"
+              },
+              "turnedOn": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:DuplexEvolution",
+      "object": "cot:SmartRefrigerator",
+      "cot:warranty": {
+        "cot:value": 20,
+        "unit": "year"
+      },
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 73.0,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 199.0,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 77.6,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 71.0,
+        "unit": "kilogram"
+      },
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:name": "SmartThings",
+        "cot:osSupport": [
+          {
+            "cot:osFamily": "cot:Android"
+          },
+          {
+            "cot:osFamily": "cot:iOS"
+          }
+        ]
+      },
+
+      "cot:powerSupply": [
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 110,
+            "unit": "volt"
+          },
+          "cot:acInputPower": {
+            "cot:value": 1200,
+            "unit": "wattHour"
+          }
+        },
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 220,
+            "unit": "volt"
+          },
+          "cot:acInputPower": {
+            "cot:value": 1200,
+            "unit": "wattHour"
+          }
+        }
+      ],
+      "cot:energyConsumption": {
+        "cot:value": 55.56,
+        "unit": "watt"
+      },
+      "cot:energyEfficiency": "cot:A3PlusEnergyLabel",
+      "state": {
+        "turnedOn": 1,
+        "cot:contains": [
+          {
+            "cot:component": {
+              "type": "cot:FreezerCompartment",
+              "cot:physicalStorage": {
+                "type": "cot:DynamicContext",
+                "cot:maxInclusive": 114.0,
+                "cot:minInclusive": 0.0,
+                "unit": "litre"
+              },
+              "value": 0
+            }
+          },
+          {
+            "cot:component": {
+              "type": "cot:RefrigeratorCompartment",
+              "cot:physicalStorage": {
+                "type": "cot:DynamicContext",
+                "cot:maxInclusive": 404.0,
+                "cot:minInclusive": 0.0,
+                "unit": "litre"
+              },
+              "value": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:MoesTuya",
+      "object": "cot:SmartIrrigationController",
+      "cot:weight": {
+        "cot:value": 1.13,
+        "unit": "kilogram"
+      },
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface",
+        "cot:frequency": {
+          "cot:value": 2.4,
+          "unit": "gigahertz"
+        }
+      },
+      "cot:controlInterface": [
+        {
+          "type": "cot:IntegratedControlInterface"
+        },
+        {
+          "type": "cot:MobileAppInterface",
+          "cot:name": ["Tuya Smart", "Amazon Alexa", "Google Home"],
+          "cot:osSupport": [
+            {
+              "cot:osFamily": "cot:Android"
+            },
+            {
+              "cot:osFamily": "cot:iOS"
+            }
+          ]
+        }
+      ],
+      "cot:contains": {
+        "cot:maxCardinality": 20,
+        "cot:component": {
+          "type": "cot:WaterPump"
+        }
+      },
+      "state": {
+        "turnedOn": 1,
+        "cot:irrigationControl": {
+          "cot:irrigationDuration": {
+            "type": "cot:DynamicContext",
+            "cot:maxInclusive": 16,
+            "unit": "minuteUnitOfTime",
+            "value": 0
+          },
+          "cot:irrigationInterval": {
+            "type": "cot:DynamicContext",
+            "cot:maxInclusive": 60,
+            "unit": "hour",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": ["cot:Yoolax", "cot:SonteFilm"],
+      "object": ["cot:SmartCurtain", "cot:SmartWindow"],
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface",
+          "cot:frequency": {
+            "cot:value": 2.4,
+            "unit": "gigahertz"
+          }
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        }
+      ],
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:length": {
+          "cot:value": 3.0,
+          "unit": "metre"
+        }
+      },
+      "cot:powerSupply": [
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 110,
+            "unit": "volt"
+          }
+        },
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 240,
+            "unit": "volt"
+          }
+        }
+      ],
+      "cot:noiseLevel": {
+        "cot:value": 48.0,
+        "unit": "decibel"
+      },
+      "cot:warranty": {
+        "cot:value": 30,
+        "unit": "month"
+      },
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:name": "Sonte",
+        "cot:osSupport": [
+          {
+            "cot:osFamily": "cot:Android"
+          },
+          {
+            "cot:osFamily": "cot:iOS"
+          }
+        ]
+      },
+      "state": {
+        "turnedOn": 1,
+        "CurtainOpen": 0,
+        "WindowOpen": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:Iristablelamp",
+      "object": "cot:SmartLightBulb",
+      "cot:color": {},
+      "cot:controlInterface": [
+        {
+          "type": "cot:MobileAppInterface"
+        },
+        {
+          "type": "cot:VoiceControlInterface"
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        },
+        {
+          "type": "cot:ZigBeeInterface"
+        }
+      ],
+      "cot:operationalState": {},
+      "cot:lightColor": {},
+      "cot:material": {},
+      "cot:colorRenderingIndex": {},
+      "cot:weight": {},
+      "cot:shape": {
+        "type": "cot:RectBox"
+      },
+      "cot:warranty": {},
+      "cot:durability": {},
+      "cot:brightness": {},
+      "cot:colorTemperature": {},
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply"
+      },
+      "cot:ipRating": {},
+      "state": {
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:SmartInterruptorPositivo",
+      "object": "cot:SmartLightSwitch",
+      "cot:controlInterface": [
+        {
+          "type": "cot:MobileAppInterface"
+        },
+        {
+          "type": "cot:VoiceControlInterface"
+        }
+      ],
+      "cot:connects": {
+        "cot:maxCardinality": 3,
+        "cot:to": {
+          "type": "cot:ElectricCircuit"
+        }
+      },
+      "cot:powerSupply": {
+        "cot:acInputPower": {},
+        "cot:acInputAmpere": {}
+      },
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:operatingTemperature": {},
+      "cot:operatingHumidity": {},
+      "cot:weight": {},
+      "cot:shape": {
+        "type": "cot:RectBox"
+      },
+      "state": {
+        "turnedOn": [0, 0, 0]
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:MideaHealthGuard",
+      "object": "cot:SmartLaundryMachine",
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:controlInterface": [
+        {
+          "type": "cot:VoiceControlInterface"
+        },
+        {
+          "type": "cot:MobileAppInterface"
+        },
+        {
+          "type": "cot:IntegratedControlInterface"
+        }
+      ],
+      "cot:operationalState": {},
+      "cot:weightCapacity": {},
+      "cot:color": {},
+      "cot:contains": {
+        "type": "cot:Motor",
+        "cot:centrifugeRotation": {}
+      },
+      "cot:operatingTemperature": {},
+      "cot:waterTemperature": {},
+      "cot:shape": {
+        "type": "cot:RectBox"
+      },
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply"
+      },
+      "functions": ["jeans", "delicado", "rapido", "pesado"],
+      "cot:energyConsumption": {},
+      "cot:noiseLevel": {},
+      "state": {
+        "turnedOn": 0,
+        "running": "jeans"
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:AnovaPrecisionCooker",
+      "object": "cot:SmartCookware",
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 33,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 33,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 33,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 4.72,
+        "unit": "kilogram"
+      },
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface"
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        }
+      ],
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:name": "ChefIQ",
+        "cot:osSupport": [
+          {
+            "cot:osFamily": "cot:Android"
+          },
+          {
+            "cot:osFamily": "cot:iOS"
+          }
+        ]
+      },
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply",
+        "cot:acInputVoltage": {
+          "cot:value": 120,
+          "unit": "volt"
+        },
+        "cot:acOutputVoltage": {
+          "cot:value": 60,
+          "unit": "volt"
+        },
+        "cot:acInputPower": {
+          "cot:value": 1000,
+          "unit": "wattHour"
+        }
+      },
+      "state": {
+        "turnedOn": 1,
+        "cot:physicalStorage": {
+          "type": "cot:DynamicContext",
+          "cot:maxInclusive": 5.67,
+          "cot:minInclusive": 0.0,
+          "qu": "litre",
+          "value": 0
+        }
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "piso",
+      "state": {
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:NukiSmartDoor",
+      "object": "cot:SmartDoor",
+      "cot:color": {},
+      "cot:contains": [
+        {
+          "cot:component": {
+            "cot:shape": {
+              "type": "cot:RectBox"
+            },
+            "cot:powerSupply": {
+              "type": "cot:DcPowerSupply"
+            }
+          }
+        },
+        {
+          "cot:component": {
+            "cot:shape": {
+              "type": "cot:RectBox"
+            },
+            "cot:powerSupply": {
+              "type": "cot:AcPowerSupply"
+            }
+          }
+        },
+        {
+          "cot:component": {
+            "cot:shape": {
+              "type": "cot:RectBox"
+            },
+            "cot:powerSupply": {
+              "type": "cot:DcPowerSupply"
+            }
+          }
+        }
+      ],
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface"
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        }
+      ],
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface"
+      },
+      "cot:dataStorage": {
+        "type": "cot:CredentialsStorage",
+        "cot:maxInclusive": 200
+      },
+      "state": {
+        "open": 0,
+        "locked": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:AppleWatchUltra",
+      "object": "cot:SmartWatch",
+      "cot:shape": {
+        "type": "cot:CylindricalShell",
+        "cot:width": {
+          "cot:value": 44.0,
+          "unit": "millimetre"
+        },
+        "cot:height": {
+          "cot:value": 49.0,
+          "unit": "millimetre"
+        },
+        "cot:length": {
+          "cot:value": 14.4,
+          "unit": "millimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 61.4,
+        "unit": "gram"
+      },
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface",
+          "cot:frequency": {
+            "cot:oneOf": [2.4, 5.0],
+            "unit": "gigahertz"
+          }
+        },
+        {
+          "type": "cot:BluetoothInterface",
+          "cot:version": {
+            "cot:value": 5.3
+          }
+        }
+      ],
+      "cot:controlInterface": [
+        {
+          "type": "cot:IntegratedControlInterface"
+        },
+        {
+          "type": "cot:MobileAppInterface",
+          "cot:name": "Apple Watch",
+          "cot:osSupport": {
+            "cot:osFamily": "cot:iOS",
+            "cot:version": {
+              "cot:minInclusive": "17.0"
+            }
+          }
+        }
+      ],
+      "cot:powerSupply": [
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 120,
+            "unit": "volt"
+          },
+          "cot:acInputPower": {
+            "cot:value": 36,
+            "unit": "wattHour"
+          },
+          "cot:cableLength": {}
+        },
+        {
+          "type": "cot:AcPowerSupply",
+          "cot:acInputVoltage": {
+            "cot:value": 240,
+            "unit": "volt"
+          },
+          "cot:acInputPower": {
+            "cot:value": 36,
+            "unit": "wattHour"
+          },
+          "cot:cableLength": {}
+        },
+        {
+          "type": "cot:BatterySupply"
+        }
+      ],
+      "cot:cpu": {},
+      "cot:dataStorage": {},
+      "cot:contains": [
+        {
+          "cot:component": {
+            "type": "cot:TemperatureSensor"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:Oximeter"
+          }
+        },
+        {
+          "cot:component": {
+            "type": "cot:ECGSensor"
+          }
+        }
+      ],
+      "cot:osSupport": {
+        "cot:osFamily": "cot:WatchOS",
+        "cot:version": "10"
+      },
+      "cot:ipRating": {},
+      "cot:operatingHumidity": {},
+      "cot:operatingTemperature": {},
+      "cot:geopositioning": {},
+      "state": {
+        "turnedOn": 1,
+        "heartBeat": 0,
+        "bloodOxygenation": 0,
+        "battery": 100
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "Robo aspirador de po",
+      "state": {
+        "turnedOn": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "object": "jardim",
+      "state": {
+        "turnedOn": 0,
+        "humidity": 0,
+        "temperature": 0
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:FirstAlertOnelink",
+      "object": "cot:SmokeSensor",
+      "cot:powerSupply": {
+        "type": "cot:BatterySupply",
+        "cot:batteryCell": {
+          "type": "cot:RechargeableBattery"
+        }
+      },
+      "cot:noiseLevel": {},
+      "cot:networkInterface": [
+        {
+          "type": "cot:WiFiInterface"
+        },
+        {
+          "type": "cot:BluetoothInterface"
+        }
+      ],
+      "cot:controlInterface": {
+        "cot:MobileAppInterface": {
+          "cot:name": "Apple HomeKit",
+          "cot:osSupport": [
+            {
+              "cot:osFamily": "cot:Android"
+            },
+            {
+              "cot:osFamily": "cot:iOS"
+            }
+          ]
+        }
+      },
+      "cot:shape": {},
+      "cot:warranty": {},
+      "cot:weight": {},
+      "state": {
+        "actived": 1
+      }
+    },
+    {
+      "req": "subscribe",
+      "name": "cot:KasaSmartPlugue",
+      "object": "cot:SmartPowerOutlet",
+      "cot:networkInterface": {
+        "type": "cot:WiFiInterface"
+      },
+      "cot:powerSupply": {
+        "type": "cot:AcPowerSupply",
+        "cot:acInputVoltage": {
+          "cot:value": 120,
+          "unit": "volt"
+        },
+        "cot:acInputAmpere": {
+          "cot:value": 15,
+          "unit": "ampere"
+        }
+      },
+      "cot:shape": {
+        "type": "cot:RectBox",
+        "cot:width": {
+          "cot:value": 3.81,
+          "unit": "centimetre"
+        },
+        "cot:height": {
+          "cot:value": 3.99,
+          "unit": "centimetre"
+        },
+        "cot:length": {
+          "cot:value": 6.65,
+          "unit": "centimetre"
+        }
+      },
+      "cot:weight": {
+        "cot:value": 181.0,
+        "unit": "gram"
+      },
+      "cot:controlInterface": {
+        "type": "cot:MobileAppInterface",
+        "cot:name": "Kasa Smart",
+        "cot:osSupport": [
+          {
+            "cot:osFamily": "cot:Android"
+          },
+          {
+            "cot:osFamily": "cot:iOS"
+          }
+        ]
+      },
+      "state": {
+        "turnedOn": [0, 0, 0]
+      }
+    }
+  ],
+  "updateMessages": [
+    [
+      {
+        "req": "update",
+        "object": "cot:Computer",
+        "turnedOn": 1,
+        "volume": 100,
+        "localization/lat": 12,
+        "localization/long": 13
+      },
+      {
+        "req": "update",
+        "object": "cot:Computer",
+        "turnedOn": 1,
+        "volume": 50,
+        "localization/lat": 12,
+        "localization/long": 13
+      },
+      {
+        "req": "update",
+        "object": "cot:Computer",
+        "turnedOn": 1,
+        "volume": 0,
+        "localization/lat": 12,
+        "localization/long": 13
+      },
+      {
+        "req": "update",
+        "object": "cot:Computer",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartMirror",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartMirror",
+        "turnedOn": 1,
+        "LightOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartMirror",
+        "turnedOn": 1,
+        "LightOn": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartMirror",
+        "turnedOn": 1,
+        "LightOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartTelevision",
+        "turnedOn": 1,
+        "volume": 100,
+        "brightness": 50
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartTelevision",
+        "turnedOn": 1,
+        "volume": 50,
+        "brightness": 50
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartTelevision",
+        "turnedOn": 1,
+        "volume": 100,
+        "brightness": 100
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartTelevision",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartSpeaker",
+        "turnedOn": 1,
+        "volume": 100
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartSpeaker",
+        "turnedOn": 1,
+        "volume": 50
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartSpeaker",
+        "turnedOn": 1,
+        "volume": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartSpeaker",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartCamera",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCamera",
+        "turnedOn": 1,
+        "angle": 270
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCamera",
+        "turnedOn": 1,
+        "angle": 70
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCamera",
+        "turnedOn": 1,
+        "angle": 200
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 1,
+        "cot:weightCapacity/value": 0,
+        "cot:physicalStorage/0/value": 2,
+        "cot:physicalStorage/1/value": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 1,
+        "cot:weightCapacity/value": 1,
+        "cot:physicalStorage/0/value": 0,
+        "cot:physicalStorage/1/value": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 1,
+        "cot:weightCapacity/value": 0,
+        "cot:physicalStorage/0/value": 0,
+        "cot:physicalStorage/1/value": 2
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 1,
+        "cot:physicalStorage/0/value": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 1,
+        "cot:physicalStorage/0/value": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 1,
+        "cot:physicalStorage/0/value": 2
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCabinet",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": ["cot:SmartMirror", "cot:SmartCabinet"],
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": ["cot:SmartMirror", "cot:SmartCabinet"],
+        "turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": ["cot:SmartMirror", "cot:SmartCabinet"],
+        "turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": ["cot:SmartMirror", "cot:SmartCabinet"],
+        "turnedOn": 1
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartAirConditioner",
+        "turnedOn": 1,
+        "temperature": 17
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartAirConditioner",
+        "turnedOn": 0,
+        "temperature": 20
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartAirConditioner",
+        "turnedOn": 0,
+        "temperature": 28
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartAirConditioner",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartRing",
+        "turnedOn": 1,
+        "heartBeat": 90,
+        "bloodOxygenation": 95,
+        "battery": 100
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartRing",
+        "turnedOn": 1,
+        "heartBeat": 80,
+        "bloodOxygenation": 85,
+        "battery": 50
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartRing",
+        "turnedOn": 1,
+        "heartBeat": 100,
+        "bloodOxygenation": 105,
+        "battery": 75
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartRing",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cafeteira",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cafeteira",
+        "turnedOn": 1,
+        "running": "chocolate"
+      },
+      {
+        "req": "update",
+        "object": "cafeteira",
+        "turnedOn": 1,
+        "running": "coffee"
+      },
+      {
+        "req": "update",
+        "object": "cafeteira",
+        "turnedOn": 1,
+        "running": "expresso"
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartShower",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartShower",
+        "turnedOn": 1,
+        "volume": 50,
+        "temperature": 30
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartShower",
+        "turnedOn": 1,
+        "volume": 100,
+        "temperature": 20
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartShower",
+        "turnedOn": 1,
+        "volume": 0,
+        "temperature": 25
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartCar",
+        "turnedOn": 0,
+        "CargoCompartment": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCar",
+        "turnedOn": 1,
+        "volume": 50,
+        "tirePressure": 30,
+        "battery": 100,
+        "CargoCompartment": 2
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCar",
+        "turnedOn": 1,
+        "volume": 100,
+        "tirePressure": 29,
+        "battery": 75,
+        "CargoCompartment": 3
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCar",
+        "turnedOn": 1,
+        "volume": 0,
+        "tirePressure": 31,
+        "battery": 100,
+        "CargoCompartment": 4
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartNecklace",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartNecklace",
+        "turnedOn": 1,
+        "battery": 100
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartNecklace",
+        "turnedOn": 1,
+        "battery": 75
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartNecklace",
+        "turnedOn": 1,
+        "battery": 50
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartCollar",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCollar",
+        "turnedOn": 1,
+        "battery": 100
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCollar",
+        "turnedOn": 1,
+        "battery": 75
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCollar",
+        "turnedOn": 1,
+        "battery": 50
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartFeeder",
+        "turnedOn": 1,
+        "cot:physicalStorage/value": 5,
+        "cot:feedingControl/cot:mealFrequency/value": 4,
+        "cot:feedingControl/cot:servingSize/value": 3,
+        "cot:feedingControl/cot:servingsPerMeal/value": 20
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartFeeder",
+        "turnedOn": 1,
+        "cot:physicalStorage/value": 3
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartFeeder",
+        "turnedOn": 1,
+        "cot:physicalStorage/value": 5,
+        "cot:feedingControl/cot:mealFrequency/value": 3,
+        "cot:feedingControl/cot:servingSize/value": 2,
+        "cot:feedingControl/cot:servingsPerMeal/value": 10
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartFeeder",
+        "turnedOn": 1,
+        "cot:physicalStorage/value": 2,
+        "cot:feedingControl/cot:mealFrequency/value": 4,
+        "cot:feedingControl/cot:servingSize/value": 3,
+        "cot:feedingControl/cot:servingsPerMeal/value": 20
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "toothbrush",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "toothbrush",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "toothbrush",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "toothbrush",
+        "turnedOn": 1
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartStove",
+        "contains/0/cot:component/type": "cot:UpperOvenChamber",
+        "contains/0/cot:component/turnedOn": 0,
+        "contains/1/cot:component/type": "cot:LowerOvenChamber",
+        "contains/1/cot:component/turnedOn": 0,
+        "contains/2/cot:component/type": "cot:FrontLeftBurner",
+        "contains/2/cot:component/turnedOn": 0,
+        "contains/3/cot:component/type": "cot:FrontRightBurner",
+        "contains/3/cot:component/turnedOn": 0,
+        "contains/4/cot:component/type": "cot:BackLeftBurner",
+        "contains/4/cot:component/turnedOn": 0,
+        "contains/5/cot:component/type": "cot:BackRightBurner",
+        "contains/5/cot:component/turnedOn": 0,
+        "contains/6/cot:component/type": "cot:CentralBurner",
+        "contains/6/cot:component/turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartStove",
+        "contains/0/cot:component/type": "cot:UpperOvenChamber",
+        "contains/0/cot:component/turnedOn": 1,
+        "contains/1/cot:component/type": "cot:LowerOvenChamber",
+        "contains/1/cot:component/turnedOn": 0,
+        "contains/2/cot:component/type": "cot:FrontLeftBurner",
+        "contains/2/cot:component/turnedOn": 1,
+        "contains/3/cot:component/type": "cot:FrontRightBurner",
+        "contains/3/cot:component/turnedOn": 0,
+        "contains/4/cot:component/type": "cot:BackLeftBurner",
+        "contains/4/cot:component/turnedOn": 0,
+        "contains/5/cot:component/type": "cot:BackRightBurner",
+        "contains/5/cot:component/turnedOn": 0,
+        "contains/6/cot:component/type": "cot:CentralBurner",
+        "contains/6/cot:component/turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartStove",
+        "contains/0/cot:component/type": "cot:UpperOvenChamber",
+        "contains/0/cot:component/turnedOn": 0,
+        "contains/1/cot:component/type": "cot:LowerOvenChamber",
+        "contains/1/cot:component/turnedOn": 1,
+        "contains/2/cot:component/type": "cot:FrontLeftBurner",
+        "contains/2/cot:component/turnedOn": 0,
+        "contains/3/cot:component/type": "cot:FrontRightBurner",
+        "contains/3/cot:component/turnedOn": 1,
+        "contains/4/cot:component/type": "cot:BackLeftBurner",
+        "contains/4/cot:component/turnedOn": 0,
+        "contains/5/cot:component/type": "cot:BackRightBurner",
+        "contains/5/cot:component/turnedOn": 1,
+        "contains/6/cot:component/type": "cot:CentralBurner",
+        "contains/6/cot:component/turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartStove",
+        "contains/0/cot:component/type": "cot:UpperOvenChamber",
+        "contains/0/cot:component/turnedOn": 0,
+        "contains/1/cot:component/type": "cot:LowerOvenChamber",
+        "contains/1/cot:component/turnedOn": 1,
+        "contains/2/cot:component/type": "cot:FrontLeftBurner",
+        "contains/2/cot:component/turnedOn": 1,
+        "contains/3/cot:component/type": "cot:FrontRightBurner",
+        "contains/3/cot:component/turnedOn": 1,
+        "contains/4/cot:component/type": "cot:BackLeftBurner",
+        "contains/4/cot:component/turnedOn": 0,
+        "contains/5/cot:component/type": "cot:BackRightBurner",
+        "contains/5/cot:component/turnedOn": 1,
+        "contains/6/cot:component/type": "cot:CentralBurner",
+        "contains/6/cot:component/turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartRefrigerator",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartRefrigerator",
+        "turnedOn": 1,
+        "cot:contains/0/cot:component/type": "cot:FreezerCompartment",
+        "cot:contains/0/cot:component/value": 0,
+        "cot:contains/1/cot:component/type": "cot:RefrigeratorCompartment",
+        "cot:contains/1/cot:component/value": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartRefrigerator",
+        "turnedOn": 1,
+        "cot:contains/0/cot:component/type": "cot:FreezerCompartment",
+        "cot:contains/0/cot:component/value": 5,
+        "cot:contains/1/cot:component/type": "cot:RefrigeratorCompartment",
+        "cot:contains/1/cot:component/value": 10
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartRefrigerator",
+        "turnedOn": 1,
+        "cot:contains/0/cot:component/type": "cot:FreezerCompartment",
+        "cot:contains/0/cot:component/value": 10,
+        "cot:contains/1/cot:component/type": "cot:RefrigeratorCompartment",
+        "cot:contains/1/cot:component/value": 40
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartIrrigationController",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartIrrigationController",
+        "turnedOn": 1,
+        "cot:irrigationControl/cot:irrigationDuration/value": 0, 
+        "cot:irrigationControl/cot:irrigationInterval/value": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartIrrigationController",
+        "turnedOn": 1,
+        "cot:irrigationControl/cot:irrigationDuration/value": 0, 
+        "cot:irrigationControl/cot:irrigationInterval/value": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartIrrigationController",
+        "turnedOn": 1,
+        "cot:irrigationControl/cot:irrigationDuration/value": 0, 
+        "cot:irrigationControl/cot:irrigationInterval/value": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": ["cot:SmartCurtain", "cot:SmartWindow"],
+        "turnedOn": 1,
+        "CurtainOpen": 1,
+        "WindowOpen": 0
+      },
+      {
+        "req": "update",
+        "object": ["cot:SmartCurtain", "cot:SmartWindow"],
+        "turnedOn": 1,
+        "CurtainOpen": 0,
+        "WindowOpen": 1
+      },
+      {
+        "req": "update",
+        "object": ["cot:SmartCurtain", "cot:SmartWindow"],
+        "turnedOn": 1,
+        "CurtainOpen": 1,
+        "WindowOpen": 1
+      },
+      {
+        "req": "update",
+        "object": ["cot:SmartCurtain", "cot:SmartWindow"],
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartLightBulb",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLightBulb",
+        "turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLightBulb",
+        "turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLightBulb",
+        "turnedOn": 1
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartLightSwitch",
+        "turnedOn": [0, 0, 0]
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLightSwitch",
+        "turnedOn": [1, 0, 0]
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLightSwitch",
+        "turnedOn": [1, 1, 0]
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLightSwitch",
+        "turnedOn": [1, 1, 1]
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartLaundryMachine",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLaundryMachine",
+        "turnedOn": 1,
+        "running": "jeans"
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLaundryMachine",
+        "turnedOn": 1,
+        "running": "delicado"
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartLaundryMachine",
+        "turnedOn": 1,
+        "running": "pesado"
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartCookware",
+        "turnedOn": 1,
+        "cot:physicalStorage/value" : 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCookware",
+        "turnedOn": 1,
+        "cot:physicalStorage/value" : 4
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCookware",
+        "turnedOn": 1,
+        "cot:physicalStorage/value" : 3
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartCookware",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "piso",
+        "turnedOn": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartDoor",
+        "open": 0,
+        "locked": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartDoor",
+        "open": 1,
+        "locked": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartDoor",
+        "open": 0,
+        "locked": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartDoor",
+        "open": 0,
+        "locked": 1
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartWatch",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartWatch",
+        "turnedOn": 1,
+        "heartBeat": 90,
+        "bloodOxygenation": 95,
+        "battery": 100
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartWatch",
+        "turnedOn": 1,
+        "heartBeat": 80,
+        "bloodOxygenation": 85,
+        "battery": 50
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartWatch",
+        "turnedOn": 1,
+        "heartBeat": 100,
+        "bloodOxygenation": 105,
+        "battery": 75
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "Robo aspirador de po",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "Robo aspirador de po",
+        "turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": "Robo aspirador de po",
+        "turnedOn": 1
+      },
+      {
+        "req": "update",
+        "object": "Robo aspirador de po",
+        "turnedOn": 1
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "jardim",
+        "turnedOn": 0
+      },
+      {
+        "req": "update",
+        "object": "jardim",
+        "turnedOn": 1,
+        "humidity": 95,
+        "temperature": 25
+      },
+      {
+        "req": "update",
+        "object": "jardim",
+        "turnedOn": 0,
+        "humidity": 85,
+        "temperature": 22
+      },
+      {
+        "req": "update",
+        "object": "jardim",
+        "turnedOn": 0,
+        "humidity": 50,
+        "temperature": 14
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmokeSensor",
+        "actived": 1
+      },
+      {
+        "req": "update",
+        "object": "cot:SmokeSensor",
+        "actived": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmokeSensor",
+        "actived": 0
+      },
+      {
+        "req": "update",
+        "object": "cot:SmokeSensor",
+        "actived": 0
+      }
+    ],
+    [
+      {
+        "req": "update",
+        "object": "cot:SmartPowerOutlet",
+        "turnedOn": [0, 0, 0]
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartPowerOutlet",
+        "turnedOn": [1, 0, 0]
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartPowerOutlet",
+        "turnedOn": [1, 1, 0]
+      },
+      {
+        "req": "update",
+        "object": "cot:SmartPowerOutlet",
+        "turnedOn": [1, 1, 1]
+      }
+    ]
+  ],
+  "requestMessages": [
+    {
+      "req": "fallDetection",
+      "info": "Deteccao de quedas"
+    },
+    {
+      "req": "microControl",
+      "info": "Controle de microprocessadores"
+    },
+    {
+      "req": "petCare",
+      "info": "Cuidados com animais de estimacao"
+    },
+    {
+      "req": "energyManegement",
+      "info": "Gerenciamento de gasto de energia"
+    },
+    {
+      "req": "waterManegement",
+      "info": "Gerenciamento de gasto de agua"
+    },
+    {
+      "req": "security",
+      "info": "Sistema de segurança"
+    },
+    {
+      "req": "localization",
+      "info": "Sistema de localizacao interno"
+    },
+    {
+      "req": "gasSec",
+      "info": "Sistema detector de gases perigosos"
+    },
+    {
+      "req": "healthCare",
+      "info": "Sistemas de cuidado com a saude"
+    },
+    {
+      "req": "lightControl",
+      "info": "Sistemas de controle de luz"
+    },
+    {
+      "req": "tempControl",
+      "info": "Controladores de temperatura e umidade"
+    },
+    {
+      "req": "smartCleaning",
+      "info": "Servico de limpeza inteligente"
+    },
+    {
+      "req": "garden",
+      "info": "Jardim inteligente"
+    },
+    {
+      "req": "mobility",
+      "info": "Locomocao inteligente"
+    },
+    {
+      "req": "Smart cooking",
+      "info": "Coccao inteligente"
+    },
+    {
+      "req": "inventoryManagement",
+      "info": "Gerenciamento de inventario"
+    }
+  ]
+}
