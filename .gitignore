@@ -68,7 +68,7 @@ CONTRIBUTING.md
 pyproject.toml
 setup.py
 CHANGES.md
-README.md
+README(ns3).md
 src/applications/model/application-packet-probe.cc
 src/applications/model/sink-application.h
 src/applications/model/application-packet-probe.h
