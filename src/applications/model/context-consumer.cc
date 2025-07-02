@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-only
  */
-#include "context-provider.h"
+#include "context-consumer.h"
 
 #include "ns3/address-utils.h"
 #include "ns3/log.h"
@@ -19,47 +19,47 @@
 namespace ns3
 {
 
-NS_LOG_COMPONENT_DEFINE("ContextProviderApplication");
+NS_LOG_COMPONENT_DEFINE("ContextConsumerApplication");
 
-NS_OBJECT_ENSURE_REGISTERED(ContextProvider);
+NS_OBJECT_ENSURE_REGISTERED(ContextConsumer);
 
 TypeId
-ContextProvider::GetTypeId()
+ContextConsumer::GetTypeId()
 {
     static TypeId tid =
-        TypeId("ns3::ContextProvider")
+        TypeId("ns3::ContextConsumer")
             .SetParent<SourceApplication>()
             .SetGroupName("Applications")
-            .AddConstructor<ContextProvider>()
+            .AddConstructor<ContextConsumer>()
             .AddAttribute(
                 "MaxPackets",
                 "The maximum number of packets the application will send (zero means infinite)",
                 UintegerValue(100),
-                MakeUintegerAccessor(&ContextProvider::m_count),
+                MakeUintegerAccessor(&ContextConsumer::m_count),
                 MakeUintegerChecker<uint32_t>())
             .AddAttribute("Interval",
                           "The time to wait between packets",
                           TimeValue(Seconds(1)),
-                          MakeTimeAccessor(&ContextProvider::m_interval),
+                          MakeTimeAccessor(&ContextConsumer::m_interval),
                           MakeTimeChecker())
             .AddAttribute(
                 "RemoteAddress",
                 "The destination Address of the outbound packets",
                 AddressValue(),
                 MakeAddressAccessor(
-                    (void (ContextProvider::*)(
-                        const Address&))&ContextProvider::SetRemote, // this is needed to indicate
+                    (void (ContextConsumer::*)(
+                        const Address&))&ContextConsumer::SetRemote, // this is needed to indicate
                                                                      // which version of the
                                                                      // function overload to use
-                    &ContextProvider::GetRemote),
+                    &ContextConsumer::GetRemote),
                 MakeAddressChecker(),
                 TypeId::SupportLevel::DEPRECATED,
                 "Replaced by Remote in ns-3.44.")
             .AddAttribute(
                 "RemotePort",
                 "The destination port of the outbound packets",
-                UintegerValue(ContextProvider::DEFAULT_PORT),
-                MakeUintegerAccessor(&ContextProvider::SetPort, &ContextProvider::GetPort),
+                UintegerValue(ContextConsumer::DEFAULT_PORT),
+                MakeUintegerAccessor(&ContextConsumer::SetPort, &ContextConsumer::GetPort),
                 MakeUintegerChecker<uint16_t>(),
                 TypeId::SupportLevel::DEPRECATED,
                 "Replaced by Remote in ns-3.44.")
@@ -67,33 +67,33 @@ ContextProvider::GetTypeId()
                 "PacketSize",
                 "Size of echo data in outbound packets",
                 UintegerValue(100),
-                MakeUintegerAccessor(&ContextProvider::SetDataSize, &ContextProvider::GetDataSize),
+                MakeUintegerAccessor(&ContextConsumer::SetDataSize, &ContextConsumer::GetDataSize),
                 MakeUintegerChecker<uint32_t>())
             .AddAttribute("ObjectType",
                           "Which object the node refers to",
                           UintegerValue(1),
-                          MakeUintegerAccessor(&ContextProvider::m_objectType),
+                          MakeUintegerAccessor(&ContextConsumer::m_objectType),
                           MakeUintegerChecker<uint32_t>())
             .AddTraceSource("Tx",
                             "A new packet is created and is sent",
-                            MakeTraceSourceAccessor(&ContextProvider::m_txTrace),
+                            MakeTraceSourceAccessor(&ContextConsumer::m_txTrace),
                             "ns3::Packet::TracedCallback")
             .AddTraceSource("Rx",
                             "A packet has been received",
-                            MakeTraceSourceAccessor(&ContextProvider::m_rxTrace),
+                            MakeTraceSourceAccessor(&ContextConsumer::m_rxTrace),
                             "ns3::Packet::TracedCallback")
             .AddTraceSource("TxWithAddresses",
                             "A new packet is created and is sent",
-                            MakeTraceSourceAccessor(&ContextProvider::m_txTraceWithAddresses),
+                            MakeTraceSourceAccessor(&ContextConsumer::m_txTraceWithAddresses),
                             "ns3::Packet::TwoAddressTracedCallback")
             .AddTraceSource("RxWithAddresses",
                             "A packet has been received",
-                            MakeTraceSourceAccessor(&ContextProvider::m_rxTraceWithAddresses),
+                            MakeTraceSourceAccessor(&ContextConsumer::m_rxTraceWithAddresses),
                             "ns3::Packet::TwoAddressTracedCallback");
     return tid;
 }
 
-ContextProvider::ContextProvider()
+ContextConsumer::ContextConsumer()
     : m_dataSize{0},
       m_data{nullptr},
       m_sent{0},
@@ -116,7 +116,7 @@ ContextProvider::ContextProvider()
     NS_LOG_FUNCTION(this);
 }
 
-ContextProvider::~ContextProvider()
+ContextConsumer::~ContextConsumer()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
@@ -127,7 +127,7 @@ ContextProvider::~ContextProvider()
 }
 
 void
-ContextProvider::SetRemote(const Address& ip, uint16_t port)
+ContextConsumer::SetRemote(const Address& ip, uint16_t port)
 {
     NS_LOG_FUNCTION(this << ip << port);
     SetRemote(ip);
@@ -135,7 +135,7 @@ ContextProvider::SetRemote(const Address& ip, uint16_t port)
 }
 
 void
-ContextProvider::SetRemote(const Address& addr)
+ContextConsumer::SetRemote(const Address& addr)
 {
     NS_LOG_FUNCTION(this << addr);
     if (!addr.IsInvalid())
@@ -149,13 +149,13 @@ ContextProvider::SetRemote(const Address& addr)
 }
 
 Address
-ContextProvider::GetRemote() const
+ContextConsumer::GetRemote() const
 {
     return m_peer;
 }
 
 void
-ContextProvider::SetPort(uint16_t port)
+ContextConsumer::SetPort(uint16_t port)
 {
     NS_LOG_FUNCTION(this << port);
     if (m_peer.IsInvalid())
@@ -171,11 +171,11 @@ ContextProvider::SetPort(uint16_t port)
 }
 
 uint16_t
-ContextProvider::GetPort() const
+ContextConsumer::GetPort() const
 {
     if (m_peer.IsInvalid())
     {
-        return m_peerPort.value_or(ContextProvider::DEFAULT_PORT);
+        return m_peerPort.value_or(ContextConsumer::DEFAULT_PORT);
     }
     if (InetSocketAddress::IsMatchingType(m_peer))
     {
@@ -185,11 +185,11 @@ ContextProvider::GetPort() const
     {
         return Inet6SocketAddress::ConvertFrom(m_peer).GetPort();
     }
-    return ContextProvider::DEFAULT_PORT;
+    return ContextConsumer::DEFAULT_PORT;
 }
 
 void
-ContextProvider::StartApplication()
+ContextConsumer::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
@@ -236,7 +236,7 @@ ContextProvider::StartApplication()
         }
         m_socket->SetIpTos(m_tos); // Affects only IPv4 sockets.
         m_socket->Connect(m_peer);
-        m_socket->SetRecvCallback(MakeCallback(&ContextProvider::HandleRead, this));
+        m_socket->SetRecvCallback(MakeCallback(&ContextConsumer::HandleRead, this));
         m_socket->SetAllowBroadcast(true);
     }
 
@@ -244,7 +244,7 @@ ContextProvider::StartApplication()
 }
 
 void
-ContextProvider::StopApplication()
+ContextConsumer::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
@@ -259,7 +259,7 @@ ContextProvider::StopApplication()
 }
 
 void
-ContextProvider::SetDataSize(uint32_t dataSize)
+ContextConsumer::SetDataSize(uint32_t dataSize)
 {
     NS_LOG_FUNCTION(this << dataSize);
 
@@ -275,14 +275,14 @@ ContextProvider::SetDataSize(uint32_t dataSize)
 }
 
 uint32_t
-ContextProvider::GetDataSize() const
+ContextConsumer::GetDataSize() const
 {
     NS_LOG_FUNCTION(this);
     return m_size;
 }
 
 void
-ContextProvider::SetFill(std::string fill)
+ContextConsumer::SetFill(std::string fill)
 {
     NS_LOG_FUNCTION(this << fill);
 
@@ -304,7 +304,7 @@ ContextProvider::SetFill(std::string fill)
 }
 
 void
-ContextProvider::SetFill(uint8_t fill, uint32_t dataSize)
+ContextConsumer::SetFill(uint8_t fill, uint32_t dataSize)
 {
     NS_LOG_FUNCTION(this << fill << dataSize);
     if (dataSize != m_dataSize)
@@ -323,7 +323,7 @@ ContextProvider::SetFill(uint8_t fill, uint32_t dataSize)
 }
 
 void
-ContextProvider::SetFill(uint8_t* fill, uint32_t fillSize, uint32_t dataSize)
+ContextConsumer::SetFill(uint8_t* fill, uint32_t fillSize, uint32_t dataSize)
 {
     NS_LOG_FUNCTION(this << fill << fillSize << dataSize);
     if (dataSize != m_dataSize)
@@ -362,14 +362,14 @@ ContextProvider::SetFill(uint8_t* fill, uint32_t fillSize, uint32_t dataSize)
 }
 
 void
-ContextProvider::ScheduleTransmit(Time dt)
+ContextConsumer::ScheduleTransmit(Time dt)
 {
     NS_LOG_FUNCTION(this << dt);
-    m_sendEvent = Simulator::Schedule(dt, &ContextProvider::Send, this);
+    m_sendEvent = Simulator::Schedule(dt, &ContextConsumer::Send, this);
 }
 
 void
-ContextProvider::Send()
+ContextConsumer::Send()
 {
     NS_LOG_FUNCTION(this);
 
@@ -425,7 +425,7 @@ ContextProvider::Send()
 }
 
 void
-ContextProvider::HandleRead(Ptr<Socket> socket)
+ContextConsumer::HandleRead(Ptr<Socket> socket)
 {
     NS_LOG_FUNCTION(this << socket);
     Address from;
@@ -480,7 +480,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 }
 
 void
-ContextProvider::SetDataMessage()
+ContextConsumer::SetDataMessage()
 {   
     m_firstData = m_messages["firstMessages"][m_objectType];
     m_updateData = m_messages["updateMessages"][m_objectType];
@@ -488,7 +488,7 @@ ContextProvider::SetDataMessage()
 }
 
 std::string
-ContextProvider::RandomData()
+ContextConsumer::RandomData()
 {   
     nlohmann::json data = m_updateData[RandomInt(0, 3)];
     data["id"] = m_objectId;
@@ -497,7 +497,7 @@ ContextProvider::RandomData()
 }
 
 int 
-ContextProvider::RandomInt(int min, int max) 
+ContextConsumer::RandomInt(int min, int max) 
 {
     static std::random_device rd; 
     static std::mt19937 gen(rd());

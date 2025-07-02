@@ -12,6 +12,7 @@ build_lib(
     model/bulk-send-application.cc
     model/onoff-application.cc
     model/context-provider.cc
+    model/context-consumer.cc
     model/cod-service.cc
     model/packet-loss-counter.cc
     model/packet-sink.cc
@@ -44,6 +45,7 @@ build_lib(
     model/packet-loss-counter.h
     model/packet-sink.h
     model/context-provider.h
+    model/context-consumer.h
     model/cod-service.h
     model/seq-ts-echo-header.h
     model/seq-ts-header.h

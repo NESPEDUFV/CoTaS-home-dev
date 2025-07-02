@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
 
     LogComponentEnable("CoDServiceApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
     NodeContainer computadorNode;
