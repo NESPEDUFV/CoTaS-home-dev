@@ -13,7 +13,6 @@
 #include "ns3/ptr.h"
 #include "ns3/traced-callback.h"
 #include "json.hpp"
-#include "sqlite3.h"
 
 #include <bsoncxx/json.hpp>
 #include <mongocxx/client.hpp>
@@ -91,7 +90,7 @@ class CoDService : public SinkApplication
 
     int ValidateID_Q(int id);
     
-    void SetupDatabase();
+    void SetupDatabase(mongocxx::client &client, std::string nome_banco);
 
     int Simple_Q();
 
@@ -103,7 +102,6 @@ class CoDService : public SinkApplication
 
     void UpdtData_Q(int id, nlohmann::json db);
 
-    sqlite3* m_banco;
     mongocxx::v_noabi::database m_bancoMongo;
 
     uint8_t m_tos;         //!< The packets Type of Service

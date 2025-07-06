@@ -6,8 +6,6 @@
 
 #include "cod-service.h"
 
-#include "sqlite3.h"
-
 #include "ns3/address-utils.h"
 #include "ns3/inet-socket-address.h"
 #include "ns3/inet6-socket-address.h"
@@ -24,10 +22,14 @@
 
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <random>
+#include <sstream>
 
 #define SQL_PATH "all_data/cot.sql"
+
+using bsoncxx::builder::basic::kvp;
+
+using bsoncxx::builder::basic::make_document;
 
 namespace ns3
 {
@@ -87,29 +89,22 @@ CoDService::StartApplication()
         // Start example code here
         mongocxx::uri uri("mongodb://localhost:27017/");
         mongocxx::client client(uri);
-        // End example code here
-        m_bancoMongo = client["admin"];
-        m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
-        std::cout << "Successfully pinged the MongoDB server." << std::endl;
-    }
-    catch (const mongocxx::exception &e)
-    {
-        std::cout << "An exception occurred: " << e.what() << std::endl;
-        return ;
-    }
-    return ;
+        std::string nome_banco = "cotas_db";
+        SetupDatabase(client, nome_banco);
 
-    // inicia o banco
-    if (sqlite3_open("all_data/cot.db", &m_banco))
-    {
-        NS_LOG_INFO("Não conectou no banco");
-        abort();
+        NS_LOG_INFO("Tentando pingar no servidor:");
+        m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
+        NS_LOG_INFO("Successfully pinged the MongoDB server.");
+        NS_LOG_INFO("Banco de dados criado com sucesso.");
+        Simple_Q();
+        NS_LOG_INFO("Validando id " << ValidateID_Q(72));
     }
-    else
+    catch (const mongocxx::exception& e)
     {
-        NS_LOG_INFO("Conectou ao banco");
-        SetupDatabase();
+        NS_LOG_ERROR("An exception occurred: " << e.what());
+        return;
     }
+
     if (!m_socket)
     {
         auto tid = TypeId::LookupByName("ns3::UdpSocketFactory");
@@ -173,8 +168,6 @@ CoDService::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
-    sqlite3_close(m_banco);
-
     if (m_socket)
     {
         m_socket->Close();
@@ -215,13 +208,13 @@ CoDService::HandleRead(Ptr<Socket> socket)
             if (req.compare("subscribe") == 0)
             {
                 HandleSubscription(socket, from, data_json);
-                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4() 
+                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
                                   << " se inscreveu");
             }
             else if (req.compare("update") == 0)
             {
                 HandleUpdate(socket, from, data_json);
-                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4() 
+                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
                                   << " atualizou dados");
             }
             else if (req.compare("getContext") == 0)
@@ -242,33 +235,32 @@ CoDService::HandleRead(Ptr<Socket> socket)
 
 void
 CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
-{   
-
+{
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
-    if(valida){
+    if (valida)
+    {
         // ip já inscrito, manda o id novamente.
         NS_LOG_INFO("IP já inscrito");
         NS_LOG_INFO("Id do ip inscrito: " << valida);
-        nlohmann::json res = {
-            { "status", 200 },
-            { "id", valida }
-        };
+        nlohmann::json res = {{"status", 200}, {"id", valida}};
 
         std::string data = res.dump();
         Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
 
         socket->SendTo(response, 0, from);
-        return ;
+        return;
     }
 
     // gera id seguro (vamos abstrair segurança)
     int precisa_gerar = 1;
     int id;
-    while(precisa_gerar){
+    while (precisa_gerar)
+    {
         id = RandomInt(20000, 20000000);
         // validar id
-        if(!ValidateID_Q(id)){
+        if (!ValidateID_Q(id))
+        {
             precisa_gerar = 0;
         }
     }
@@ -277,10 +269,7 @@ CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohm
     InsertDataSub_Q(id, from, data_json);
 
     // retorna status ok com id ou error sem id
-    nlohmann::json res = {
-        { "status", 200 },
-        { "id", id }
-    };
+    nlohmann::json res = {{"status", 200}, {"id", id}};
 
     std::string data = res.dump();
     Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
@@ -291,39 +280,37 @@ void
 CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
 {
     // verifica se id é válido
-    int id =  data_json["id"];
-    if (!ValidateID_Q(id)){
+    int id = data_json["id"];
+    if (!ValidateID_Q(id))
+    {
         // id inválido
         nlohmann::json res = {
-            { "status", 401 },
+            {"status", 401},
         };
         std::string data = res.dump();
         Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
 
         socket->SendTo(response, 0, from);
-        return ;
+        return;
     }
 
     // pega dados no banco
     nlohmann::json db_json = GetDataJSON_Q(id);
-    
+
     // atualiza os campos
     UpdtData_JSON(db_json, data_json);
-    
+
     // volta pro banco
     UpdtData_Q(id, db_json);
 
     // retorna status ok ou error
-    nlohmann::json res = {
-        { "status", 200 },
-        { "id", id }
-    };
+    nlohmann::json res = {{"status", 200}, {"id", id}};
 
     std::string data = res.dump();
     Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
     socket->SendTo(response, 0, from);
-    
-    return ;
+
+    return;
 }
 
 void
@@ -349,64 +336,58 @@ CoDService::ReadSqlArc()
 }
 
 void
-CoDService::SetupDatabase()
+CoDService::SetupDatabase(mongocxx::client& client, std::string nome_banco)
 {
-    char* zErrMsg = 0;
-    int rc;
-
-    std::string sqlScript = ReadSqlArc();
-
-    if (!sqlScript.empty())
+    try
     {
-        // sqlite3_exec é usada para executar comandos SQL que não retornam dados
-        // (ou quando não nos importamos com o retorno, como aqui)
-        rc = sqlite3_exec(m_banco, sqlScript.c_str(), 0, 0, &zErrMsg);
-
-        if (rc != SQLITE_OK)
+        auto databases = client.list_database_names();
+        auto it = std::find(databases.begin(), databases.end(), nome_banco);
+        if (it != databases.end())
         {
-            std::cerr << "Erro no SQL: " << zErrMsg << std::endl;
-            sqlite3_free(zErrMsg);
+            NS_LOG_INFO("Banco de dados encontrado. Resetando (drop)...");
+            client[nome_banco].drop();
+            NS_LOG_INFO("Banco de dados '" << nome_banco << "' foi dropado com sucesso.");
         }
         else
         {
-            std::cout << "Script executado com sucesso!" << std::endl;
+            NS_LOG_INFO("Banco de dados '" << nome_banco << "' não existe.");
         }
+        m_bancoMongo = client[nome_banco];
+        auto collection = m_bancoMongo["object"];
+
+        nlohmann::json j_documento = {{"nome", "Carlos"},
+                                      {"cidade", "Juatuba"},
+                                      {"ativo", true},
+                                      {"timestamp", "2025-07-04T10:15:38-03:00"},
+                                      {"id", 72},
+                                      {"ip", 27}};
+
+        std::string json_string = j_documento.dump();
+        auto bson_documento = bsoncxx::from_json(json_string);
+        auto result = collection.insert_one(bson_documento.view());
+    }
+    catch (const std::exception& e)
+    {
+        NS_LOG_INFO("Exceção: " << e.what());
+        return;
     }
 }
 
 int
 CoDService::Simple_Q()
 {
-    int rc;
+    auto collection = m_bancoMongo["object"];
 
-    const char* sqlSelect = "SELECT * FROM objeto;";
-    sqlite3_stmt* stmt;
-
-    rc = sqlite3_prepare_v2(m_banco, sqlSelect, -1, &stmt, 0);
-
-    if (rc != SQLITE_OK)
+    auto result = collection.find_one(make_document(kvp("nome", "Carlos")));
+    if (result)
     {
-        NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-        sqlite3_close(m_banco);
-        return 1;
+        NS_LOG_INFO(bsoncxx::to_json(*result));
+    }
+    else
+    {
+        NS_LOG_INFO("No result found");
     }
 
-    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-    {
-        int id = sqlite3_column_int(stmt, 0);
-        const unsigned char* raw_data = sqlite3_column_text(stmt, 1);
-
-        std::string data = reinterpret_cast<const char*>(raw_data);
-
-        NS_LOG_INFO("ID: " << id << "Data: " << data);
-    }
-
-    if (rc != SQLITE_DONE)
-    {
-        NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    }
-
-    sqlite3_finalize(stmt);
     return 0;
 }
 
@@ -414,35 +395,23 @@ CoDService::Simple_Q()
 // se existe retorna id
 int
 CoDService::ValidateIP_Q(Address ip)
-{   
-    // TODO: RESOLVER ESSE BO DO IP
-    int rc;
+{
+    auto collection = m_bancoMongo["object"];
     uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-    const char* sql = "SELECT id FROM objeto WHERE ip == ?;";
-    sqlite3_stmt* stmt;
-    int existe = 0;
-    rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
+    nlohmann::json j_query = {{"ip", ip_num}};
 
-    if (rc != SQLITE_OK)
+    std::string json_string = j_query.dump();
+    auto bson_query = bsoncxx::from_json(json_string);
+    auto result = collection.find_one(bson_query.view());
+    if (result)
     {
-        NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-        sqlite3_close(m_banco);
-        abort();
+        std::cout << bsoncxx::to_json(*result) << std::endl;
     }
-
-    rc = sqlite3_bind_int(stmt, 1, ip_num);
-
-    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+    else
     {
-        existe = sqlite3_column_int(stmt, 0);
+        std::cout << "No result found" << std::endl;
     }
-    if (rc != SQLITE_DONE)
-    {
-        NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    }
-
-    sqlite3_finalize(stmt);
-    return existe;
+    return 0;
 }
 
 // se o id já existe, ele retorna o próprio id
@@ -450,107 +419,92 @@ CoDService::ValidateIP_Q(Address ip)
 int
 CoDService::ValidateID_Q(int id)
 {
-    int rc;
+    auto collection = m_bancoMongo["object"];
+    nlohmann::json j_query = {{"id", id}};
 
-    const char* sql = "SELECT id FROM objeto WHERE id == ?;";
-    sqlite3_stmt* stmt;
-    int existe = 0;
-    rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
-
-    if (rc != SQLITE_OK)
+    std::string json_string = j_query.dump();
+    auto bson_query = bsoncxx::from_json(json_string);
+    auto result = collection.find_one(bson_query.view());
+    if (result)
     {
-        NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-        sqlite3_close(m_banco);
-        abort();
+        std::cout << bsoncxx::to_json(*result) << std::endl;
+        return 1;
     }
-
-    rc = sqlite3_bind_int(stmt, 1, id);
-
-    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-    {
-        existe = sqlite3_column_int(stmt, 0);
-    }
-    if (rc != SQLITE_DONE)
-    {
-        NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    }
-
-    sqlite3_finalize(stmt);
-    return existe;
+    return 0;
 }
 
 int
 CoDService::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 {
-    int rc;
-    const char* sql = "INSERT INTO objeto (id, ip, dados) VALUES (?, ?, ?)";
-    sqlite3_stmt* stmt;
-    uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-    std::string data_s = data_json.dump();
+    // int rc;
+    // const char* sql = "INSERT INTO objeto (id, ip, dados) VALUES (?, ?, ?)";
+    // sqlite3_stmt* stmt;
+    // uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
+    // std::string data_s = data_json.dump();
 
-    rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
+    // rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
 
-    if (rc != SQLITE_OK)
-    {
-        NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-        sqlite3_close(m_banco);
-        abort();
-    }
+    // if (rc != SQLITE_OK)
+    // {
+    //     NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
+    //     sqlite3_close(m_banco);
+    //     abort();
+    // }
 
-    sqlite3_bind_int(stmt, 1, id);
-    sqlite3_bind_int(stmt, 2, ip_num);
-    sqlite3_bind_text(stmt, 3, data_s.c_str(), -1, SQLITE_STATIC);
-    
-    rc = sqlite3_step(stmt);
-    if (rc != SQLITE_DONE)
-    {
-        NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-        abort();
-    }
-    // NS_LOG_INFO("Inseriu dados de " 
-    //     << InetSocketAddress::ConvertFrom(ip).GetIpv4());
-    sqlite3_finalize(stmt);
+    // sqlite3_bind_int(stmt, 1, id);
+    // sqlite3_bind_int(stmt, 2, ip_num);
+    // sqlite3_bind_text(stmt, 3, data_s.c_str(), -1, SQLITE_STATIC);
+
+    // rc = sqlite3_step(stmt);
+    // if (rc != SQLITE_DONE)
+    // {
+    //     NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
+    //     abort();
+    // }
+    // // NS_LOG_INFO("Inseriu dados de "
+    // //     << InetSocketAddress::ConvertFrom(ip).GetIpv4());
+    // sqlite3_finalize(stmt);
     return 1;
 }
 
 nlohmann::json
 CoDService::GetDataJSON_Q(int id)
 {
-    int rc;
+    // int rc;
 
-    const char* sql = "SELECT dados FROM objeto WHERE id == ?;";
-    sqlite3_stmt* stmt;
-    rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
+    // const char* sql = "SELECT dados FROM objeto WHERE id == ?;";
+    // sqlite3_stmt* stmt;
+    // rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
 
-    if (rc != SQLITE_OK)
-    {
-        NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-        sqlite3_close(m_banco);
-        abort();
-    }
+    // if (rc != SQLITE_OK)
+    // {
+    //     NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
+    //     sqlite3_close(m_banco);
+    //     abort();
+    // }
 
-    rc = sqlite3_bind_int(stmt, 1, id);
+    // rc = sqlite3_bind_int(stmt, 1, id);
     nlohmann::json data_json;
-    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-    {
-        const unsigned char* raw_data = sqlite3_column_text(stmt, 0);
-        std::string data = reinterpret_cast<const char*>(raw_data);
+    // while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+    // {
+    //     const unsigned char* raw_data = sqlite3_column_text(stmt, 0);
+    //     std::string data = reinterpret_cast<const char*>(raw_data);
 
-        data_json = nlohmann::json::parse(data);
-    }
-    if (rc != SQLITE_DONE)
-    {
-        NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    }
+    //     data_json = nlohmann::json::parse(data);
+    // }
+    // if (rc != SQLITE_DONE)
+    // {
+    //     NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
+    // }
 
-    sqlite3_finalize(stmt);
+    // sqlite3_finalize(stmt);
     return data_json;
 }
 
 int
-CoDService::RandomInt(int min, int max) 
+CoDService::RandomInt(int min, int max)
 {
-    static std::random_device rd; 
+    static std::random_device rd;
     static std::mt19937 gen(rd());
 
     std::uniform_int_distribution<> distrib(min, max);
@@ -559,16 +513,20 @@ CoDService::RandomInt(int min, int max)
 }
 
 void
-CoDService::UpdtData_JSON(nlohmann::json& db, nlohmann::json new_data) 
+CoDService::UpdtData_JSON(nlohmann::json& db, nlohmann::json new_data)
 {
     // estamos usando o conceito de JSON Pointer
     new_data.erase("req");
     new_data.erase("id");
-    for(auto& context : new_data.items()){
-        try {
-            nlohmann::json::json_pointer ptr("/state/"+context.key());
+    for (auto& context : new_data.items())
+    {
+        try
+        {
+            nlohmann::json::json_pointer ptr("/state/" + context.key());
             db[ptr] = context.value();
-        }catch (const nlohmann::json::exception& e){
+        }
+        catch (const nlohmann::json::exception& e)
+        {
             NS_LOG_INFO("Erro ao tentar alterar o valor: " << e.what());
             abort();
         }
@@ -576,36 +534,35 @@ CoDService::UpdtData_JSON(nlohmann::json& db, nlohmann::json new_data)
 }
 
 void
-CoDService::UpdtData_Q(int id, nlohmann::json db) 
+CoDService::UpdtData_Q(int id, nlohmann::json db)
 {
-    int rc;
-    const char* sql = "UPDATE objeto SET dados=? WHERE id=?";
-    sqlite3_stmt* stmt;
-    std::string data_s = db.dump();
+    // int rc;
+    // const char* sql = "UPDATE objeto SET dados=? WHERE id=?";
+    // sqlite3_stmt* stmt;
+    // std::string data_s = db.dump();
 
-    rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
+    // rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
 
-    if (rc != SQLITE_OK)
-    {
-        NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-        sqlite3_close(m_banco);
-        abort();
-    }
+    // if (rc != SQLITE_OK)
+    // {
+    //     NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
+    //     sqlite3_close(m_banco);
+    //     abort();
+    // }
 
-    sqlite3_bind_text(stmt, 1, data_s.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_int(stmt, 2, id);
-    
-    rc = sqlite3_step(stmt);
-    if (rc != SQLITE_DONE)
-    {
-        NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-        abort();
-    }
-    // NS_LOG_INFO("Inseriu dados de " 
-    //     << InetSocketAddress::ConvertFrom(ip).GetIpv4());
-    sqlite3_finalize(stmt);
-    return ;
+    // sqlite3_bind_text(stmt, 1, data_s.c_str(), -1, SQLITE_STATIC);
+    // sqlite3_bind_int(stmt, 2, id);
+
+    // rc = sqlite3_step(stmt);
+    // if (rc != SQLITE_DONE)
+    // {
+    //     NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
+    //     abort();
+    // }
+    // // NS_LOG_INFO("Inseriu dados de "
+    // //     << InetSocketAddress::ConvertFrom(ip).GetIpv4());
+    // sqlite3_finalize(stmt);
+    return;
 }
-
 
 } // Namespace ns3
