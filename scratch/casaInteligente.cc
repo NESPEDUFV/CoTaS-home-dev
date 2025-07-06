@@ -658,6 +658,8 @@ int main(int argc, char* argv[])
     Ipv4InterfaceContainer csmaInterfaces = ipv4.Assign(csmaDevices);
     Ipv4InterfaceContainer AppInterfaces = ipv4.Assign(ApplicationsDev);
     
+    // por padrão os nós APs não repassam pacotes, 
+    // então precisamos ligar esse "forward"
     for (uint32_t i = 0; i < roteadorNodes.GetN(); ++i)
     {
         Ptr<Ipv4> ipv4 = roteadorNodes.Get(i)->GetObject<Ipv4>();

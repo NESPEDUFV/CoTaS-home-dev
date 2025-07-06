@@ -15,6 +15,12 @@
 #include "json.hpp"
 #include "sqlite3.h"
 
+#include <bsoncxx/json.hpp>
+#include <mongocxx/client.hpp>
+#include <mongocxx/exception/exception.hpp>
+#include <mongocxx/instance.hpp>
+#include <mongocxx/uri.hpp>
+
 namespace ns3
 {
 
@@ -98,6 +104,7 @@ class CoDService : public SinkApplication
     void UpdtData_Q(int id, nlohmann::json db);
 
     sqlite3* m_banco;
+    mongocxx::v_noabi::database m_bancoMongo;
 
     uint8_t m_tos;         //!< The packets Type of Service
     Ptr<Socket> m_socket;  //!< Socket

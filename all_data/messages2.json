@@ -2590,6 +2590,7 @@
     {
       "req": "getContext",
       "type": "fallDetection",
+      "where": "fala de qual objeto ou qual contexto",
       "info": "Deteccao de quedas"
     },
     {
@@ -2666,6 +2667,10 @@
       "req": "getContext",
       "type": "inventoryManagement",
       "info": "Gerenciamento de inventario"
+    },
+    {
+      "req": "getObject",
+      "where": "fala de qual objeto ou qual contexto"
     }
   ]
 }

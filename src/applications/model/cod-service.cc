@@ -81,6 +81,24 @@ CoDService::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    mongocxx::instance instance;
+    try
+    {
+        // Start example code here
+        mongocxx::uri uri("mongodb://localhost:27017/");
+        mongocxx::client client(uri);
+        // End example code here
+        m_bancoMongo = client["admin"];
+        m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
+        std::cout << "Successfully pinged the MongoDB server." << std::endl;
+    }
+    catch (const mongocxx::exception &e)
+    {
+        std::cout << "An exception occurred: " << e.what() << std::endl;
+        return ;
+    }
+    return ;
+
     // inicia o banco
     if (sqlite3_open("all_data/cot.db", &m_banco))
     {
