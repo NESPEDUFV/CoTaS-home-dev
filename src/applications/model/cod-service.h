@@ -103,6 +103,8 @@ class CoDService : public SinkApplication
     void UpdtData_Q(int id, nlohmann::json db);
 
     mongocxx::v_noabi::database m_bancoMongo;
+    mongocxx::instance m_instance{};
+    std::optional<mongocxx::client> m_client;
 
     uint8_t m_tos;         //!< The packets Type of Service
     Ptr<Socket> m_socket;  //!< Socket

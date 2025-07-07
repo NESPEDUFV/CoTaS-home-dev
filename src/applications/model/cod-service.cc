@@ -83,28 +83,23 @@ CoDService::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
-    mongocxx::instance instance;
     try
-    {
-        // Start example code here
+    {   
         mongocxx::uri uri("mongodb://localhost:27017/");
-        mongocxx::client client(uri);
+        m_client.emplace(uri);
         std::string nome_banco = "cotas_db";
-        SetupDatabase(client, nome_banco);
 
-        NS_LOG_INFO("Tentando pingar no servidor:");
+        SetupDatabase(*m_client, nome_banco);
+
+        NS_LOG_INFO("Tentando pingar no servidor de dados:");
         m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
-        NS_LOG_INFO("Successfully pinged the MongoDB server.");
-        NS_LOG_INFO("Banco de dados criado com sucesso.");
-        Simple_Q();
-        NS_LOG_INFO("Validando id " << ValidateID_Q(72));
+        NS_LOG_INFO("Banco de dados criado e conectado com sucesso.");
     }
     catch (const mongocxx::exception& e)
     {
         NS_LOG_ERROR("An exception occurred: " << e.what());
         return;
     }
-
     if (!m_socket)
     {
         auto tid = TypeId::LookupByName("ns3::UdpSocketFactory");
@@ -213,7 +208,9 @@ CoDService::HandleRead(Ptr<Socket> socket)
             }
             else if (req.compare("update") == 0)
             {
-                HandleUpdate(socket, from, data_json);
+                Simple_Q();
+                abort();
+                //HandleUpdate(socket, from, data_json);
                 NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
                                   << " atualizou dados");
             }
@@ -321,6 +318,7 @@ CoDService::HandleRequest(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::
     // retorna status ok ou error
 }
 
+// descontinuado
 std::string
 CoDService::ReadSqlArc()
 {
@@ -377,15 +375,26 @@ int
 CoDService::Simple_Q()
 {
     auto collection = m_bancoMongo["object"];
-
-    auto result = collection.find_one(make_document(kvp("nome", "Carlos")));
-    if (result)
+    std::vector<bsoncxx::document::value> resultados;
+    auto cursor = collection.find({});
+    
+    // libera o cursor o quanto antes
+    try
     {
-        NS_LOG_INFO(bsoncxx::to_json(*result));
+        for (auto&& doc : cursor) {
+            resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
+        }
     }
-    else
+    catch (const std::exception& e)
     {
-        NS_LOG_INFO("No result found");
+        NS_LOG_INFO("Exceção: " << e.what());
+        return 0;
+    }
+    
+    // faz a lógica que precisa
+    for (const auto& doc_value : resultados)
+    {
+        std::cout << bsoncxx::to_json(doc_value) << std::endl;
     }
 
     return 0;
@@ -396,21 +405,30 @@ CoDService::Simple_Q()
 int
 CoDService::ValidateIP_Q(Address ip)
 {
-    auto collection = m_bancoMongo["object"];
-    uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-    nlohmann::json j_query = {{"ip", ip_num}};
+    try
+    {
+        auto collection = m_bancoMongo["object"];
+        uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
+        nlohmann::json j_query = {{"ip", ip_num}};
+        std::string json_string = j_query.dump();
 
-    std::string json_string = j_query.dump();
-    auto bson_query = bsoncxx::from_json(json_string);
-    auto result = collection.find_one(bson_query.view());
-    if (result)
-    {
-        std::cout << bsoncxx::to_json(*result) << std::endl;
+        auto bson_query = bsoncxx::from_json(json_string);
+        auto result = collection.find_one(bson_query.view());
+        if (result)
+        {
+            auto view = (*result).view();
+            int id_retornado = view["id"].get_int32().value;
+            std::cout << bsoncxx::to_json(*result) << std::endl;
+            return id_retornado;
+        }
     }
-    else
+    catch (const std::exception& e)
     {
-        std::cout << "No result found" << std::endl;
+        NS_LOG_INFO("Exceção: " << e.what());
+        abort();
+        return 0;
     }
+
     return 0;
 }
 
@@ -427,8 +445,10 @@ CoDService::ValidateID_Q(int id)
     auto result = collection.find_one(bson_query.view());
     if (result)
     {
+        auto view = (*result).view();
+        int id_retornado = view["id"].get_int32().value;
         std::cout << bsoncxx::to_json(*result) << std::endl;
-        return 1;
+        return id_retornado;
     }
     return 0;
 }
@@ -436,34 +456,24 @@ CoDService::ValidateID_Q(int id)
 int
 CoDService::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 {
-    // int rc;
-    // const char* sql = "INSERT INTO objeto (id, ip, dados) VALUES (?, ?, ?)";
-    // sqlite3_stmt* stmt;
-    // uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-    // std::string data_s = data_json.dump();
+    auto collection = m_bancoMongo["object"];
+    uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
 
-    // rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
+    data_json["id"] = id;
+    data_json["ip"] = ip_num;
 
-    // if (rc != SQLITE_OK)
-    // {
-    //     NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-    //     sqlite3_close(m_banco);
-    //     abort();
-    // }
+    std::string json_string = data_json.dump();
+    try
+    {
+        auto bson_documento = bsoncxx::from_json(json_string);
+        auto result = collection.insert_one(bson_documento.view());
+    }
+    catch (const std::exception& e)
+    {
+        NS_LOG_INFO("Exceção: " << e.what());
+        return 0;
+    }
 
-    // sqlite3_bind_int(stmt, 1, id);
-    // sqlite3_bind_int(stmt, 2, ip_num);
-    // sqlite3_bind_text(stmt, 3, data_s.c_str(), -1, SQLITE_STATIC);
-
-    // rc = sqlite3_step(stmt);
-    // if (rc != SQLITE_DONE)
-    // {
-    //     NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    //     abort();
-    // }
-    // // NS_LOG_INFO("Inseriu dados de "
-    // //     << InetSocketAddress::ConvertFrom(ip).GetIpv4());
-    // sqlite3_finalize(stmt);
     return 1;
 }
 
