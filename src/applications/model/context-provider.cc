@@ -63,12 +63,6 @@ ContextProvider::GetTypeId()
                 MakeUintegerChecker<uint16_t>(),
                 TypeId::SupportLevel::DEPRECATED,
                 "Replaced by Remote in ns-3.44.")
-            .AddAttribute(
-                "PacketSize",
-                "Size of echo data in outbound packets",
-                UintegerValue(100),
-                MakeUintegerAccessor(&ContextProvider::SetDataSize, &ContextProvider::GetDataSize),
-                MakeUintegerChecker<uint32_t>())
             .AddAttribute("ObjectType",
                           "Which object the node refers to",
                           UintegerValue(1),
@@ -94,9 +88,7 @@ ContextProvider::GetTypeId()
 }
 
 ContextProvider::ContextProvider()
-    : m_dataSize{0},
-      m_data{nullptr},
-      m_sent{0},
+    : m_sent{0},
       m_socket{nullptr},
       m_peerPort{},
       m_sendEvent{},
@@ -120,10 +112,6 @@ ContextProvider::~ContextProvider()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
-
-    delete[] m_data;
-    m_data = nullptr;
-    m_dataSize = 0;
 }
 
 void
@@ -259,109 +247,6 @@ ContextProvider::StopApplication()
 }
 
 void
-ContextProvider::SetDataSize(uint32_t dataSize)
-{
-    NS_LOG_FUNCTION(this << dataSize);
-
-    //
-    // If the client is setting the echo packet data size this way, we infer
-    // that she doesn't care about the contents of the packet at all, so
-    // neither will we.
-    //
-    delete[] m_data;
-    m_data = nullptr;
-    m_dataSize = 0;
-    m_size = dataSize;
-}
-
-uint32_t
-ContextProvider::GetDataSize() const
-{
-    NS_LOG_FUNCTION(this);
-    return m_size;
-}
-
-void
-ContextProvider::SetFill(std::string fill)
-{
-    NS_LOG_FUNCTION(this << fill);
-
-    uint32_t dataSize = fill.size() + 1;
-
-    if (dataSize != m_dataSize)
-    {
-        delete[] m_data;
-        m_data = new uint8_t[dataSize];
-        m_dataSize = dataSize;
-    }
-
-    memcpy(m_data, fill.c_str(), dataSize);
-
-    //
-    // Overwrite packet size attribute.
-    //
-    m_size = dataSize;
-}
-
-void
-ContextProvider::SetFill(uint8_t fill, uint32_t dataSize)
-{
-    NS_LOG_FUNCTION(this << fill << dataSize);
-    if (dataSize != m_dataSize)
-    {
-        delete[] m_data;
-        m_data = new uint8_t[dataSize];
-        m_dataSize = dataSize;
-    }
-
-    memset(m_data, fill, dataSize);
-
-    //
-    // Overwrite packet size attribute.
-    //
-    m_size = dataSize;
-}
-
-void
-ContextProvider::SetFill(uint8_t* fill, uint32_t fillSize, uint32_t dataSize)
-{
-    NS_LOG_FUNCTION(this << fill << fillSize << dataSize);
-    if (dataSize != m_dataSize)
-    {
-        delete[] m_data;
-        m_data = new uint8_t[dataSize];
-        m_dataSize = dataSize;
-    }
-
-    if (fillSize >= dataSize)
-    {
-        memcpy(m_data, fill, dataSize);
-        m_size = dataSize;
-        return;
-    }
-
-    //
-    // Do all but the final fill.
-    //
-    uint32_t filled = 0;
-    while (filled + fillSize < dataSize)
-    {
-        memcpy(&m_data[filled], fill, fillSize);
-        filled += fillSize;
-    }
-
-    //
-    // Last fill may be partial
-    //
-    memcpy(&m_data[filled], fill, dataSize - filled);
-
-    //
-    // Overwrite packet size attribute.
-    //
-    m_size = dataSize;
-}
-
-void
 ContextProvider::ScheduleTransmit(Time dt)
 {
     NS_LOG_FUNCTION(this << dt);
@@ -390,7 +275,6 @@ ContextProvider::Send()
     }
 
     p = Create<Packet>((uint8_t*)data.c_str(), data.size());
-    m_size = data.size();
 
     Address localAddress;
     m_socket->GetSockName(localAddress);
@@ -402,21 +286,6 @@ ContextProvider::Send()
     m_txTraceWithAddresses(p, localAddress, m_peer);
     m_socket->Send(p);
     ++m_sent;
-
-    // if (InetSocketAddress::IsMatchingType(m_peer))
-    // {
-    //     NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size
-    //                            << " bytes to " <<
-    //                            InetSocketAddress::ConvertFrom(m_peer).GetIpv4()
-    //                            << " port " << InetSocketAddress::ConvertFrom(m_peer).GetPort());
-    // }
-    // else if (Inet6SocketAddress::IsMatchingType(m_peer))
-    // {
-    //     NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size
-    //                            << " bytes to " <<
-    //                            Inet6SocketAddress::ConvertFrom(m_peer).GetIpv6()
-    //                            << " port " << Inet6SocketAddress::ConvertFrom(m_peer).GetPort());
-    // }
 
     if (m_sent < m_count || m_count == 0)
     {
@@ -456,22 +325,6 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
             NS_LOG_INFO("status não reconhecido");
         }
 
-
-        if (InetSocketAddress::IsMatchingType(from))
-        {
-            // NS_LOG_INFO("Aceitou inscrição");
-            // NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client received "
-            //                        << packet->GetSize() << " bytes from "
-            //                        << InetSocketAddress::ConvertFrom(from).GetIpv4() << " port "
-            //                        << InetSocketAddress::ConvertFrom(from).GetPort());
-        }
-        // else if (Inet6SocketAddress::IsMatchingType(from))
-        // {
-        //     NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client received "
-        //                            << packet->GetSize() << " bytes from "
-        //                            << Inet6SocketAddress::ConvertFrom(from).GetIpv6() << " port "
-        //                            << Inet6SocketAddress::ConvertFrom(from).GetPort());
-        // }
         Address localAddress;
         socket->GetSockName(localAddress);
         m_rxTrace(packet);

@@ -40,27 +40,6 @@ ContextProviderHelper::ContextProviderHelper(const Address& address)
     SetAttribute("Remote", AddressValue(address));
 }
 
-void
-ContextProviderHelper::SetFill(Ptr<Application> app, const std::string& fill)
-{
-    app->GetObject<ContextProvider>()->SetFill(fill);
-}
-
-void
-ContextProviderHelper::SetFill(Ptr<Application> app, uint8_t fill, uint32_t dataLength)
-{
-    app->GetObject<ContextProvider>()->SetFill(fill, dataLength);
-}
-
-void
-ContextProviderHelper::SetFill(Ptr<Application> app,
-                             uint8_t* fill,
-                             uint32_t fillLength,
-                             uint32_t dataLength)
-{
-    app->GetObject<ContextProvider>()->SetFill(fill, fillLength, dataLength);
-}
-
 ContextConsumerHelper::ContextConsumerHelper(const Address& address, uint16_t port)
     : ContextConsumerHelper(addressUtils::ConvertToSocketAddress(address, port))
 {
@@ -72,26 +51,6 @@ ContextConsumerHelper::ContextConsumerHelper(const Address& address)
     SetAttribute("Remote", AddressValue(address));
 }
 
-void
-ContextConsumerHelper::SetFill(Ptr<Application> app, const std::string& fill)
-{
-    app->GetObject<ContextConsumer>()->SetFill(fill);
-}
-
-void
-ContextConsumerHelper::SetFill(Ptr<Application> app, uint8_t fill, uint32_t dataLength)
-{
-    app->GetObject<ContextConsumer>()->SetFill(fill, dataLength);
-}
-
-void
-ContextConsumerHelper::SetFill(Ptr<Application> app,
-                             uint8_t* fill,
-                             uint32_t fillLength,
-                             uint32_t dataLength)
-{
-    app->GetObject<ContextConsumer>()->SetFill(fill, fillLength, dataLength);
-}
 
 
 } // namespace ns3

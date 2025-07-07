@@ -172,10 +172,6 @@ class ContextProvider : public SourceApplication
 
     uint32_t m_count; //!< Maximum number of packets the application will send
     Time m_interval;  //!< Packet inter-send time
-    uint32_t m_size;  //!< Size of the sent packet
-
-    uint32_t m_dataSize; //!< packet payload size (must be equal to m_size)
-    uint8_t* m_data;     //!< packet payload data
 
     uint32_t m_sent;                    //!< Counter for sent packets
     Ptr<Socket> m_socket;               //!< Socket

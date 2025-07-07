@@ -679,7 +679,6 @@ int main(int argc, char* argv[])
     ContextProviderHelper ClientProvider(CoTDisInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(6));
     ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(500)));
-    ClientProvider.SetAttribute("PacketSize", UintegerValue(1024));
     
     ClientProvider.SetAttribute("ObjectType", UintegerValue(0));
     ApplicationContainer computadorApp = ClientProvider.Install(computadorNode);
@@ -876,7 +875,6 @@ int main(int argc, char* argv[])
     ContextConsumerHelper ClientConsumer(CoTDisInterface.GetAddress(0), 9);
     ClientConsumer.SetAttribute("MaxPackets", UintegerValue(6));
     ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(500)));
-    ClientConsumer.SetAttribute("PacketSize", UintegerValue(1024));
     
     ClientConsumer.SetAttribute("ApplicationType", UintegerValue(0));
     ApplicationContainer FallDetection = ClientConsumer.Install(ApplicationsNodes.Get(0));

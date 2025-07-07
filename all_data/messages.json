@@ -2838,87 +2838,312 @@
     {
       "req": "getContext",
       "type": "fallDetection",
-      "where": "fala de qual objeto ou qual contexto",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartWatch",
+                "cot:SmartCamera",
+                "cot:SmartNecklace",
+                "cot:SmartRing"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Deteccao de quedas"
     },
     {
       "req": "getContext",
       "type": "microControl",
+      "query": {
+        "$and": [
+          {
+            "object": "cot:SmartSpeaker"
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Controle de microprocessadores"
     },
     {
       "req": "getContext",
       "type": "petCare",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": ["cot:SmartCamera", "cot:SmartCollar", "cot:SmartFeeder"]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Cuidados com animais de estimacao"
     },
     {
       "req": "getContext",
       "type": "energyManegement",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cafeteira",
+                "cot:SmartCollar",
+                "cot:Computer",
+                "cot:SmartAirConditioner",
+                "cot:SmartLightBulb",
+                "cot:SmartMirror",
+                "cot:SmartPowerOutlet",
+                "cot:SmartRefrigerator",
+                "cot:SmartTelevision",
+                "Robo aspirador de po"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Gerenciamento de gasto de energia"
     },
     {
       "req": "getContext",
       "type": "waterManegement",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartIrrigationController",
+                "jardim",
+                "cot:SmartShower"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Gerenciamento de gasto de agua"
     },
     {
       "req": "getContext",
       "type": "security",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": ["cot:SmartCamera", "cot:SmartDoor"]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Sistema de segurança"
     },
     {
       "req": "getContext",
       "type": "localization",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartCamera",
+                "cot:SmartCollar",
+                "cot:SmartNecklace",
+                "cot:SmartWatch",
+                "cot:SmartRing",
+                "Robo aspirador de po",
+                "cot:SmartCar"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Sistema de localizacao interno"
     },
     {
       "req": "getContext",
       "type": "gasSec",
+      "query": {
+        "$and": [
+          {
+            "object": "cot:SmokeSensor"
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Sistema detector de gases perigosos"
     },
     {
       "req": "getContext",
       "type": "healthCare",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartNecklace",
+                "toothbrush",
+                "cot:SmartWatch",
+                "cot:SmartRing"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Sistemas de cuidado com a saude"
     },
     {
       "req": "getContext",
       "type": "lightControl",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartCamera",
+                "cot:SmartLightSwitch",
+                "jardim",
+                "cot:SmartLightBulb"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Sistemas de controle de luz"
     },
     {
       "req": "getContext",
       "type": "tempControl",
+      "query": {
+        "$and": [
+          {
+            "object": "cot:SmartAirConditioner"
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Controladores de temperatura e umidade"
     },
     {
       "req": "getContext",
       "type": "smartCleaning",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": ["Robo aspirador de po", "cot:SmartLaundryMachine"]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Servico de limpeza inteligente"
     },
     {
       "req": "getContext",
       "type": "garden",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": ["jardim", "cot:SmartIrrigationController"]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Jardim inteligente"
     },
     {
       "req": "getContext",
       "type": "mobility",
+      "query": {
+        "$and": [
+          {
+            "object": "cot:SmartCar"
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Locomocao inteligente"
     },
     {
       "req": "getContext",
       "type": "SmartCooking",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartRefrigerator",
+                "SmartCookware",
+                "cot:SmartStove",
+                "cafeteira"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Coccao inteligente"
     },
     {
       "req": "getContext",
       "type": "inventoryManagement",
+      "query": {
+        "$and": [
+          {
+            "object": {
+              "$in": [
+                "cot:SmartRefrigerator",
+                "cot:SmartCabinet"
+              ]
+            }
+          },
+          {
+            "state.turnedOn": 1
+          }
+        ]
+      },
       "info": "Gerenciamento de inventario"
-    },
-    {
-      "req": "getObject",
-      "where": "fala de qual objeto ou qual contexto"
     }
   ]
 }

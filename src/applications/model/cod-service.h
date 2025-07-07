@@ -84,8 +84,6 @@ class CoDService : public SinkApplication
 
     int RandomInt(int min, int max);
 
-    std::string ReadSqlArc();
-
     int ValidateIP_Q(Address ip);
 
     int ValidateID_Q(int id);
@@ -96,12 +94,6 @@ class CoDService : public SinkApplication
 
     int InsertDataSub_Q(int id, Address ip, nlohmann::json data_json);
     
-    nlohmann::json GetDataJSON_Q(int id);
-
-    void UpdtData_JSON(nlohmann::json& db, nlohmann::json new_data); 
-
-    void UpdtData_Q(int id, nlohmann::json db);
-
     mongocxx::v_noabi::database m_bancoMongo;
     mongocxx::instance m_instance{};
     std::optional<mongocxx::client> m_client;

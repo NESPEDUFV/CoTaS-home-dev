@@ -63,12 +63,6 @@ ContextConsumer::GetTypeId()
                 MakeUintegerChecker<uint16_t>(),
                 TypeId::SupportLevel::DEPRECATED,
                 "Replaced by Remote in ns-3.44.")
-            .AddAttribute(
-                "PacketSize",
-                "Size of echo data in outbound packets",
-                UintegerValue(100),
-                MakeUintegerAccessor(&ContextConsumer::SetDataSize, &ContextConsumer::GetDataSize),
-                MakeUintegerChecker<uint32_t>())
             .AddAttribute("ApplicationType",
                           "Which Application the node refers to",
                           UintegerValue(1),
@@ -94,13 +88,10 @@ ContextConsumer::GetTypeId()
 }
 
 ContextConsumer::ContextConsumer()
-    : m_dataSize{0},
-      m_data{nullptr},
-      m_sent{0},
+    : m_sent{0},
       m_socket{nullptr},
       m_peerPort{},
-      m_sendEvent{},
-      m_objectId{0}
+      m_sendEvent{}
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -121,9 +112,6 @@ ContextConsumer::~ContextConsumer()
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
 
-    delete[] m_data;
-    m_data = nullptr;
-    m_dataSize = 0;
 }
 
 void
@@ -259,109 +247,6 @@ ContextConsumer::StopApplication()
 }
 
 void
-ContextConsumer::SetDataSize(uint32_t dataSize)
-{
-    NS_LOG_FUNCTION(this << dataSize);
-
-    //
-    // If the client is setting the echo packet data size this way, we infer
-    // that she doesn't care about the contents of the packet at all, so
-    // neither will we.
-    //
-    delete[] m_data;
-    m_data = nullptr;
-    m_dataSize = 0;
-    m_size = dataSize;
-}
-
-uint32_t
-ContextConsumer::GetDataSize() const
-{
-    NS_LOG_FUNCTION(this);
-    return m_size;
-}
-
-void
-ContextConsumer::SetFill(std::string fill)
-{
-    NS_LOG_FUNCTION(this << fill);
-
-    uint32_t dataSize = fill.size() + 1;
-
-    if (dataSize != m_dataSize)
-    {
-        delete[] m_data;
-        m_data = new uint8_t[dataSize];
-        m_dataSize = dataSize;
-    }
-
-    memcpy(m_data, fill.c_str(), dataSize);
-
-    //
-    // Overwrite packet size attribute.
-    //
-    m_size = dataSize;
-}
-
-void
-ContextConsumer::SetFill(uint8_t fill, uint32_t dataSize)
-{
-    NS_LOG_FUNCTION(this << fill << dataSize);
-    if (dataSize != m_dataSize)
-    {
-        delete[] m_data;
-        m_data = new uint8_t[dataSize];
-        m_dataSize = dataSize;
-    }
-
-    memset(m_data, fill, dataSize);
-
-    //
-    // Overwrite packet size attribute.
-    //
-    m_size = dataSize;
-}
-
-void
-ContextConsumer::SetFill(uint8_t* fill, uint32_t fillSize, uint32_t dataSize)
-{
-    NS_LOG_FUNCTION(this << fill << fillSize << dataSize);
-    if (dataSize != m_dataSize)
-    {
-        delete[] m_data;
-        m_data = new uint8_t[dataSize];
-        m_dataSize = dataSize;
-    }
-
-    if (fillSize >= dataSize)
-    {
-        memcpy(m_data, fill, dataSize);
-        m_size = dataSize;
-        return;
-    }
-
-    //
-    // Do all but the final fill.
-    //
-    uint32_t filled = 0;
-    while (filled + fillSize < dataSize)
-    {
-        memcpy(&m_data[filled], fill, fillSize);
-        filled += fillSize;
-    }
-
-    //
-    // Last fill may be partial
-    //
-    memcpy(&m_data[filled], fill, dataSize - filled);
-
-    //
-    // Overwrite packet size attribute.
-    //
-    m_size = dataSize;
-}
-
-void
 ContextConsumer::ScheduleTransmit(Time dt)
 {
     NS_LOG_FUNCTION(this << dt);
@@ -384,7 +269,6 @@ ContextConsumer::Send()
     
 
     p = Create<Packet>((uint8_t*)data.c_str(), data.size());
-    m_size = data.size();
 
     Address localAddress;
     m_socket->GetSockName(localAddress);
@@ -397,21 +281,6 @@ ContextConsumer::Send()
     m_socket->Send(p);
     ++m_sent;
 
-    // if (InetSocketAddress::IsMatchingType(m_peer))
-    // {
-    //     NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size
-    //                            << " bytes to " <<
-    //                            InetSocketAddress::ConvertFrom(m_peer).GetIpv4()
-    //                            << " port " << InetSocketAddress::ConvertFrom(m_peer).GetPort());
-    // }
-    // else if (Inet6SocketAddress::IsMatchingType(m_peer))
-    // {
-    //     NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size
-    //                            << " bytes to " <<
-    //                            Inet6SocketAddress::ConvertFrom(m_peer).GetIpv6()
-    //                            << " port " << Inet6SocketAddress::ConvertFrom(m_peer).GetPort());
-    // }
-
     if (m_sent < m_count || m_count == 0)
     {
         ScheduleTransmit(m_interval);
@@ -421,7 +290,6 @@ ContextConsumer::Send()
 void
 ContextConsumer::HandleRead(Ptr<Socket> socket)
 {
-    NS_LOG_INFO("lidando com dados consumidor");
     NS_LOG_FUNCTION(this << socket);
     Address from;
     while (auto packet = socket->RecvFrom(from))
@@ -430,19 +298,19 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         packet->CopyData(raw_data, packet->GetSize());
         nlohmann::json data_json =
             nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
-
         uint64_t res = data_json["status"];
         
         switch (res)
         {
         case 200:
-            m_objectId = data_json["id"];
+            NS_LOG_INFO("Requisição de consumidor respondida com sucesso");
             break;
-        case 204:
-            // resposta do update, não faz nada
-        break;
+        case 400:
+            NS_LOG_INFO("Bad request " << data_json["info"]);
+            break;
         case 401:
-            NS_LOG_INFO("Tentou enviar update sem inscrição");
+            // TODO
+            NS_LOG_INFO("Tentou enviar request sem inscrição");
             break;
         case 500:
             NS_LOG_INFO("Erro no servidor");
@@ -451,22 +319,6 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             NS_LOG_INFO("status não reconhecido");
         }
 
-
-        if (InetSocketAddress::IsMatchingType(from))
-        {
-            // NS_LOG_INFO("Aceitou inscrição");
-            // NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client received "
-            //                        << packet->GetSize() << " bytes from "
-            //                        << InetSocketAddress::ConvertFrom(from).GetIpv4() << " port "
-            //                        << InetSocketAddress::ConvertFrom(from).GetPort());
-        }
-        // else if (Inet6SocketAddress::IsMatchingType(from))
-        // {
-        //     NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client received "
-        //                            << packet->GetSize() << " bytes from "
-        //                            << Inet6SocketAddress::ConvertFrom(from).GetIpv6() << " port "
-        //                            << Inet6SocketAddress::ConvertFrom(from).GetPort());
-        // }
         Address localAddress;
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
@@ -480,23 +332,4 @@ ContextConsumer::SetDataMessage()
     m_reqData = m_messages["requestMessages"][m_applicationType];
 }
 
-std::string
-ContextConsumer::RandomData()
-{   
-    nlohmann::json data = m_reqData[RandomInt(0, 3)];
-    data["id"] = m_objectId;
-    // add dados que variam com ns3 (localização)
-    return data.dump();
-}
-
-int 
-ContextConsumer::RandomInt(int min, int max) 
-{
-    static std::random_device rd; 
-    static std::mt19937 gen(rd());
-
-    std::uniform_int_distribution<> distrib(min, max);
-
-    return distrib(gen);
-}
 } // Namespace ns3

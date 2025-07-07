@@ -161,7 +161,6 @@ CoDService::StartApplication()
 void
 CoDService::StopApplication()
 {
-    Simple_Q();
     NS_LOG_FUNCTION(this);
 
     if (m_socket)
@@ -215,7 +214,9 @@ CoDService::HandleRead(Ptr<Socket> socket)
             }
             else if (req.compare("getContext") == 0)
             {
-                NS_LOG_INFO("Chegou requisição da aplicação");
+                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
+                                  << " respondendo requisição...");
+                HandleRequest(socket, from, data_json);
             }
         }
         // trata no ipv6
@@ -301,24 +302,15 @@ CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::j
     {
         auto bson_documento = bsoncxx::from_json(json_string);
         auto update_doc = make_document(kvp("$set", bson_documento));
-    
+
         auto result = collection.update_one(query_filter.view(), update_doc.view());
     }
     catch (const std::exception& e)
     {
         NS_LOG_INFO("Exceção: " << e.what());
         abort();
-        return ;
+        return;
     }
-
-    // // pega dados no banco
-    // nlohmann::json db_json = GetDataJSON_Q(id);
-
-    // // atualiza os campos
-    // UpdtData_JSON(db_json, data_json);
-
-    // // volta pro banco
-    // UpdtData_Q(id, db_json);
 
     // retorna status ok ou error
     nlohmann::json res = {{"status", 200}, {"id", id}};
@@ -333,24 +325,57 @@ CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::j
 void
 CoDService::HandleRequest(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
 {
-    // verifica se id é válido
-    // atualiza dados no banco
-    // retorna status ok ou error
-}
+    auto collection = m_bancoMongo["object"];
+    nlohmann::json res = nlohmann::json::array();
+    nlohmann::json cap;
+    std::vector<bsoncxx::document::value> resultados;
 
-// descontinuado
-std::string
-CoDService::ReadSqlArc()
-{
-    std::ifstream arquivo(SQL_PATH);
-    if (!arquivo.is_open())
+    std::string json_string = data_json["query"].dump();
+    if (json_string.empty())
     {
-        NS_LOG_INFO("Erro ao abrir o arquivo SQL: " << SQL_PATH);
-        return "";
+        cap = {{"status", 400}, {"info", "bad request"}};
+        NS_LOG_INFO("Consumidor enviou cabeçalho errado");
+        std::string data = cap.dump();
+        Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
+        socket->SendTo(response, 0, from);
+
+        return;
     }
-    std::stringstream buffer;
-    buffer << arquivo.rdbuf();
-    return buffer.str();
+    auto bson_query = bsoncxx::from_json(json_string);
+
+    auto cursor = collection.find(bson_query.view());
+
+    // libera o cursor o quanto antes
+    try
+    {
+        for (auto&& doc : cursor)
+        {
+            resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
+        }
+    }
+    catch (const std::exception& e)
+    {
+        NS_LOG_INFO("Exceção: " << e.what());
+        abort();
+        return;
+    }
+
+    // faz a lógica que precisa
+    for (const auto& doc_value : resultados)
+    {
+        std::string json_db = bsoncxx::to_json(doc_value.view());
+        res.push_back(nlohmann::json::parse(json_db));
+    }
+    NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
+    cap = {{"status", 200}, {"response", res}};
+
+    std::string data = cap.dump();
+    Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
+    socket->SendTo(response, 0, from);
+
+    return;
+
+    // retorna dados
 }
 
 void
@@ -496,40 +521,6 @@ CoDService::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
     return 1;
 }
 
-nlohmann::json
-CoDService::GetDataJSON_Q(int id)
-{
-    // int rc;
-
-    // const char* sql = "SELECT dados FROM objeto WHERE id == ?;";
-    // sqlite3_stmt* stmt;
-    // rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
-
-    // if (rc != SQLITE_OK)
-    // {
-    //     NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-    //     sqlite3_close(m_banco);
-    //     abort();
-    // }
-
-    // rc = sqlite3_bind_int(stmt, 1, id);
-    nlohmann::json data_json;
-    // while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-    // {
-    //     const unsigned char* raw_data = sqlite3_column_text(stmt, 0);
-    //     std::string data = reinterpret_cast<const char*>(raw_data);
-
-    //     data_json = nlohmann::json::parse(data);
-    // }
-    // if (rc != SQLITE_DONE)
-    // {
-    //     NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    // }
-
-    // sqlite3_finalize(stmt);
-    return data_json;
-}
-
 int
 CoDService::RandomInt(int min, int max)
 {
@@ -539,59 +530,6 @@ CoDService::RandomInt(int min, int max)
     std::uniform_int_distribution<> distrib(min, max);
 
     return distrib(gen);
-}
-
-void
-CoDService::UpdtData_JSON(nlohmann::json& db, nlohmann::json new_data)
-{
-    // estamos usando o conceito de JSON Pointer
-    new_data.erase("req");
-    new_data.erase("id");
-    for (auto& context : new_data.items())
-    {
-        try
-        {
-            nlohmann::json::json_pointer ptr("/state/" + context.key());
-            db[ptr] = context.value();
-        }
-        catch (const nlohmann::json::exception& e)
-        {
-            NS_LOG_INFO("Erro ao tentar alterar o valor: " << e.what());
-            abort();
-        }
-    }
-}
-
-void
-CoDService::UpdtData_Q(int id, nlohmann::json db)
-{
-    // int rc;
-    // const char* sql = "UPDATE objeto SET dados=? WHERE id=?";
-    // sqlite3_stmt* stmt;
-    // std::string data_s = db.dump();
-
-    // rc = sqlite3_prepare_v2(m_banco, sql, -1, &stmt, 0);
-
-    // if (rc != SQLITE_OK)
-    // {
-    //     NS_LOG_INFO("Erro ao preparar a consulta: " << sqlite3_errmsg(m_banco));
-    //     sqlite3_close(m_banco);
-    //     abort();
-    // }
-
-    // sqlite3_bind_text(stmt, 1, data_s.c_str(), -1, SQLITE_STATIC);
-    // sqlite3_bind_int(stmt, 2, id);
-
-    // rc = sqlite3_step(stmt);
-    // if (rc != SQLITE_DONE)
-    // {
-    //     NS_LOG_INFO("Erro ao executar o passo: " << sqlite3_errmsg(m_banco));
-    //     abort();
-    // }
-    // // NS_LOG_INFO("Inseriu dados de "
-    // //     << InetSocketAddress::ConvertFrom(ip).GetIpv4());
-    // sqlite3_finalize(stmt);
-    return;
 }
 
 } // Namespace ns3
