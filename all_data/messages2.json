@@ -1710,695 +1710,695 @@
       {
         "req": "update",
         "object": "cot:Computer",
-        "turnedOn": 1,
-        "volume": 100,
-        "localization/lat": 12,
-        "localization/long": 13
+        "state.turnedOn": 1,
+        "state.volume": 100,
+        "state.localization.lat": 12,
+        "state.localization.long": 13
       },
       {
         "req": "update",
         "object": "cot:Computer",
-        "turnedOn": 1,
-        "volume": 50,
-        "localization/lat": 12,
-        "localization/long": 13
+        "state.turnedOn": 1,
+        "state.volume": 50,
+        "state.localization.lat": 12,
+        "state.localization.long": 13
       },
       {
         "req": "update",
         "object": "cot:Computer",
-        "turnedOn": 1,
-        "volume": 0,
-        "localization/lat": 12,
-        "localization/long": 13
+        "state.turnedOn": 1,
+        "state.volume": 0,
+        "state.localization.lat": 12,
+        "state.localization.long": 13
       },
       {
         "req": "update",
         "object": "cot:Computer",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartMirror",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartMirror",
-        "turnedOn": 1,
-        "LightOn": 0
+        "state.turnedOn": 1,
+        "state.LightOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartMirror",
-        "turnedOn": 1,
-        "LightOn": 1
+        "state.turnedOn": 1,
+        "state.LightOn": 1
       },
       {
         "req": "update",
         "object": "cot:SmartMirror",
-        "turnedOn": 1,
-        "LightOn": 0
+        "state.turnedOn": 1,
+        "state.LightOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartTelevision",
-        "turnedOn": 1,
-        "volume": 100,
-        "brightness": 50
+        "state.turnedOn": 1,
+        "state.volume": 100,
+        "state.brightness": 50
       },
       {
         "req": "update",
         "object": "cot:SmartTelevision",
-        "turnedOn": 1,
-        "volume": 50,
-        "brightness": 50
+        "state.turnedOn": 1,
+        "state.volume": 50,
+        "state.brightness": 50
       },
       {
         "req": "update",
         "object": "cot:SmartTelevision",
-        "turnedOn": 1,
-        "volume": 100,
-        "brightness": 100
+        "state.turnedOn": 1,
+        "state.volume": 100,
+        "state.brightness": 100
       },
       {
         "req": "update",
         "object": "cot:SmartTelevision",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartSpeaker",
-        "turnedOn": 1,
-        "volume": 100
+        "state.turnedOn": 1,
+        "state.volume": 100
       },
       {
         "req": "update",
         "object": "cot:SmartSpeaker",
-        "turnedOn": 1,
-        "volume": 50
+        "state.turnedOn": 1,
+        "state.volume": 50
       },
       {
         "req": "update",
         "object": "cot:SmartSpeaker",
-        "turnedOn": 1,
-        "volume": 0
+        "state.turnedOn": 1,
+        "state.volume": 0
       },
       {
         "req": "update",
         "object": "cot:SmartSpeaker",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartCamera",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartCamera",
-        "turnedOn": 1,
-        "angle": 270
+        "state.turnedOn": 1,
+        "state.angle": 270
       },
       {
         "req": "update",
         "object": "cot:SmartCamera",
-        "turnedOn": 1,
-        "angle": 70
+        "state.turnedOn": 1,
+        "state.angle": 70
       },
       {
         "req": "update",
         "object": "cot:SmartCamera",
-        "turnedOn": 1,
-        "angle": 200
+        "state.turnedOn": 1,
+        "state.angle": 200
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 1,
-        "cot:weightCapacity/value": 0,
-        "cot:physicalStorage/0/value": 2,
-        "cot:physicalStorage/1/value": 0
+        "state.turnedOn": 1,
+        "state.cot:weightCapacity.value": 0,
+        "state.cot:physicalStorage.0.value": 2,
+        "state.cot:physicalStorage.1.value": 0
       },
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 1,
-        "cot:weightCapacity/value": 1,
-        "cot:physicalStorage/0/value": 0,
-        "cot:physicalStorage/1/value": 0
+        "state.turnedOn": 1,
+        "state.cot:weightCapacity.value": 1,
+        "state.cot:physicalStorage.0.value": 0,
+        "state.cot:physicalStorage.1.value": 0
       },
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 1,
-        "cot:weightCapacity/value": 0,
-        "cot:physicalStorage/0/value": 0,
-        "cot:physicalStorage/1/value": 2
+        "state.turnedOn": 1,
+        "state.cot:weightCapacity.value": 0,
+        "state.cot:physicalStorage.0.value": 0,
+        "state.cot:physicalStorage.1.value": 2
       },
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 1,
-        "cot:physicalStorage/0/value": 0
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.0.value": 0
       },
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 1,
-        "cot:physicalStorage/0/value": 1
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.0.value": 1
       },
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 1,
-        "cot:physicalStorage/0/value": 2
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.0.value": 2
       },
       {
         "req": "update",
         "object": "cot:SmartCabinet",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": ["cot:SmartMirror", "cot:SmartCabinet"],
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": ["cot:SmartMirror", "cot:SmartCabinet"],
-        "turnedOn": 1
+        "state.turnedOn": 1
       },
       {
         "req": "update",
         "object": ["cot:SmartMirror", "cot:SmartCabinet"],
-        "turnedOn": 1
+        "state.turnedOn": 1
       },
       {
         "req": "update",
         "object": ["cot:SmartMirror", "cot:SmartCabinet"],
-        "turnedOn": 1
+        "state.turnedOn": 1
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartAirConditioner",
-        "turnedOn": 1,
-        "temperature": 17
+        "state.turnedOn": 1,
+        "state.temperature": 17
       },
       {
         "req": "update",
         "object": "cot:SmartAirConditioner",
-        "turnedOn": 0,
-        "temperature": 20
+        "state.turnedOn": 0,
+        "state.temperature": 20
       },
       {
         "req": "update",
         "object": "cot:SmartAirConditioner",
-        "turnedOn": 0,
-        "temperature": 28
+        "state.turnedOn": 0,
+        "state.temperature": 28
       },
       {
         "req": "update",
         "object": "cot:SmartAirConditioner",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartRing",
-        "turnedOn": 1,
-        "heartBeat": 90,
-        "bloodOxygenation": 95,
-        "battery": 100
+        "state.turnedOn": 1,
+        "state.heartBeat": 90,
+        "state.bloodOxygenation": 95,
+        "state.battery": 100
       },
       {
         "req": "update",
         "object": "cot:SmartRing",
-        "turnedOn": 1,
-        "heartBeat": 80,
-        "bloodOxygenation": 85,
-        "battery": 50
+        "state.turnedOn": 1,
+        "state.heartBeat": 80,
+        "state.bloodOxygenation": 85,
+        "state.battery": 50
       },
       {
         "req": "update",
         "object": "cot:SmartRing",
-        "turnedOn": 1,
-        "heartBeat": 100,
-        "bloodOxygenation": 105,
-        "battery": 75
+        "state.turnedOn": 1,
+        "state.heartBeat": 100,
+        "state.bloodOxygenation": 105,
+        "state.battery": 75
       },
       {
         "req": "update",
         "object": "cot:SmartRing",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cafeteira",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cafeteira",
-        "turnedOn": 1,
-        "running": "chocolate"
+        "state.turnedOn": 1,
+        "state.running": "chocolate"
       },
       {
         "req": "update",
         "object": "cafeteira",
-        "turnedOn": 1,
-        "running": "coffee"
+        "state.turnedOn": 1,
+        "state.running": "coffee"
       },
       {
         "req": "update",
         "object": "cafeteira",
-        "turnedOn": 1,
-        "running": "expresso"
+        "state.turnedOn": 1,
+        "state.running": "expresso"
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartShower",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartShower",
-        "turnedOn": 1,
-        "volume": 50,
-        "temperature": 30
+        "state.turnedOn": 1,
+        "state.volume": 50,
+        "state.temperature": 30
       },
       {
         "req": "update",
         "object": "cot:SmartShower",
-        "turnedOn": 1,
-        "volume": 100,
-        "temperature": 20
+        "state.turnedOn": 1,
+        "state.volume": 100,
+        "state.temperature": 20
       },
       {
         "req": "update",
         "object": "cot:SmartShower",
-        "turnedOn": 1,
-        "volume": 0,
-        "temperature": 25
+        "state.turnedOn": 1,
+        "state.volume": 0,
+        "state.temperature": 25
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartCar",
-        "turnedOn": 0,
-        "CargoCompartment": 1
+        "state.turnedOn": 0,
+        "state.CargoCompartment": 1
       },
       {
         "req": "update",
         "object": "cot:SmartCar",
-        "turnedOn": 1,
-        "volume": 50,
-        "tirePressure": 30,
-        "battery": 100,
-        "CargoCompartment": 2
+        "state.turnedOn": 1,
+        "state.volume": 50,
+        "state.tirePressure": 30,
+        "state.battery": 100,
+        "state.CargoCompartment": 2
       },
       {
         "req": "update",
         "object": "cot:SmartCar",
-        "turnedOn": 1,
-        "volume": 100,
-        "tirePressure": 29,
-        "battery": 75,
-        "CargoCompartment": 3
+        "state.turnedOn": 1,
+        "state.volume": 100,
+        "state.tirePressure": 29,
+        "state.battery": 75,
+        "state.CargoCompartment": 3
       },
       {
         "req": "update",
         "object": "cot:SmartCar",
-        "turnedOn": 1,
-        "volume": 0,
-        "tirePressure": 31,
-        "battery": 100,
-        "CargoCompartment": 4
+        "state.turnedOn": 1,
+        "state.volume": 0,
+        "state.tirePressure": 31,
+        "state.battery": 100,
+        "state.CargoCompartment": 4
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartNecklace",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartNecklace",
-        "turnedOn": 1,
-        "battery": 100
+        "state.turnedOn": 1,
+        "state.battery": 100
       },
       {
         "req": "update",
         "object": "cot:SmartNecklace",
-        "turnedOn": 1,
-        "battery": 75
+        "state.turnedOn": 1,
+        "state.battery": 75
       },
       {
         "req": "update",
         "object": "cot:SmartNecklace",
-        "turnedOn": 1,
-        "battery": 50
+        "state.turnedOn": 1,
+        "state.battery": 50
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartCollar",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartCollar",
-        "turnedOn": 1,
-        "battery": 100
+        "state.turnedOn": 1,
+        "state.battery": 100
       },
       {
         "req": "update",
         "object": "cot:SmartCollar",
-        "turnedOn": 1,
-        "battery": 75
+        "state.turnedOn": 1,
+        "state.battery": 75
       },
       {
         "req": "update",
         "object": "cot:SmartCollar",
-        "turnedOn": 1,
-        "battery": 50
+        "state.turnedOn": 1,
+        "state.battery": 50
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartFeeder",
-        "turnedOn": 1,
-        "cot:physicalStorage/value": 5,
-        "cot:feedingControl/cot:mealFrequency/value": 4,
-        "cot:feedingControl/cot:servingSize/value": 3,
-        "cot:feedingControl/cot:servingsPerMeal/value": 20
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value": 5,
+        "state.cot:feedingControl.cot:mealFrequency.value": 4,
+        "state.cot:feedingControl.cot:servingSize.value": 3,
+        "state.cot:feedingControl.cot:servingsPerMeal.value": 20
       },
       {
         "req": "update",
         "object": "cot:SmartFeeder",
-        "turnedOn": 1,
-        "cot:physicalStorage/value": 3
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value": 3
       },
       {
         "req": "update",
         "object": "cot:SmartFeeder",
-        "turnedOn": 1,
-        "cot:physicalStorage/value": 5,
-        "cot:feedingControl/cot:mealFrequency/value": 3,
-        "cot:feedingControl/cot:servingSize/value": 2,
-        "cot:feedingControl/cot:servingsPerMeal/value": 10
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value": 5,
+        "state.cot:feedingControl.cot:mealFrequency.value": 3,
+        "state.cot:feedingControl.cot:servingSize.value": 2,
+        "state.cot:feedingControl.cot:servingsPerMeal.value": 10
       },
       {
         "req": "update",
         "object": "cot:SmartFeeder",
-        "turnedOn": 1,
-        "cot:physicalStorage/value": 2,
-        "cot:feedingControl/cot:mealFrequency/value": 4,
-        "cot:feedingControl/cot:servingSize/value": 3,
-        "cot:feedingControl/cot:servingsPerMeal/value": 20
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value": 2,
+        "state.cot:feedingControl.cot:mealFrequency.value": 4,
+        "state.cot:feedingControl.cot:servingSize.value": 3,
+        "state.cot:feedingControl.cot:servingsPerMeal.value": 20
       }
     ],
     [
       {
         "req": "update",
         "object": "toothbrush",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "toothbrush",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "toothbrush",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "toothbrush",
-        "turnedOn": 1
+        "state.turnedOn": 1
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartStove",
-        "contains/0/cot:component/type": "cot:UpperOvenChamber",
-        "contains/0/cot:component/turnedOn": 0,
-        "contains/1/cot:component/type": "cot:LowerOvenChamber",
-        "contains/1/cot:component/turnedOn": 0,
-        "contains/2/cot:component/type": "cot:FrontLeftBurner",
-        "contains/2/cot:component/turnedOn": 0,
-        "contains/3/cot:component/type": "cot:FrontRightBurner",
-        "contains/3/cot:component/turnedOn": 0,
-        "contains/4/cot:component/type": "cot:BackLeftBurner",
-        "contains/4/cot:component/turnedOn": 0,
-        "contains/5/cot:component/type": "cot:BackRightBurner",
-        "contains/5/cot:component/turnedOn": 0,
-        "contains/6/cot:component/type": "cot:CentralBurner",
-        "contains/6/cot:component/turnedOn": 0
+        "state.contains.0.cot:component.type": "cot:UpperOvenChamber",
+        "state.contains.0.cot:component.state.turnedOn": 0,
+        "state.contains.1.cot:component.type": "cot:LowerOvenChamber",
+        "state.contains.1.cot:component.state.turnedOn": 0,
+        "state.contains.2.cot:component.type": "cot:FrontLeftBurner",
+        "state.contains.2.cot:component.state.turnedOn": 0,
+        "state.contains.3.cot:component.type": "cot:FrontRightBurner",
+        "state.contains.3.cot:component.state.turnedOn": 0,
+        "state.contains.4.cot:component.type": "cot:BackLeftBurner",
+        "state.contains.4.cot:component.state.turnedOn": 0,
+        "state.contains.5.cot:component.type": "cot:BackRightBurner",
+        "state.contains.5.cot:component.state.turnedOn": 0,
+        "state.contains.6.cot:component.type": "cot:CentralBurner",
+        "state.contains.6.cot:component.state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartStove",
-        "contains/0/cot:component/type": "cot:UpperOvenChamber",
-        "contains/0/cot:component/turnedOn": 1,
-        "contains/1/cot:component/type": "cot:LowerOvenChamber",
-        "contains/1/cot:component/turnedOn": 0,
-        "contains/2/cot:component/type": "cot:FrontLeftBurner",
-        "contains/2/cot:component/turnedOn": 1,
-        "contains/3/cot:component/type": "cot:FrontRightBurner",
-        "contains/3/cot:component/turnedOn": 0,
-        "contains/4/cot:component/type": "cot:BackLeftBurner",
-        "contains/4/cot:component/turnedOn": 0,
-        "contains/5/cot:component/type": "cot:BackRightBurner",
-        "contains/5/cot:component/turnedOn": 0,
-        "contains/6/cot:component/type": "cot:CentralBurner",
-        "contains/6/cot:component/turnedOn": 1
+        "state.contains.0.cot:component.type": "cot:UpperOvenChamber",
+        "state.contains.0.cot:component.state.turnedOn": 1,
+        "state.contains.1.cot:component.type": "cot:LowerOvenChamber",
+        "state.contains.1.cot:component.state.turnedOn": 0,
+        "state.contains.2.cot:component.type": "cot:FrontLeftBurner",
+        "state.contains.2.cot:component.state.turnedOn": 1,
+        "state.contains.3.cot:component.type": "cot:FrontRightBurner",
+        "state.contains.3.cot:component.state.turnedOn": 0,
+        "state.contains.4.cot:component.type": "cot:BackLeftBurner",
+        "state.contains.4.cot:component.state.turnedOn": 0,
+        "state.contains.5.cot:component.type": "cot:BackRightBurner",
+        "state.contains.5.cot:component.state.turnedOn": 0,
+        "state.contains.6.cot:component.type": "cot:CentralBurner",
+        "state.contains.6.cot:component.state.turnedOn": 1
       },
       {
         "req": "update",
         "object": "cot:SmartStove",
-        "contains/0/cot:component/type": "cot:UpperOvenChamber",
-        "contains/0/cot:component/turnedOn": 0,
-        "contains/1/cot:component/type": "cot:LowerOvenChamber",
-        "contains/1/cot:component/turnedOn": 1,
-        "contains/2/cot:component/type": "cot:FrontLeftBurner",
-        "contains/2/cot:component/turnedOn": 0,
-        "contains/3/cot:component/type": "cot:FrontRightBurner",
-        "contains/3/cot:component/turnedOn": 1,
-        "contains/4/cot:component/type": "cot:BackLeftBurner",
-        "contains/4/cot:component/turnedOn": 0,
-        "contains/5/cot:component/type": "cot:BackRightBurner",
-        "contains/5/cot:component/turnedOn": 1,
-        "contains/6/cot:component/type": "cot:CentralBurner",
-        "contains/6/cot:component/turnedOn": 0
+        "state.contains.0.cot:component.type": "cot:UpperOvenChamber",
+        "state.contains.0.cot:component.state.turnedOn": 0,
+        "state.contains.1.cot:component.type": "cot:LowerOvenChamber",
+        "state.contains.1.cot:component.state.turnedOn": 1,
+        "state.contains.2.cot:component.type": "cot:FrontLeftBurner",
+        "state.contains.2.cot:component.state.turnedOn": 0,
+        "state.contains.3.cot:component.type": "cot:FrontRightBurner",
+        "state.contains.3.cot:component.state.turnedOn": 1,
+        "state.contains.4.cot:component.type": "cot:BackLeftBurner",
+        "state.contains.4.cot:component.state.turnedOn": 0,
+        "state.contains.5.cot:component.type": "cot:BackRightBurner",
+        "state.contains.5.cot:component.state.turnedOn": 1,
+        "state.contains.6.cot:component.type": "cot:CentralBurner",
+        "state.contains.6.cot:component.state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartStove",
-        "contains/0/cot:component/type": "cot:UpperOvenChamber",
-        "contains/0/cot:component/turnedOn": 0,
-        "contains/1/cot:component/type": "cot:LowerOvenChamber",
-        "contains/1/cot:component/turnedOn": 1,
-        "contains/2/cot:component/type": "cot:FrontLeftBurner",
-        "contains/2/cot:component/turnedOn": 1,
-        "contains/3/cot:component/type": "cot:FrontRightBurner",
-        "contains/3/cot:component/turnedOn": 1,
-        "contains/4/cot:component/type": "cot:BackLeftBurner",
-        "contains/4/cot:component/turnedOn": 0,
-        "contains/5/cot:component/type": "cot:BackRightBurner",
-        "contains/5/cot:component/turnedOn": 1,
-        "contains/6/cot:component/type": "cot:CentralBurner",
-        "contains/6/cot:component/turnedOn": 0
+        "state.contains.0.cot:component.type": "cot:UpperOvenChamber",
+        "state.contains.0.cot:component.state.turnedOn": 0,
+        "state.contains.1.cot:component.type": "cot:LowerOvenChamber",
+        "state.contains.1.cot:component.state.turnedOn": 1,
+        "state.contains.2.cot:component.type": "cot:FrontLeftBurner",
+        "state.contains.2.cot:component.state.turnedOn": 1,
+        "state.contains.3.cot:component.type": "cot:FrontRightBurner",
+        "state.contains.3.cot:component.state.turnedOn": 1,
+        "state.contains.4.cot:component.type": "cot:BackLeftBurner",
+        "state.contains.4.cot:component.state.turnedOn": 0,
+        "state.contains.5.cot:component.type": "cot:BackRightBurner",
+        "state.contains.5.cot:component.state.turnedOn": 1,
+        "state.contains.6.cot:component.type": "cot:CentralBurner",
+        "state.contains.6.cot:component.state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartRefrigerator",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartRefrigerator",
-        "turnedOn": 1,
-        "cot:contains/0/cot:component/type": "cot:FreezerCompartment",
-        "cot:contains/0/cot:component/value": 0,
-        "cot:contains/1/cot:component/type": "cot:RefrigeratorCompartment",
-        "cot:contains/1/cot:component/value": 0
+        "state.turnedOn": 1,
+        "state.cot:contains.0.cot:component.type": "cot:FreezerCompartment",
+        "state.cot:contains.0.cot:component.value": 0,
+        "state.cot:contains.1.cot:component.type": "cot:RefrigeratorCompartment",
+        "state.cot:contains.1.cot:component.value": 0
       },
       {
         "req": "update",
         "object": "cot:SmartRefrigerator",
-        "turnedOn": 1,
-        "cot:contains/0/cot:component/type": "cot:FreezerCompartment",
-        "cot:contains/0/cot:component/value": 5,
-        "cot:contains/1/cot:component/type": "cot:RefrigeratorCompartment",
-        "cot:contains/1/cot:component/value": 10
+        "state.turnedOn": 1,
+        "state.cot:contains.0.cot:component.type": "cot:FreezerCompartment",
+        "state.cot:contains.0.cot:component.value": 5,
+        "state.cot:contains.1.cot:component.type": "cot:RefrigeratorCompartment",
+        "state.cot:contains.1.cot:component.value": 10
       },
       {
         "req": "update",
         "object": "cot:SmartRefrigerator",
-        "turnedOn": 1,
-        "cot:contains/0/cot:component/type": "cot:FreezerCompartment",
-        "cot:contains/0/cot:component/value": 10,
-        "cot:contains/1/cot:component/type": "cot:RefrigeratorCompartment",
-        "cot:contains/1/cot:component/value": 40
+        "state.turnedOn": 1,
+        "state.cot:contains.0.cot:component.type": "cot:FreezerCompartment",
+        "state.cot:contains.0.cot:component.value": 10,
+        "state.cot:contains.1.cot:component.type": "cot:RefrigeratorCompartment",
+        "state.cot:contains.1.cot:component.value": 40
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartIrrigationController",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartIrrigationController",
-        "turnedOn": 1,
-        "cot:irrigationControl/cot:irrigationDuration/value": 0, 
-        "cot:irrigationControl/cot:irrigationInterval/value": 0
+        "state.turnedOn": 1,
+        "state.cot:irrigationControl.cot:irrigationDuration.value": 0, 
+        "state.cot:irrigationControl.cot:irrigationInterval.value": 0
       },
       {
         "req": "update",
         "object": "cot:SmartIrrigationController",
-        "turnedOn": 1,
-        "cot:irrigationControl/cot:irrigationDuration/value": 0, 
-        "cot:irrigationControl/cot:irrigationInterval/value": 0
+        "state.turnedOn": 1,
+        "state.cot:irrigationControl.cot:irrigationDuration.value": 0, 
+        "state.cot:irrigationControl.cot:irrigationInterval.value": 0
       },
       {
         "req": "update",
         "object": "cot:SmartIrrigationController",
-        "turnedOn": 1,
-        "cot:irrigationControl/cot:irrigationDuration/value": 0, 
-        "cot:irrigationControl/cot:irrigationInterval/value": 0
+        "state.turnedOn": 1,
+        "state.cot:irrigationControl.cot:irrigationDuration.value": 0, 
+        "state.cot:irrigationControl.cot:irrigationInterval.value": 0
       }
     ],
     [
       {
         "req": "update",
         "object": ["cot:SmartCurtain", "cot:SmartWindow"],
-        "turnedOn": 1,
-        "CurtainOpen": 1,
-        "WindowOpen": 0
+        "state.turnedOn": 1,
+        "state.CurtainOpen": 1,
+        "state.WindowOpen": 0
       },
       {
         "req": "update",
         "object": ["cot:SmartCurtain", "cot:SmartWindow"],
-        "turnedOn": 1,
-        "CurtainOpen": 0,
-        "WindowOpen": 1
+        "state.turnedOn": 1,
+        "state.CurtainOpen": 0,
+        "state.WindowOpen": 1
       },
       {
         "req": "update",
         "object": ["cot:SmartCurtain", "cot:SmartWindow"],
-        "turnedOn": 1,
-        "CurtainOpen": 1,
-        "WindowOpen": 1
+        "state.turnedOn": 1,
+        "state.CurtainOpen": 1,
+        "state.WindowOpen": 1
       },
       {
         "req": "update",
         "object": ["cot:SmartCurtain", "cot:SmartWindow"],
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartLightBulb",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartLightBulb",
-        "turnedOn": 1
+        "state.turnedOn": 1
       },
       {
         "req": "update",
         "object": "cot:SmartLightBulb",
-        "turnedOn": 1
+        "state.turnedOn": 1
       },
       {
         "req": "update",
         "object": "cot:SmartLightBulb",
-        "turnedOn": 1
+        "state.turnedOn": 1
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartLightSwitch",
-        "turnedOn": [0, 0, 0]
+        "state.turnedOn": [0, 0, 0]
       },
       {
         "req": "update",
         "object": "cot:SmartLightSwitch",
-        "turnedOn": [1, 0, 0]
+        "state.turnedOn": [1, 0, 0]
       },
       {
         "req": "update",
         "object": "cot:SmartLightSwitch",
-        "turnedOn": [1, 1, 0]
+        "state.turnedOn": [1, 1, 0]
       },
       {
         "req": "update",
         "object": "cot:SmartLightSwitch",
-        "turnedOn": [1, 1, 1]
+        "state.turnedOn": [1, 1, 1]
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartLaundryMachine",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartLaundryMachine",
-        "turnedOn": 1,
+        "state.turnedOn": 1,
         "running": "jeans"
       },
       {
         "req": "update",
         "object": "cot:SmartLaundryMachine",
-        "turnedOn": 1,
+        "state.turnedOn": 1,
         "running": "delicado"
       },
       {
         "req": "update",
         "object": "cot:SmartLaundryMachine",
-        "turnedOn": 1,
+        "state.turnedOn": 1,
         "running": "pesado"
       }
     ],
@@ -2406,139 +2406,139 @@
       {
         "req": "update",
         "object": "cot:SmartCookware",
-        "turnedOn": 1,
-        "cot:physicalStorage/value" : 0
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value" : 0
       },
       {
         "req": "update",
         "object": "cot:SmartCookware",
-        "turnedOn": 1,
-        "cot:physicalStorage/value" : 4
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value" : 4
       },
       {
         "req": "update",
         "object": "cot:SmartCookware",
-        "turnedOn": 1,
-        "cot:physicalStorage/value" : 3
+        "state.turnedOn": 1,
+        "state.cot:physicalStorage.value" : 3
       },
       {
         "req": "update",
         "object": "cot:SmartCookware",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "piso",
-        "turnedOn": 0
+        "state.turnedOn": 0
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartDoor",
-        "open": 0,
-        "locked": 0
+        "state.open": 0,
+        "state.locked": 0
       },
       {
         "req": "update",
         "object": "cot:SmartDoor",
-        "open": 1,
-        "locked": 0
+        "state.open": 1,
+        "state.locked": 0
       },
       {
         "req": "update",
         "object": "cot:SmartDoor",
-        "open": 0,
-        "locked": 1
+        "state.open": 0,
+        "state.locked": 1
       },
       {
         "req": "update",
         "object": "cot:SmartDoor",
-        "open": 0,
-        "locked": 1
+        "state.open": 0,
+        "state.locked": 1
       }
     ],
     [
       {
         "req": "update",
         "object": "cot:SmartWatch",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "cot:SmartWatch",
-        "turnedOn": 1,
-        "heartBeat": 90,
-        "bloodOxygenation": 95,
-        "battery": 100
+        "state.turnedOn": 1,
+        "state.heartBeat": 90,
+        "state.bloodOxygenation": 95,
+        "state.battery": 100
       },
       {
         "req": "update",
         "object": "cot:SmartWatch",
-        "turnedOn": 1,
-        "heartBeat": 80,
-        "bloodOxygenation": 85,
-        "battery": 50
+        "state.turnedOn": 1,
+        "state.heartBeat": 80,
+        "state.bloodOxygenation": 85,
+        "state.battery": 50
       },
       {
         "req": "update",
         "object": "cot:SmartWatch",
-        "turnedOn": 1,
-        "heartBeat": 100,
-        "bloodOxygenation": 105,
-        "battery": 75
+        "state.turnedOn": 1,
+        "state.heartBeat": 100,
+        "state.bloodOxygenation": 105,
+        "state.battery": 75
       }
     ],
     [
       {
         "req": "update",
         "object": "Robo aspirador de po",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "Robo aspirador de po",
-        "turnedOn": 1
+        "state.turnedOn": 1
       },
       {
         "req": "update",
         "object": "Robo aspirador de po",
-        "turnedOn": 1
+        "state.turnedOn": 1
       },
       {
         "req": "update",
         "object": "Robo aspirador de po",
-        "turnedOn": 1
+        "state.turnedOn": 1
       }
     ],
     [
       {
         "req": "update",
         "object": "jardim",
-        "turnedOn": 0
+        "state.turnedOn": 0
       },
       {
         "req": "update",
         "object": "jardim",
-        "turnedOn": 1,
+        "state.turnedOn": 1,
         "humidity": 95,
-        "temperature": 25
+        "state.temperature": 25
       },
       {
         "req": "update",
         "object": "jardim",
-        "turnedOn": 0,
+        "state.turnedOn": 0,
         "humidity": 85,
-        "temperature": 22
+        "state.temperature": 22
       },
       {
         "req": "update",
         "object": "jardim",
-        "turnedOn": 0,
+        "state.turnedOn": 0,
         "humidity": 50,
-        "temperature": 14
+        "state.temperature": 14
       }
     ],
     [
@@ -2567,22 +2567,22 @@
       {
         "req": "update",
         "object": "cot:SmartPowerOutlet",
-        "turnedOn": [0, 0, 0]
+        "state.turnedOn": [0, 0, 0]
       },
       {
         "req": "update",
         "object": "cot:SmartPowerOutlet",
-        "turnedOn": [1, 0, 0]
+        "state.turnedOn": [1, 0, 0]
       },
       {
         "req": "update",
         "object": "cot:SmartPowerOutlet",
-        "turnedOn": [1, 1, 0]
+        "state.turnedOn": [1, 1, 0]
       },
       {
         "req": "update",
         "object": "cot:SmartPowerOutlet",
-        "turnedOn": [1, 1, 1]
+        "state.turnedOn": [1, 1, 1]
       }
     ]
   ],

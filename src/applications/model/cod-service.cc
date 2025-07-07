@@ -84,7 +84,7 @@ CoDService::StartApplication()
     NS_LOG_FUNCTION(this);
 
     try
-    {   
+    {
         mongocxx::uri uri("mongodb://localhost:27017/");
         m_client.emplace(uri);
         std::string nome_banco = "cotas_db";
@@ -161,6 +161,7 @@ CoDService::StartApplication()
 void
 CoDService::StopApplication()
 {
+    Simple_Q();
     NS_LOG_FUNCTION(this);
 
     if (m_socket)
@@ -208,9 +209,7 @@ CoDService::HandleRead(Ptr<Socket> socket)
             }
             else if (req.compare("update") == 0)
             {
-                Simple_Q();
-                abort();
-                //HandleUpdate(socket, from, data_json);
+                HandleUpdate(socket, from, data_json);
                 NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
                                   << " atualizou dados");
             }
@@ -235,6 +234,7 @@ CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohm
 {
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
+    data_json.erase("req");
     if (valida)
     {
         // ip já inscrito, manda o id novamente.
@@ -276,8 +276,12 @@ CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohm
 void
 CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
 {
+    auto collection = m_bancoMongo["object"];
     // verifica se id é válido
     int id = data_json["id"];
+    data_json.erase("id");
+    data_json.erase("req");
+    data_json.erase("object");
     if (!ValidateID_Q(id))
     {
         // id inválido
@@ -291,14 +295,30 @@ CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::j
         return;
     }
 
-    // pega dados no banco
-    nlohmann::json db_json = GetDataJSON_Q(id);
+    auto query_filter = make_document(kvp("id", id));
+    std::string json_string = data_json.dump();
+    try
+    {
+        auto bson_documento = bsoncxx::from_json(json_string);
+        auto update_doc = make_document(kvp("$set", bson_documento));
+    
+        auto result = collection.update_one(query_filter.view(), update_doc.view());
+    }
+    catch (const std::exception& e)
+    {
+        NS_LOG_INFO("Exceção: " << e.what());
+        abort();
+        return ;
+    }
 
-    // atualiza os campos
-    UpdtData_JSON(db_json, data_json);
+    // // pega dados no banco
+    // nlohmann::json db_json = GetDataJSON_Q(id);
 
-    // volta pro banco
-    UpdtData_Q(id, db_json);
+    // // atualiza os campos
+    // UpdtData_JSON(db_json, data_json);
+
+    // // volta pro banco
+    // UpdtData_Q(id, db_json);
 
     // retorna status ok ou error
     nlohmann::json res = {{"status", 200}, {"id", id}};
@@ -377,11 +397,12 @@ CoDService::Simple_Q()
     auto collection = m_bancoMongo["object"];
     std::vector<bsoncxx::document::value> resultados;
     auto cursor = collection.find({});
-    
+
     // libera o cursor o quanto antes
     try
     {
-        for (auto&& doc : cursor) {
+        for (auto&& doc : cursor)
+        {
             resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
         }
     }
@@ -390,7 +411,7 @@ CoDService::Simple_Q()
         NS_LOG_INFO("Exceção: " << e.what());
         return 0;
     }
-    
+
     // faz a lógica que precisa
     for (const auto& doc_value : resultados)
     {
@@ -418,7 +439,6 @@ CoDService::ValidateIP_Q(Address ip)
         {
             auto view = (*result).view();
             int id_retornado = view["id"].get_int32().value;
-            std::cout << bsoncxx::to_json(*result) << std::endl;
             return id_retornado;
         }
     }
@@ -447,7 +467,6 @@ CoDService::ValidateID_Q(int id)
     {
         auto view = (*result).view();
         int id_retornado = view["id"].get_int32().value;
-        std::cout << bsoncxx::to_json(*result) << std::endl;
         return id_retornado;
     }
     return 0;

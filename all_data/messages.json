@@ -2836,68 +2836,89 @@
   ],
   "requestMessages": [
     {
-      "req": "fallDetection",
-      "info":"Deteccao de quedas"
+      "req": "getContext",
+      "type": "fallDetection",
+      "where": "fala de qual objeto ou qual contexto",
+      "info": "Deteccao de quedas"
     },
     {
-      "req": "microControl",
-      "info":"Controle de microprocessadores"
+      "req": "getContext",
+      "type": "microControl",
+      "info": "Controle de microprocessadores"
     },
     {
-      "req": "petCare",
-      "info":"Cuidados com animais de estimacao"
+      "req": "getContext",
+      "type": "petCare",
+      "info": "Cuidados com animais de estimacao"
     },
     {
-      "req": "energyManegement",
-      "info":"Gerenciamento de gasto de energia"
+      "req": "getContext",
+      "type": "energyManegement",
+      "info": "Gerenciamento de gasto de energia"
     },
     {
-      "req": "waterManegement",
-      "info":"Gerenciamento de gasto de agua"
+      "req": "getContext",
+      "type": "waterManegement",
+      "info": "Gerenciamento de gasto de agua"
     },
     {
-      "req": "security",
-      "info":"Sistema de segurança"
+      "req": "getContext",
+      "type": "security",
+      "info": "Sistema de segurança"
     },
     {
-      "req": "localization",
-      "info":"Sistema de localizacao interno"
+      "req": "getContext",
+      "type": "localization",
+      "info": "Sistema de localizacao interno"
     },
     {
-      "req": "gasSec",
-      "info":"Sistema detector de gases perigosos"
+      "req": "getContext",
+      "type": "gasSec",
+      "info": "Sistema detector de gases perigosos"
     },
     {
-      "req": "healthCare",
-      "info":"Sistemas de cuidado com a saude"
+      "req": "getContext",
+      "type": "healthCare",
+      "info": "Sistemas de cuidado com a saude"
     },
     {
-      "req": "lightControl",
-      "info":"Sistemas de controle de luz"
+      "req": "getContext",
+      "type": "lightControl",
+      "info": "Sistemas de controle de luz"
     },
     {
-      "req": "tempControl",
-      "info":"Controladores de temperatura e umidade"
+      "req": "getContext",
+      "type": "tempControl",
+      "info": "Controladores de temperatura e umidade"
     },
     {
-      "req": "smartCleaning",
-      "info":"Servico de limpeza inteligente"
+      "req": "getContext",
+      "type": "smartCleaning",
+      "info": "Servico de limpeza inteligente"
     },
     {
-      "req": "garden",
-      "info":"Jardim inteligente"
+      "req": "getContext",
+      "type": "garden",
+      "info": "Jardim inteligente"
     },
     {
-      "req": "mobility",
-      "info":"Locomocao inteligente"
+      "req": "getContext",
+      "type": "mobility",
+      "info": "Locomocao inteligente"
     },
     {
-      "req": "Smart cooking",
-      "info":"Coccao inteligente"
+      "req": "getContext",
+      "type": "SmartCooking",
+      "info": "Coccao inteligente"
     },
     {
-      "req": "inventoryManagement",
-      "info":"Gerenciamento de inventario"
+      "req": "getContext",
+      "type": "inventoryManagement",
+      "info": "Gerenciamento de inventario"
+    },
+    {
+      "req": "getObject",
+      "where": "fala de qual objeto ou qual contexto"
     }
   ]
 }
