@@ -14,6 +14,7 @@
 #include "ns3/socket.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/uinteger.h"
+#include "ns3/timestamp-tag.h"
 #include <random>
 
 namespace ns3
@@ -276,6 +277,10 @@ ContextProvider::Send()
 
     p = Create<Packet>((uint8_t*)data.c_str(), data.size());
 
+    TimestampTag timestampTag;
+    timestampTag.SetTimestamp(Simulator::Now());
+    p->AddPacketTag(timestampTag);
+
     Address localAddress;
     m_socket->GetSockName(localAddress);
     
@@ -306,7 +311,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
             nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
 
         uint64_t res = data_json["status"];
-        
+        NS_LOG_INFO("Chegou resposta do servidor no provedor");
         switch (res)
         {
         case 200:
@@ -324,6 +329,21 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
         default:
             NS_LOG_INFO("status não reconhecido");
         }
+
+        TimestampTag timestampTag;
+
+        if (packet->PeekPacketTag(timestampTag))
+        {
+            Time txTime = timestampTag.GetTimestamp();
+            
+            Time now = Simulator::Now();
+            
+            Time delay = now - txTime;
+
+            NS_LOG_INFO ("RTT: " << delay.GetSeconds() << " segundos.");
+        
+        }
+
 
         Address localAddress;
         socket->GetSockName(localAddress);

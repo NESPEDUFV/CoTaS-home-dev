@@ -7,6 +7,7 @@
 #include "ns3/netanim-module.h"
 #include "ns3/csma-module.h"
 #include "ns3/random-walk-2d-mobility-model.h"
+#include "ns3/flow-monitor-module.h"
 
 using namespace ns3;
 
@@ -18,10 +19,13 @@ int main(int argc, char* argv[])
 // ----------------- Configura logs do terminal -------------------------
 
     LogComponentEnable("CoDServiceApplication", LOG_LEVEL_INFO); 
-    //LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
+// 97 instancias
+// 16 aplicações + CoTaS
+
     NodeContainer computadorNode;
     computadorNode.Create(1);
 
@@ -50,7 +54,7 @@ int main(int argc, char* argv[])
     aCNodes.Create(6);
 
     NodeContainer anelNode;
-    anelNode.Create(1);
+    anelNode.Create(2);
 
     NodeContainer cafeteiraNode;
     cafeteiraNode.Create(1);
@@ -62,7 +66,7 @@ int main(int argc, char* argv[])
     carroNode.Create(1);
 
     NodeContainer colarNode;
-    colarNode.Create(1);
+    colarNode.Create(2);
 
     NodeContainer coleiraNode;
     coleiraNode.Create(1);
@@ -104,7 +108,7 @@ int main(int argc, char* argv[])
     portaNodes.Create(8);
 
     NodeContainer relogioNode;
-    relogioNode.Create(1);
+    relogioNode.Create(2);
 
     // Robô aspirador de pó
     NodeContainer RAPNode;
@@ -135,15 +139,13 @@ int main(int argc, char* argv[])
     NodeContainer allNodes = NodeContainer( 
         computadorNode, espelhoNodes, televisaoNode, 
         echoDotNodes, cameraNodes, guardaRoupaNode, 
-        armarioCozinhaNode, armarioBanheiroNode, aCNodes, 
-        anelNode, cafeteiraNode, chuveiroNode, carroNode, 
+        armarioCozinhaNode, armarioBanheiroNode, 
+        chuveiroNode, carroNode, fogaoNode, geladeiraNode, gotejadorNode,
         colarNode, coleiraNode, comedouroNode, escovaNode, 
-        fogaoNode, geladeiraNode, gotejadorNode, 
-        janelaCortinaNodes, lampadaNodes, lavaLouçasNode, 
-        panelaNode, portaNodes, relogioNode, 
-        RAPNode, jardimNode, SFumaca, tomadaNodes, 
-        interruptorNodes, roteadorNodes, CoTDisNode,
-        ApplicationsNodes
+        lavaLouçasNode, panelaNode, portaNodes, relogioNode, RAPNode, 
+        jardimNode, SFumaca, tomadaNodes, interruptorNodes, aCNodes, 
+        anelNode, cafeteiraNode, janelaCortinaNodes, lampadaNodes, 
+        roteadorNodes, CoTDisNode, ApplicationsNodes
     ); //PisoNodes,
 
 // -------------- Configura pilha de protocolos da internet -------------
@@ -158,7 +160,9 @@ int main(int argc, char* argv[])
     csma.SetChannelAttribute("Delay", TimeValue(NanoSeconds(2560)));
 
     NetDeviceContainer csmaDevices;
+    
     csmaDevices = csma.Install(roteadorNodes);
+
     
 // --------------------- Configurando rede wifi --------------------------
 
@@ -166,7 +170,7 @@ int main(int argc, char* argv[])
     
     YansWifiPhyHelper phy;
     phy.SetChannel(channel.Create());
-
+    
     WifiMacHelper mac;
     Ssid ssid = Ssid("ns-3-ssid");
 
@@ -324,19 +328,26 @@ int main(int argc, char* argv[])
     mobility.Install(anelNode);
     position = anelNode.Get(0)->GetObject<MobilityModel>(); //23
     position->SetPosition(Vector(2, 6, 0.0)); // anel
+    
+    mobility.Install(anelNode);
+    position = anelNode.Get(1)->GetObject<MobilityModel>(); //24
+    position->SetPosition(Vector(2, 7, 0.0)); // anel
 
-    position = cafeteiraNode.Get(0)->GetObject<MobilityModel>(); //24
+    position = cafeteiraNode.Get(0)->GetObject<MobilityModel>(); //25
     position->SetPosition(Vector(16.5, 3.5, 0.8)); // Cafeteira
 
-    position = chuveiroNode.Get(0)->GetObject<MobilityModel>(); //25
+    position = chuveiroNode.Get(0)->GetObject<MobilityModel>(); //26
     position->SetPosition(Vector(11, 1, 0.9)); // Chuveiro
 
-    position = carroNode.Get(0)->GetObject<MobilityModel>(); //26
+    position = carroNode.Get(0)->GetObject<MobilityModel>(); //27
     position->SetPosition(Vector(15, 14, 1.0)); // Carro
 
     mobility.Install(colarNode);
-    position = colarNode.Get(0)->GetObject<MobilityModel>(); //27
+    position = colarNode.Get(0)->GetObject<MobilityModel>(); //28
     position->SetPosition(Vector(2.3, 6, 0.0)); // Colar
+    
+    position = colarNode.Get(1)->GetObject<MobilityModel>(); //29
+    position->SetPosition(Vector(2.3, 7, 0.0)); // Colar
     
     mobility.Install(coleiraNode);
     position = coleiraNode.Get(0)->GetObject<MobilityModel>(); //28
@@ -465,6 +476,9 @@ int main(int argc, char* argv[])
     mobility.Install(relogioNode);
     position = relogioNode.Get(0)->GetObject<MobilityModel>(); //69
     position->SetPosition(Vector(3, 7, 0.0)); // Relogio
+
+    position = relogioNode.Get(1)->GetObject<MobilityModel>(); //69
+    position->SetPosition(Vector(3, 8, 0.0)); // Relogio
 
     mobility.Install(RAPNode);
     position = RAPNode.Get(0)->GetObject<MobilityModel>(); //70
@@ -667,6 +681,9 @@ int main(int argc, char* argv[])
     }
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
+    // gera arquivo para o wireshark
+    // phy.EnablePcapAll("casaInteligente");
+
     // -------------------------- CoTaS APP ---------------------------------
     CoDServiceHelper Service(9);
 
@@ -677,8 +694,8 @@ int main(int argc, char* argv[])
     // ------------------------- Clientes provedores -----------------------
 
     ContextProviderHelper ClientProvider(CoTDisInterface.GetAddress(0), 9);
-    ClientProvider.SetAttribute("MaxPackets", UintegerValue(6));
-    ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(500)));
+    ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
+    ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
     
     ClientProvider.SetAttribute("ObjectType", UintegerValue(0));
     ApplicationContainer computadorApp = ClientProvider.Install(computadorNode);
@@ -873,8 +890,8 @@ int main(int argc, char* argv[])
     // -------------------------- Clientes consumidores ----------------
     
     ContextConsumerHelper ClientConsumer(CoTDisInterface.GetAddress(0), 9);
-    ClientConsumer.SetAttribute("MaxPackets", UintegerValue(6));
-    ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(500)));
+    ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
+    ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(100)));
     
     ClientConsumer.SetAttribute("ApplicationType", UintegerValue(0));
     ApplicationContainer FallDetection = ClientConsumer.Install(ApplicationsNodes.Get(0));

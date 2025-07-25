@@ -14,6 +14,8 @@
 #include "ns3/socket.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/uinteger.h"
+#include "ns3/timestamp-tag.h"
+
 #include <random>
 
 namespace ns3
@@ -270,12 +272,16 @@ ContextConsumer::Send()
 
     p = Create<Packet>((uint8_t*)data.c_str(), data.size());
 
+    TimestampTag timestampTag;
+    timestampTag.SetTimestamp(Simulator::Now());
+    p->AddPacketTag(timestampTag);
+
     Address localAddress;
     m_socket->GetSockName(localAddress);
     
     // call to the trace sinks before the packet is actually sent,
     // so that tags added to the packet can be sent as well
-    
+
     m_txTrace(p);
     m_txTraceWithAddresses(p, localAddress, m_peer);
     m_socket->Send(p);
@@ -299,11 +305,13 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         nlohmann::json data_json =
             nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
         uint64_t res = data_json["status"];
+        TimestampTag timestampTag;
+        NS_LOG_INFO("Chegou resposta do servidor no consumidor");
         
         switch (res)
         {
         case 200:
-            NS_LOG_INFO("Requisição de consumidor respondida com sucesso");
+            // NS_LOG_INFO("Requisição de consumidor respondida com sucesso");
             break;
         case 400:
             NS_LOG_INFO("Bad request " << data_json["info"]);
@@ -317,6 +325,18 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             break;
         default:
             NS_LOG_INFO("status não reconhecido");
+        }
+
+        if (packet->PeekPacketTag(timestampTag))
+        {
+            Time txTime = timestampTag.GetTimestamp();
+            
+            Time now = Simulator::Now();
+            
+            Time delay = now - txTime;
+
+            NS_LOG_INFO ("RTT: " << delay.GetSeconds() << " segundos.");
+        
         }
 
         Address localAddress;

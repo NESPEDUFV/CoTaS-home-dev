@@ -64,20 +64,17 @@ class CoDService : public SinkApplication
      */
     void HandleRead(Ptr<Socket> socket);
 
-    void HandleSubscription(
-      ns3::Ptr<ns3::Socket> socket, 
+    std::string HandleSubscription( 
       Address from,
       nlohmann::json data_json
     );
 
-    void HandleUpdate(
-      ns3::Ptr<ns3::Socket> socket, 
+    std::string HandleUpdate( 
       Address from,
       nlohmann::json data_json
     );
 
-    void HandleRequest(
-      ns3::Ptr<ns3::Socket> socket, 
+    std::string HandleRequest( 
       Address from,
       nlohmann::json data_json
     );

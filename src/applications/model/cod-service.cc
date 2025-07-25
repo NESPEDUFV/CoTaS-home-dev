@@ -19,6 +19,7 @@
 #include "ns3/socket.h"
 #include "ns3/udp-socket.h"
 #include "ns3/uinteger.h"
+#include "ns3/timestamp-tag.h"
 
 #include <fstream>
 #include <iostream>
@@ -198,26 +199,37 @@ CoDService::HandleRead(Ptr<Socket> socket)
                 nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
 
             std::string req = data_json["req"].get<std::string>();
-
+            std::string response_data;
+            TimestampTag timestampTag;
+            NS_LOG_INFO("Chegou requisição no servidor");
             // TODO: transformar num dicionário de funções
             if (req.compare("subscribe") == 0)
             {
-                HandleSubscription(socket, from, data_json);
-                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                                  << " se inscreveu");
+                response_data = HandleSubscription(from, data_json);
+                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
+                //                   << " se inscreveu");
             }
             else if (req.compare("update") == 0)
             {
-                HandleUpdate(socket, from, data_json);
-                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                                  << " atualizou dados");
+                response_data = HandleUpdate(from, data_json);
+                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
+                //                   << " atualizou dados");
             }
             else if (req.compare("getContext") == 0)
             {
-                NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                                  << " respondendo requisição...");
-                HandleRequest(socket, from, data_json);
+                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
+                //                   << " respondendo requisição...");
+                response_data = HandleRequest(from, data_json);
             }
+
+            Ptr<Packet> response = Create<Packet>((uint8_t*)response_data.c_str(), response_data.size());
+            if(packet->PeekPacketTag(timestampTag))
+            {
+                response->AddPacketTag(timestampTag);
+            }
+            
+            NS_LOG_INFO("Enviando resposta do servidor");
+            socket->SendTo(response, 0, from);
         }
         // trata no ipv6
         else if (Inet6SocketAddress::IsMatchingType(from))
@@ -230,8 +242,8 @@ CoDService::HandleRead(Ptr<Socket> socket)
     }
 }
 
-void
-CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
+std::string
+CoDService::HandleSubscription(Address from, nlohmann::json data_json)
 {
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
@@ -239,15 +251,13 @@ CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohm
     if (valida)
     {
         // ip já inscrito, manda o id novamente.
-        NS_LOG_INFO("IP já inscrito");
-        NS_LOG_INFO("Id do ip inscrito: " << valida);
+        // NS_LOG_INFO("IP já inscrito");
+        // NS_LOG_INFO("Id do ip inscrito: " << valida);
         nlohmann::json res = {{"status", 200}, {"id", valida}};
 
         std::string data = res.dump();
-        Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
-
-        socket->SendTo(response, 0, from);
-        return;
+        
+        return data;
     }
 
     // gera id seguro (vamos abstrair segurança)
@@ -270,12 +280,11 @@ CoDService::HandleSubscription(ns3::Ptr<ns3::Socket> socket, Address from, nlohm
     nlohmann::json res = {{"status", 200}, {"id", id}};
 
     std::string data = res.dump();
-    Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
-    socket->SendTo(response, 0, from);
+    return data;
 }
 
-void
-CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
+std::string
+CoDService::HandleUpdate(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     // verifica se id é válido
@@ -290,10 +299,8 @@ CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::j
             {"status", 401},
         };
         std::string data = res.dump();
-        Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
 
-        socket->SendTo(response, 0, from);
-        return;
+        return data;
     }
 
     auto query_filter = make_document(kvp("id", id));
@@ -309,21 +316,22 @@ CoDService::HandleUpdate(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::j
     {
         NS_LOG_INFO("Exceção: " << e.what());
         abort();
-        return;
+        nlohmann::json res = {{"status", 500}, {"msg", "Erro na consulta dso dados"}};
+        std::string data = res.dump();
+        
+        return data;
     }
 
     // retorna status ok ou error
     nlohmann::json res = {{"status", 200}, {"id", id}};
 
     std::string data = res.dump();
-    Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
-    socket->SendTo(response, 0, from);
 
-    return;
+    return data;
 }
 
-void
-CoDService::HandleRequest(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::json data_json)
+std::string
+CoDService::HandleRequest(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     nlohmann::json res = nlohmann::json::array();
@@ -336,10 +344,8 @@ CoDService::HandleRequest(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::
         cap = {{"status", 400}, {"info", "bad request"}};
         NS_LOG_INFO("Consumidor enviou cabeçalho errado");
         std::string data = cap.dump();
-        Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
-        socket->SendTo(response, 0, from);
 
-        return;
+        return data;
     }
     auto bson_query = bsoncxx::from_json(json_string);
 
@@ -357,7 +363,10 @@ CoDService::HandleRequest(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::
     {
         NS_LOG_INFO("Exceção: " << e.what());
         abort();
-        return;
+        nlohmann::json res = {{"status", 500}, {"msg", "Erro na consulta dso dados"}};
+        std::string data = res.dump();
+        
+        return data;
     }
 
     // faz a lógica que precisa
@@ -366,14 +375,12 @@ CoDService::HandleRequest(ns3::Ptr<ns3::Socket> socket, Address from, nlohmann::
         std::string json_db = bsoncxx::to_json(doc_value.view());
         res.push_back(nlohmann::json::parse(json_db));
     }
-    NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
+    // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
     cap = {{"status", 200}, {"response", res}};
 
     std::string data = cap.dump();
-    Ptr<Packet> response = Create<Packet>((uint8_t*)data.c_str(), data.size());
-    socket->SendTo(response, 0, from);
 
-    return;
+    return data;
 
     // retorna dados
 }
