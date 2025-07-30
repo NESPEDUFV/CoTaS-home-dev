@@ -11,7 +11,7 @@ build_lib(
   SOURCE_FILES
     helper/bulk-send-helper.cc
     helper/on-off-helper.cc
-    helper/cod-service-helper.cc
+    helper/cotas-helper.cc
     helper/packet-sink-helper.cc
     helper/three-gpp-http-helper.cc
     helper/udp-client-server-helper.cc
@@ -21,7 +21,7 @@ build_lib(
     model/onoff-application.cc
     model/context-provider.cc
     model/context-consumer.cc
-    model/cod-service.cc
+    model/cotas.cc
     model/packet-loss-counter.cc
     model/packet-sink.cc
     model/seq-ts-echo-header.cc
@@ -41,7 +41,7 @@ build_lib(
   HEADER_FILES
     helper/bulk-send-helper.h
     helper/on-off-helper.h
-    helper/cod-service-helper.h
+    helper/cotas-helper.h
     helper/packet-sink-helper.h
     helper/three-gpp-http-helper.h
     helper/udp-client-server-helper.h
@@ -54,7 +54,7 @@ build_lib(
     model/packet-sink.h
     model/context-provider.h
     model/context-consumer.h
-    model/cod-service.h
+    model/cotas.h
     model/seq-ts-echo-header.h
     model/seq-ts-header.h
     model/seq-ts-size-header.h

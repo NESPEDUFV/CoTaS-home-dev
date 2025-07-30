@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#ifndef COD_SERVICE_H
-#define COD_SERVICE_H
+#ifndef COTAS_H
+#define COTAS_H
 
 #include "sink-application.h"
 
@@ -37,7 +37,7 @@ class Packet;
  *
  * Every packet received is sent back.
  */
-class CoDService : public SinkApplication
+class CoTaS : public SinkApplication
 {
   public:
     static constexpr uint16_t DEFAULT_PORT{9}; //!< default port
@@ -48,8 +48,8 @@ class CoDService : public SinkApplication
      */
     static TypeId GetTypeId();
 
-    CoDService();
-    ~CoDService() override;
+    CoTaS();
+    ~CoTaS() override;
 
   private:
     void StartApplication() override;
@@ -108,4 +108,4 @@ class CoDService : public SinkApplication
 
 } // namespace ns3
 
-#endif /* COD_SERVICE_H */
+#endif /* COTAS_H */

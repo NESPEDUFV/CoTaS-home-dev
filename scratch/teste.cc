@@ -142,7 +142,7 @@ main(int argc, char* argv[])
     address.Assign(staDevices);
     address.Assign(apDevices);
 
-    CoDServiceHelper echoServer(9);
+    CoTaSHelper echoServer(9);
 
     ApplicationContainer serverApps = echoServer.Install(csmaNodes.Get(nCsma));
     serverApps.Start(Seconds(1));

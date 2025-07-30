@@ -6,10 +6,10 @@
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
 
-#include "cod-service-helper.h"
+#include "cotas-helper.h"
 
 #include "ns3/address-utils.h"
-#include "ns3/cod-service.h"
+#include "ns3/cotas.h"
 #include "ns3/context-consumer.h"
 #include "ns3/context-provider.h"
 #include "ns3/uinteger.h"
@@ -17,14 +17,14 @@
 namespace ns3
 {
 
-CoDServiceHelper::CoDServiceHelper(uint16_t port)
-    : ApplicationHelper(CoDService::GetTypeId())
+CoTaSHelper::CoTaSHelper(uint16_t port)
+    : ApplicationHelper(CoTaS::GetTypeId())
 {
     SetAttribute("Port", UintegerValue(port));
 }
 
-CoDServiceHelper::CoDServiceHelper(const Address& address)
-    : ApplicationHelper(CoDService::GetTypeId())
+CoTaSHelper::CoTaSHelper(const Address& address)
+    : ApplicationHelper(CoTaS::GetTypeId())
 {
     SetAttribute("Local", AddressValue(address));
 }

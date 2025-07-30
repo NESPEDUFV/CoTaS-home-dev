@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 {
 // ----------------- Configura logs do terminal -------------------------
 
-    LogComponentEnable("CoDServiceApplication", LOG_LEVEL_INFO); 
+    LogComponentEnable("CoTaSApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
 
@@ -685,7 +685,7 @@ int main(int argc, char* argv[])
     // phy.EnablePcapAll("casaInteligente");
 
     // -------------------------- CoTaS APP ---------------------------------
-    CoDServiceHelper Service(9);
+    CoTaSHelper Service(9);
 
     ApplicationContainer serverApp = Service.Install(CoTDisNode.Get(0));
     serverApp.Start(Seconds(1));

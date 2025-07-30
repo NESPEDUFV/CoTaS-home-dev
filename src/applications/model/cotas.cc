@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "cod-service.h"
+#include "cotas.h"
 
 #include "ns3/address-utils.h"
 #include "ns3/inet-socket-address.h"
@@ -35,36 +35,36 @@ using bsoncxx::builder::basic::make_document;
 namespace ns3
 {
 
-NS_LOG_COMPONENT_DEFINE("CoDServiceApplication");
+NS_LOG_COMPONENT_DEFINE("CoTaSApplication");
 
-NS_OBJECT_ENSURE_REGISTERED(CoDService);
+NS_OBJECT_ENSURE_REGISTERED(CoTaS);
 
 TypeId
-CoDService::GetTypeId()
+CoTaS::GetTypeId()
 {
     static TypeId tid =
-        TypeId("ns3::CoDService")
+        TypeId("ns3::CoTaS")
             .SetParent<SinkApplication>()
             .SetGroupName("Applications")
-            .AddConstructor<CoDService>()
+            .AddConstructor<CoTaS>()
             .AddAttribute("Tos",
                           "The Type of Service used to send IPv4 packets. "
                           "All 8 bits of the TOS byte are set (including ECN bits).",
                           UintegerValue(0),
-                          MakeUintegerAccessor(&CoDService::m_tos),
+                          MakeUintegerAccessor(&CoTaS::m_tos),
                           MakeUintegerChecker<uint8_t>())
             .AddTraceSource("Rx",
                             "A packet has been received",
-                            MakeTraceSourceAccessor(&CoDService::m_rxTrace),
+                            MakeTraceSourceAccessor(&CoTaS::m_rxTrace),
                             "ns3::Packet::TracedCallback")
             .AddTraceSource("RxWithAddresses",
                             "A packet has been received",
-                            MakeTraceSourceAccessor(&CoDService::m_rxTraceWithAddresses),
+                            MakeTraceSourceAccessor(&CoTaS::m_rxTraceWithAddresses),
                             "ns3::Packet::TwoAddressTracedCallback");
     return tid;
 }
 
-CoDService::CoDService()
+CoTaS::CoTaS()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
       m_socket6{nullptr}
@@ -72,7 +72,7 @@ CoDService::CoDService()
     NS_LOG_FUNCTION(this);
 }
 
-CoDService::~CoDService()
+CoTaS::~CoTaS()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
@@ -80,7 +80,7 @@ CoDService::~CoDService()
 }
 
 void
-CoDService::StartApplication()
+CoTaS::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
@@ -128,7 +128,7 @@ CoDService::StartApplication()
             }
         }
         m_socket->SetIpTos(m_tos); // Affects only IPv4 sockets.
-        m_socket->SetRecvCallback(MakeCallback(&CoDService::HandleRead, this));
+        m_socket->SetRecvCallback(MakeCallback(&CoTaS::HandleRead, this));
     }
 
     if (m_local.IsInvalid() && !m_socket6)
@@ -155,12 +155,12 @@ CoDService::StartApplication()
                 NS_FATAL_ERROR("Error: Failed to join multicast group");
             }
         }
-        m_socket6->SetRecvCallback(MakeCallback(&CoDService::HandleRead, this));
+        m_socket6->SetRecvCallback(MakeCallback(&CoTaS::HandleRead, this));
     }
 }
 
 void
-CoDService::StopApplication()
+CoTaS::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
@@ -177,7 +177,7 @@ CoDService::StopApplication()
 }
 
 void
-CoDService::HandleRead(Ptr<Socket> socket)
+CoTaS::HandleRead(Ptr<Socket> socket)
 {
     NS_LOG_FUNCTION(this << socket);
 
@@ -243,7 +243,7 @@ CoDService::HandleRead(Ptr<Socket> socket)
 }
 
 std::string
-CoDService::HandleSubscription(Address from, nlohmann::json data_json)
+CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
 {
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
@@ -284,7 +284,7 @@ CoDService::HandleSubscription(Address from, nlohmann::json data_json)
 }
 
 std::string
-CoDService::HandleUpdate(Address from, nlohmann::json data_json)
+CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     // verifica se id é válido
@@ -331,7 +331,7 @@ CoDService::HandleUpdate(Address from, nlohmann::json data_json)
 }
 
 std::string
-CoDService::HandleRequest(Address from, nlohmann::json data_json)
+CoTaS::HandleRequest(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     nlohmann::json res = nlohmann::json::array();
@@ -386,7 +386,7 @@ CoDService::HandleRequest(Address from, nlohmann::json data_json)
 }
 
 void
-CoDService::SetupDatabase(mongocxx::client& client, std::string nome_banco)
+CoTaS::SetupDatabase(mongocxx::client& client, std::string nome_banco)
 {
     try
     {
@@ -424,7 +424,7 @@ CoDService::SetupDatabase(mongocxx::client& client, std::string nome_banco)
 }
 
 int
-CoDService::Simple_Q()
+CoTaS::Simple_Q()
 {
     auto collection = m_bancoMongo["object"];
     std::vector<bsoncxx::document::value> resultados;
@@ -456,7 +456,7 @@ CoDService::Simple_Q()
 // se não existe ip com isso no banco retorna 0
 // se existe retorna id
 int
-CoDService::ValidateIP_Q(Address ip)
+CoTaS::ValidateIP_Q(Address ip)
 {
     try
     {
@@ -487,7 +487,7 @@ CoDService::ValidateIP_Q(Address ip)
 // se o id já existe, ele retorna o próprio id
 // se não, retorna 0
 int
-CoDService::ValidateID_Q(int id)
+CoTaS::ValidateID_Q(int id)
 {
     auto collection = m_bancoMongo["object"];
     nlohmann::json j_query = {{"id", id}};
@@ -505,7 +505,7 @@ CoDService::ValidateID_Q(int id)
 }
 
 int
-CoDService::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
+CoTaS::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
@@ -529,7 +529,7 @@ CoDService::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 }
 
 int
-CoDService::RandomInt(int min, int max)
+CoTaS::RandomInt(int min, int max)
 {
     static std::random_device rd;
     static std::mt19937 gen(rd());

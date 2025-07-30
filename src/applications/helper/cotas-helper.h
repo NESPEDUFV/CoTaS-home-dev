@@ -6,8 +6,8 @@
  * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
  */
 
-#ifndef COD_SERVICE_HELPER_H
-#define COD_SERVICE_HELPER_H
+#ifndef COTAS_HELPER_H
+#define COTAS_HELPER_H
 
 #include "ns3/application-helper.h"
 
@@ -21,24 +21,24 @@ namespace ns3
  * @brief Create a server application which waits for input UDP packets
  *        and sends them back to the original sender.
  */
-class CoDServiceHelper : public ApplicationHelper
+class CoTaSHelper : public ApplicationHelper
 {
   public:
     /**
-     * Create CoDServiceHelper which will make life easier for people trying
+     * Create CoTaSHelper which will make life easier for people trying
      * to set up simulations with echos.
      *
      * @param port The port the server will wait on for incoming packets
      */
-    CoDServiceHelper(uint16_t port);
+    CoTaSHelper(uint16_t port);
 
     /**
-     * Create CoDServiceHelper which will make life easier for people trying
+     * Create CoTaSHelper which will make life easier for people trying
      * to set up simulations with echos.
      *
      * @param address The address the server will bind to
      */
-    CoDServiceHelper(const Address& address);
+    CoTaSHelper(const Address& address);
 };
 
 /**
@@ -100,4 +100,4 @@ class ContextConsumerHelper : public ApplicationHelper
 
 } // namespace ns3
 
-#endif  /* COD_SERVICE_HELPER_H */
+#endif  /* COTAS_HELPER_H */
