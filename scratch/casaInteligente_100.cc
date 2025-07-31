@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
-// 97 instancias
+// 100 instancias
 // 16 aplicações + CoTaS
 
     NodeContainer computadorNode;
