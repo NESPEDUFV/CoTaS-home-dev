@@ -12,7 +12,7 @@
 using namespace ns3;
 
 // ----------------- Casa inteligente em um grid 21x21 ------------------
-NS_LOG_COMPONENT_DEFINE("smartHouse");
+NS_LOG_COMPONENT_DEFINE("smartHouse_20");
 
 int main(int argc, char* argv[])
 {
@@ -50,8 +50,8 @@ int main(int argc, char* argv[])
     NodeContainer roteadorNodes;
     roteadorNodes.Create(3);
 
-    NodeContainer CoTDisNode;
-    CoTDisNode.Create(1);
+    NodeContainer CoTaSNode;
+    CoTaSNode.Create(1);
 
     NodeContainer ApplicationsNodes;
     ApplicationsNodes.Create(16);
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
     NodeContainer allNodes = NodeContainer( 
         computadorNode, espelhoNodes, televisaoNode, 
         echoDotNodes, cameraNodes, guardaRoupaNode, 
-        aCNodes, roteadorNodes, CoTDisNode, ApplicationsNodes
+        aCNodes, roteadorNodes, CoTaSNode, ApplicationsNodes
     );
 
 // -------------- Configura pilha de protocolos da internet -------------
@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
     NetDeviceContainer 
     computadorDev, espelhoDev, televisaoDev, echoDotDev,
     cameraDev, guardaRoupaDev, aCNDev,
-    CoTDisDev, ApplicationsDev;
+    CoTaSDev, ApplicationsDev;
 
     mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), 
                 "ActiveProbing", BooleanValue(false));
@@ -106,8 +106,9 @@ int main(int argc, char* argv[])
     televisaoDev = wifi.Install(phy, mac, televisaoNode);
     echoDotDev = wifi.Install(phy, mac, echoDotNodes);
     cameraDev = wifi.Install(phy, mac, cameraNodes);
+    aCNDev = wifi.Install(phy, mac, aCNodes);
     guardaRoupaDev = wifi.Install(phy, mac, guardaRoupaNode);
-    CoTDisDev = wifi.Install(phy, mac, CoTDisNode);
+    CoTaSDev = wifi.Install(phy, mac, CoTaSNode);
     ApplicationsDev = wifi.Install(phy, mac, ApplicationsNodes);
 
     NetDeviceContainer apDevices;
@@ -219,7 +220,7 @@ int main(int argc, char* argv[])
     
 // --------------------------- Aplicações ---------------------------
 
-    position = CoTDisNode.Get(0)->GetObject<MobilityModel>(); // 99
+    position = CoTaSNode.Get(0)->GetObject<MobilityModel>(); // 99
     position->SetPosition(Vector(8, 5.5, 0.0)); // aplicação
 
     position = ApplicationsNodes.Get(0)->GetObject<MobilityModel>(); // 103 ?????????
@@ -281,7 +282,7 @@ int main(int argc, char* argv[])
     Ipv4InterfaceContainer cameraInterface = ipv4.Assign(cameraDev);
     Ipv4InterfaceContainer guardaRoupaInterface = ipv4.Assign(guardaRoupaDev);
     Ipv4InterfaceContainer aCInterface = ipv4.Assign(aCNDev);
-    Ipv4InterfaceContainer CoTDisInterface = ipv4.Assign(CoTDisDev);
+    Ipv4InterfaceContainer CoTaSInterface = ipv4.Assign(CoTaSDev);
     Ipv4InterfaceContainer apInterfaces = ipv4.Assign(apDevices);
     Ipv4InterfaceContainer csmaInterfaces = ipv4.Assign(csmaDevices);
     Ipv4InterfaceContainer AppInterfaces = ipv4.Assign(ApplicationsDev);
@@ -298,13 +299,13 @@ int main(int argc, char* argv[])
     // -------------------------- CoTaS APP ---------------------------------
     CoTaSHelper Service(9);
 
-    ApplicationContainer serverApp = Service.Install(CoTDisNode.Get(0));
+    ApplicationContainer serverApp = Service.Install(CoTaSNode.Get(0));
     serverApp.Start(Seconds(1));
     serverApp.Stop(Seconds(20));
 
     // ------------------------- Clientes provedores -----------------------
 
-    ContextProviderHelper ClientProvider(CoTDisInterface.GetAddress(0), 9);
+    ContextProviderHelper ClientProvider(CoTaSInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
     ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
     
@@ -352,7 +353,7 @@ int main(int argc, char* argv[])
 
     // -------------------------- Clientes consumidores ----------------
     
-    ContextConsumerHelper ClientConsumer(CoTDisInterface.GetAddress(0), 9);
+    ContextConsumerHelper ClientConsumer(CoTaSInterface.GetAddress(0), 9);
     ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
     ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(100)));
     

@@ -12,7 +12,7 @@
 using namespace ns3;
 
 // ----------------- Casa inteligente em um grid 21x21 ------------------
-NS_LOG_COMPONENT_DEFINE("smartHouse");
+NS_LOG_COMPONENT_DEFINE("smartHouse_40");
 
 int main(int argc, char* argv[])
 {
@@ -130,8 +130,6 @@ int main(int argc, char* argv[])
     armarioBanheiroDev, aCNDev, anelDev, cafeteiraDev, 
     chuveiroDev, carroDev, colarDev, coleiraDev,
     janelaCortinaDev,  
-     
-        
     CoTaSDev, ApplicationsDev;
 
     mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), 
@@ -152,6 +150,7 @@ int main(int argc, char* argv[])
     carroDev = wifi.Install(phy, mac, carroNode);
     colarDev = wifi.Install(phy, mac, colarNode);
     coleiraDev = wifi.Install(phy, mac, coleiraNode);
+    janelaCortinaDev = wifi.Install(phy, mac, janelaCortinaNodes);
     CoTaSDev = wifi.Install(phy, mac, CoTaSNode);
     ApplicationsDev = wifi.Install(phy, mac, ApplicationsNodes);
 

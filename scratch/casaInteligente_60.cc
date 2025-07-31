@@ -12,7 +12,7 @@
 using namespace ns3;
 
 // ----------------- Casa inteligente em um grid 21x21 ------------------
-NS_LOG_COMPONENT_DEFINE("smartHouse");
+NS_LOG_COMPONENT_DEFINE("smartHouse_60");
 
 int main(int argc, char* argv[])
 {
@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
     chuveiroDev, carroDev, colarDev, coleiraDev, 
     comedouroDev, escovaDev, fogaoDev, geladeiraDev, 
     gotejadorDev, janelaCortinaDev, lampadaDev, 
-    lavaLouçasDev, RAPDev, interruptorDev,
+    lavaLouçasDev, interruptorDev,
     CoTDisDev, ApplicationsDev;
 
     mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), 
@@ -632,7 +632,7 @@ int main(int argc, char* argv[])
     Ipv4InterfaceContainer lampadaInterface = ipv4.Assign(lampadaDev);
     Ipv4InterfaceContainer interruptorInterface = ipv4.Assign(interruptorDev); 
     Ipv4InterfaceContainer lavaLouçasInterface = ipv4.Assign(lavaLouçasDev);
-    Ipv4InterfaceContainer RAPInterface = ipv4.Assign(RAPDev);
+    // Ipv4InterfaceContainer RAPInterface = ipv4.Assign(RAPDev);
     Ipv4InterfaceContainer CoTDisInterface = ipv4.Assign(CoTDisDev);
     Ipv4InterfaceContainer apInterfaces = ipv4.Assign(apDevices);
     Ipv4InterfaceContainer csmaInterfaces = ipv4.Assign(csmaDevices);

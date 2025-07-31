@@ -12,7 +12,7 @@
 using namespace ns3;
 
 // ----------------- Casa inteligente em um grid 21x21 ------------------
-NS_LOG_COMPONENT_DEFINE("smartHouse");
+NS_LOG_COMPONENT_DEFINE("smartHouse_80");
 
 int main(int argc, char* argv[])
 {
