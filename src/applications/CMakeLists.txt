@@ -16,12 +16,14 @@ build_lib(
     helper/three-gpp-http-helper.cc
     helper/udp-client-server-helper.cc
     helper/udp-echo-helper.cc
+    helper/generic-app-helper.cc
     model/application-packet-probe.cc
     model/bulk-send-application.cc
     model/onoff-application.cc
     model/context-provider.cc
     model/context-consumer.cc
     model/cotas.cc
+    model/generic-app.cc
     model/packet-loss-counter.cc
     model/packet-sink.cc
     model/seq-ts-echo-header.cc
@@ -42,6 +44,7 @@ build_lib(
     helper/bulk-send-helper.h
     helper/on-off-helper.h
     helper/cotas-helper.h
+    helper/generic-app-helper.h
     helper/packet-sink-helper.h
     helper/three-gpp-http-helper.h
     helper/udp-client-server-helper.h
@@ -55,6 +58,7 @@ build_lib(
     model/context-provider.h
     model/context-consumer.h
     model/cotas.h
+    model/generic-app.h
     model/seq-ts-echo-header.h
     model/seq-ts-header.h
     model/seq-ts-size-header.h
