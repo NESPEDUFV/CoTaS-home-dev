@@ -19,6 +19,7 @@
 #include "ns3/socket.h"
 #include "ns3/udp-socket.h"
 #include "ns3/uinteger.h"
+#include "ns3/timestamp-tag.h"
 
 namespace ns3
 {
@@ -159,21 +160,20 @@ GenericApplication::HandleRead(Ptr<Socket> socket)
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
         m_rxTraceWithAddresses(packet, from, localAddress);
-        if (InetSocketAddress::IsMatchingType(from))
+        TimestampTag timestampTag;
+        NS_LOG_INFO("Chegou dados do cliente no consumidor");
+        
+        if (packet->PeekPacketTag(timestampTag))
         {
-            NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received "
-                                   << packet->GetSize() << " bytes from "
-                                   << InetSocketAddress::ConvertFrom(from).GetIpv4() << " port "
-                                   << InetSocketAddress::ConvertFrom(from).GetPort());
-        }
-        else if (Inet6SocketAddress::IsMatchingType(from))
-        {
-            NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received "
-                                   << packet->GetSize() << " bytes from "
-                                   << Inet6SocketAddress::ConvertFrom(from).GetIpv6() << " port "
-                                   << Inet6SocketAddress::ConvertFrom(from).GetPort());
-        }
+            Time txTime = timestampTag.GetTimestamp();
+            
+            Time now = Simulator::Now();
+            
+            Time delay = now - txTime;
 
+            NS_LOG_INFO ("Latencia: " << delay.GetSeconds() << " segundos.");
+        
+        }
     }
 }
 

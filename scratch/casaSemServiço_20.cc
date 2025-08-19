@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
     LogComponentEnable("CoTaSApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("GenericApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
 // 97 instancias
@@ -296,163 +297,156 @@ int main(int argc, char* argv[])
     }
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
-    // -------------------------- CoTaS APP ---------------------------------
-    CoTaSHelper Service(9);
+    // -------------------------- Aplicações consumidoras --------------
+    GenericApplicationHelper Service(9);
+    ApplicationContainer allServiceApp;
+    ApplicationContainer FallDetection = Service.Install(ApplicationsNodes.Get(0));
+    ApplicationContainer MicroControl = Service.Install(ApplicationsNodes.Get(1));
+    ApplicationContainer PetCare = Service.Install(ApplicationsNodes.Get(2));
+    ApplicationContainer EnergyManegement = Service.Install(ApplicationsNodes.Get(3));
+    ApplicationContainer WaterManegement = Service.Install(ApplicationsNodes.Get(4));
+    ApplicationContainer Security = Service.Install(ApplicationsNodes.Get(5));
+    ApplicationContainer Localization = Service.Install(ApplicationsNodes.Get(6));
+    ApplicationContainer GasSec = Service.Install(ApplicationsNodes.Get(7));
+    ApplicationContainer HealthCare = Service.Install(ApplicationsNodes.Get(8));
+    ApplicationContainer LightControl = Service.Install(ApplicationsNodes.Get(9));
+    ApplicationContainer TempControl = Service.Install(ApplicationsNodes.Get(10));
+    ApplicationContainer SmartCleaning = Service.Install(ApplicationsNodes.Get(11));
+    ApplicationContainer Garden = Service.Install(ApplicationsNodes.Get(12));
+    ApplicationContainer SmartMobility = Service.Install(ApplicationsNodes.Get(13));
+    ApplicationContainer SmartCooking = Service.Install(ApplicationsNodes.Get(14));
+    ApplicationContainer InventoryManagement = Service.Install(ApplicationsNodes.Get(15));
+    allServiceApp.Add(FallDetection);
+    allServiceApp.Add(MicroControl);
+    allServiceApp.Add(PetCare);
+    allServiceApp.Add(EnergyManegement);
+    allServiceApp.Add(WaterManegement);
+    allServiceApp.Add(Security);
+    allServiceApp.Add(Localization);
+    allServiceApp.Add(GasSec);
+    allServiceApp.Add(HealthCare);
+    allServiceApp.Add(LightControl);
+    allServiceApp.Add(TempControl);
+    allServiceApp.Add(SmartCleaning);
+    allServiceApp.Add(Garden);
+    allServiceApp.Add(SmartMobility);
+    allServiceApp.Add(SmartCooking);
+    allServiceApp.Add(InventoryManagement);
 
-    ApplicationContainer serverApp = Service.Install(CoTaSNode.Get(0));
-    serverApp.Start(Seconds(1));
-    serverApp.Stop(Seconds(20));
+    allServiceApp.Start(Seconds(1));
+    allServiceApp.Stop(Seconds(20));
 
     // ------------------------- Clientes provedores -----------------------
 
-    ContextProviderHelper ClientProvider(CoTaSInterface.GetAddress(0), 9);
-    ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
-    ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+    // Configurando aplicações ---------------------------------------------
+
+    ContextProviderHelper FallDetectionHelper(AppInterfaces.GetAddress(0), 9);
+    FallDetectionHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    FallDetectionHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper MicroControlHelper(AppInterfaces.GetAddress(1), 9);
+    MicroControlHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    MicroControlHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper PetCareHelper(AppInterfaces.GetAddress(2), 9);
+    PetCareHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    PetCareHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper EnergyManegementHelper(AppInterfaces.GetAddress(3), 9);
+    EnergyManegementHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    EnergyManegementHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper WaterManegementHelper(AppInterfaces.GetAddress(4), 9);
+    WaterManegementHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    WaterManegementHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper SecurityHelper(AppInterfaces.GetAddress(5), 9);
+    SecurityHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    SecurityHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
     
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(0));
-    ApplicationContainer computadorApp = ClientProvider.Install(computadorNode);
+    ContextProviderHelper LocalizationHelper(AppInterfaces.GetAddress(6), 9);
+    LocalizationHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    LocalizationHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
 
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(1));
-    ApplicationContainer espelhoApp = ClientProvider.Install(espelhoNodes);
+    ContextProviderHelper GasSecHelper(AppInterfaces.GetAddress(7), 9);
+    GasSecHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    GasSecHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper HealthCareHelper(AppInterfaces.GetAddress(8), 9);
+    HealthCareHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    HealthCareHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper LightControlHelper(AppInterfaces.GetAddress(9), 9);
+    LightControlHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    LightControlHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper TempControlHelper(AppInterfaces.GetAddress(10), 9);
+    TempControlHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    TempControlHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper SmartCleaningHelper(AppInterfaces.GetAddress(11), 9);
+    SmartCleaningHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    SmartCleaningHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper GardenHelper(AppInterfaces.GetAddress(12), 9);
+    GardenHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    GardenHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper SmartMobilityHelper(AppInterfaces.GetAddress(13), 9);
+    SmartMobilityHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    SmartMobilityHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper SmartCookingHelper(AppInterfaces.GetAddress(14), 9);
+    SmartCookingHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    SmartCookingHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    ContextProviderHelper InventoryManagementHelper(AppInterfaces.GetAddress(15), 9);
+    InventoryManagementHelper.SetAttribute("MaxPackets", UintegerValue(200));
+    InventoryManagementHelper.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
+
+    // Instalando aplicações -----------------------------------------------
+
+    ApplicationContainer allClientApp;
+    MicroControlHelper.SetAttribute("ObjectType", UintegerValue(0));
+    EnergyManegementHelper.SetAttribute("ObjectType", UintegerValue(0));
+    ApplicationContainer computadorApp = MicroControlHelper.Install(computadorNode);
+    computadorApp.Add(EnergyManegementHelper.Install(computadorNode));
+    allClientApp.Add(computadorApp); 
     
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(2));
-    ApplicationContainer televisaoApp = ClientProvider.Install(televisaoNode);
+    LightControlHelper.SetAttribute("ObjectType", UintegerValue(1));
+    ApplicationContainer espelhoApp = LightControlHelper.Install(espelhoNodes);
+    allClientApp.Add(espelhoApp); 
     
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(3));
-    ApplicationContainer echoDotApp = ClientProvider.Install(echoDotNodes);
-    
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(4));
-    ApplicationContainer cameraApp = ClientProvider.Install(cameraNodes);
-    
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(5));
-    ApplicationContainer guardaRoupaApp  = ClientProvider.Install(guardaRoupaNode);
-    
-    ClientProvider.SetAttribute("ObjectType", UintegerValue(8));
-    ApplicationContainer aCApp = ClientProvider.Install(aCNodes);
+    EnergyManegementHelper.SetAttribute("ObjectType", UintegerValue(2));
+    ApplicationContainer televisaoApp = EnergyManegementHelper.Install(televisaoNode);
+    allClientApp.Add(televisaoApp);
 
-    computadorApp.Start(Seconds(10));
-    computadorApp.Stop(Seconds(20));
+    MicroControlHelper.SetAttribute("ObjectType", UintegerValue(3));
+    ApplicationContainer echoDotApp = MicroControlHelper.Install(echoDotNodes);
+    allClientApp.Add(echoDotApp);
 
-    espelhoApp.Start(Seconds(10));
-    espelhoApp.Stop(Seconds(20));
+    SecurityHelper.SetAttribute("ObjectType", UintegerValue(4));
+    LocalizationHelper.SetAttribute("ObjectType", UintegerValue(4));
+    FallDetectionHelper.SetAttribute("ObjectType", UintegerValue(4));
+    PetCareHelper.SetAttribute("ObjectType", UintegerValue(4));
+    ApplicationContainer cameraApp = SecurityHelper.Install(cameraNodes);
+    cameraApp.Add(LocalizationHelper.Install(cameraNodes));
+    cameraApp.Add(FallDetectionHelper.Install(cameraNodes));
+    cameraApp.Add(PetCareHelper.Install(cameraNodes));
+    allClientApp.Add(cameraApp);
 
-    televisaoApp.Start(Seconds(10));
-    televisaoApp.Stop(Seconds(20));
+    InventoryManagementHelper.SetAttribute("ObjectType", UintegerValue(5));
+    ApplicationContainer guardaRoupaApp = InventoryManagementHelper.Install(guardaRoupaNode);
+    allClientApp.Add(guardaRoupaApp);
 
-    echoDotApp.Start(Seconds(10));
-    echoDotApp.Stop(Seconds(20));
+    TempControlHelper.SetAttribute("ObjectType", UintegerValue(8));
+    EnergyManegementHelper.SetAttribute("ObjectType", UintegerValue(8));
+    ApplicationContainer aCApp = TempControlHelper.Install(aCNodes);
+    aCApp.Add(EnergyManegementHelper.Install(aCNodes));
+    allClientApp.Add(aCApp);
 
-    cameraApp.Start(Seconds(10));
-    cameraApp.Stop(Seconds(20));
-
-    guardaRoupaApp.Start(Seconds(10));
-    guardaRoupaApp.Stop(Seconds(20));
-
-    aCApp.Start(Seconds(10));
-    aCApp.Stop(Seconds(20));
-
-    // -------------------------- Clientes consumidores ----------------
-    
-    ContextConsumerHelper ClientConsumer(CoTaSInterface.GetAddress(0), 9);
-    ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
-    ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(100)));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(0));
-    ApplicationContainer FallDetection = ClientConsumer.Install(ApplicationsNodes.Get(0));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(1));
-    ApplicationContainer MicroControl = ClientConsumer.Install(ApplicationsNodes.Get(1));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(2));
-    ApplicationContainer PetCare = ClientConsumer.Install(ApplicationsNodes.Get(2));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(3));
-    ApplicationContainer EnergyManegement = ClientConsumer.Install(ApplicationsNodes.Get(3));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(4));
-    ApplicationContainer WaterManegement = ClientConsumer.Install(ApplicationsNodes.Get(4));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(5));
-    ApplicationContainer Security = ClientConsumer.Install(ApplicationsNodes.Get(5));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(6));
-    ApplicationContainer Localization = ClientConsumer.Install(ApplicationsNodes.Get(6));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(7));
-    ApplicationContainer GasSec = ClientConsumer.Install(ApplicationsNodes.Get(7));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(8));
-    ApplicationContainer HealthCare = ClientConsumer.Install(ApplicationsNodes.Get(8));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(9));
-    ApplicationContainer LightControl = ClientConsumer.Install(ApplicationsNodes.Get(9));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(10));
-    ApplicationContainer TempControl = ClientConsumer.Install(ApplicationsNodes.Get(10));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(11));
-    ApplicationContainer SmartCleaning = ClientConsumer.Install(ApplicationsNodes.Get(11));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(12));
-    ApplicationContainer Garden = ClientConsumer.Install(ApplicationsNodes.Get(12));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(13));
-    ApplicationContainer SmartMobility = ClientConsumer.Install(ApplicationsNodes.Get(13));
-
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(14));
-    ApplicationContainer SmartCooking = ClientConsumer.Install(ApplicationsNodes.Get(14));
-    
-    ClientConsumer.SetAttribute("ApplicationType", UintegerValue(15));
-    ApplicationContainer InventoryManagement = ClientConsumer.Install(ApplicationsNodes.Get(15));
-
-    FallDetection.Start(Seconds(12));
-    FallDetection.Stop(Seconds(20));
-
-    MicroControl.Start(Seconds(12));
-    MicroControl.Stop(Seconds(20));
-
-    PetCare.Start(Seconds(12));
-    PetCare.Stop(Seconds(20));
-
-    EnergyManegement.Start(Seconds(12));
-    EnergyManegement.Stop(Seconds(20));
-
-    WaterManegement.Start(Seconds(12));
-    WaterManegement.Stop(Seconds(20));
-
-    Security.Start(Seconds(12));
-    Security.Stop(Seconds(20));
-
-    Localization.Start(Seconds(12));
-    Localization.Stop(Seconds(20));
-
-    GasSec.Start(Seconds(12));
-    GasSec.Stop(Seconds(20));
-
-    HealthCare.Start(Seconds(12));
-    HealthCare.Stop(Seconds(20));
-
-    LightControl.Start(Seconds(12));
-    LightControl.Stop(Seconds(20));
-
-    TempControl.Start(Seconds(12));
-    TempControl.Stop(Seconds(20));
-
-    SmartCleaning.Start(Seconds(12));
-    SmartCleaning.Stop(Seconds(20));
-
-    Garden.Start(Seconds(12));
-    Garden.Stop(Seconds(20));
-
-    SmartMobility.Start(Seconds(12));
-    SmartMobility.Stop(Seconds(20));
-
-    SmartCooking.Start(Seconds(12));
-    SmartCooking.Stop(Seconds(20));
-
-    InventoryManagement.Start(Seconds(12));
-    InventoryManagement.Stop(Seconds(20));
-
+    allClientApp.Start(Seconds(10));
+    allClientApp.Stop(Seconds(20));
     
     Simulator::Stop(Seconds(21.0));
     Simulator::Run();
