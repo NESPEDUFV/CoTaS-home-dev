@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-2.0-only
  */
 
-#include "cotas.h"
+#include "generic-server.h"
 
 #include "ns3/address-utils.h"
 #include "ns3/inet-socket-address.h"
@@ -26,43 +26,39 @@
 #include <random>
 #include <sstream>
 
-using bsoncxx::builder::basic::kvp;
-
-using bsoncxx::builder::basic::make_document;
-
 namespace ns3
 {
 
-NS_LOG_COMPONENT_DEFINE("CoTaSApplication");
+NS_LOG_COMPONENT_DEFINE("GenericServerApplication");
 
-NS_OBJECT_ENSURE_REGISTERED(CoTaS);
+NS_OBJECT_ENSURE_REGISTERED(GenericServer);
 
 TypeId
-CoTaS::GetTypeId()
+GenericServer::GetTypeId()
 {
     static TypeId tid =
-        TypeId("ns3::CoTaS")
+        TypeId("ns3::GenericServer")
             .SetParent<SinkApplication>()
             .SetGroupName("Applications")
-            .AddConstructor<CoTaS>()
+            .AddConstructor<GenericServer>()
             .AddAttribute("Tos",
                           "The Type of Service used to send IPv4 packets. "
                           "All 8 bits of the TOS byte are set (including ECN bits).",
                           UintegerValue(0),
-                          MakeUintegerAccessor(&CoTaS::m_tos),
+                          MakeUintegerAccessor(&GenericServer::m_tos),
                           MakeUintegerChecker<uint8_t>())
             .AddTraceSource("Rx",
                             "A packet has been received",
-                            MakeTraceSourceAccessor(&CoTaS::m_rxTrace),
+                            MakeTraceSourceAccessor(&GenericServer::m_rxTrace),
                             "ns3::Packet::TracedCallback")
             .AddTraceSource("RxWithAddresses",
                             "A packet has been received",
-                            MakeTraceSourceAccessor(&CoTaS::m_rxTraceWithAddresses),
+                            MakeTraceSourceAccessor(&GenericServer::m_rxTraceWithAddresses),
                             "ns3::Packet::TwoAddressTracedCallback");
     return tid;
 }
 
-CoTaS::CoTaS()
+GenericServer::GenericServer()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
       m_socket6{nullptr}
@@ -70,7 +66,7 @@ CoTaS::CoTaS()
     NS_LOG_FUNCTION(this);
 }
 
-CoTaS::~CoTaS()
+GenericServer::~GenericServer()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
@@ -78,7 +74,7 @@ CoTaS::~CoTaS()
 }
 
 void
-CoTaS::StartApplication()
+GenericServer::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
@@ -86,7 +82,7 @@ CoTaS::StartApplication()
     {
         mongocxx::uri uri("mongodb://localhost:27017/");
         m_client.emplace(uri);
-        std::string nome_banco = "cotas_db";
+        std::string nome_banco = "GenericServer_db";
 
         SetupDatabase(*m_client, nome_banco);
 
@@ -126,7 +122,7 @@ CoTaS::StartApplication()
             }
         }
         m_socket->SetIpTos(m_tos); // Affects only IPv4 sockets.
-        m_socket->SetRecvCallback(MakeCallback(&CoTaS::HandleRead, this));
+        m_socket->SetRecvCallback(MakeCallback(&GenericServer::HandleRead, this));
     }
 
     if (m_local.IsInvalid() && !m_socket6)
@@ -153,12 +149,12 @@ CoTaS::StartApplication()
                 NS_FATAL_ERROR("Error: Failed to join multicast group");
             }
         }
-        m_socket6->SetRecvCallback(MakeCallback(&CoTaS::HandleRead, this));
+        m_socket6->SetRecvCallback(MakeCallback(&GenericServer::HandleRead, this));
     }
 }
 
 void
-CoTaS::StopApplication()
+GenericServer::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
@@ -175,7 +171,7 @@ CoTaS::StopApplication()
 }
 
 void
-CoTaS::HandleRead(Ptr<Socket> socket)
+GenericServer::HandleRead(Ptr<Socket> socket)
 {
     NS_LOG_FUNCTION(this << socket);
 
@@ -241,7 +237,7 @@ CoTaS::HandleRead(Ptr<Socket> socket)
 }
 
 std::string
-CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
+GenericServer::HandleSubscription(Address from, nlohmann::json data_json)
 {
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
@@ -282,7 +278,7 @@ CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
 }
 
 std::string
-CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
+GenericServer::HandleUpdate(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     // verifica se id é válido
@@ -329,7 +325,7 @@ CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
 }
 
 std::string
-CoTaS::HandleRequest(Address from, nlohmann::json data_json)
+GenericServer::HandleRequest(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     nlohmann::json res = nlohmann::json::array();
@@ -384,7 +380,7 @@ CoTaS::HandleRequest(Address from, nlohmann::json data_json)
 }
 
 void
-CoTaS::SetupDatabase(mongocxx::client& client, std::string nome_banco)
+GenericServer::SetupDatabase(mongocxx::client& client, std::string nome_banco)
 {
     try
     {
@@ -422,7 +418,7 @@ CoTaS::SetupDatabase(mongocxx::client& client, std::string nome_banco)
 }
 
 int
-CoTaS::Simple_Q()
+GenericServer::Simple_Q()
 {
     auto collection = m_bancoMongo["object"];
     std::vector<bsoncxx::document::value> resultados;
@@ -454,7 +450,7 @@ CoTaS::Simple_Q()
 // se não existe ip com isso no banco retorna 0
 // se existe retorna id
 int
-CoTaS::ValidateIP_Q(Address ip)
+GenericServer::ValidateIP_Q(Address ip)
 {
     try
     {
@@ -485,7 +481,7 @@ CoTaS::ValidateIP_Q(Address ip)
 // se o id já existe, ele retorna o próprio id
 // se não, retorna 0
 int
-CoTaS::ValidateID_Q(int id)
+GenericServer::ValidateID_Q(int id)
 {
     auto collection = m_bancoMongo["object"];
     nlohmann::json j_query = {{"id", id}};
@@ -503,7 +499,7 @@ CoTaS::ValidateID_Q(int id)
 }
 
 int
-CoTaS::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
+GenericServer::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
     uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
@@ -527,7 +523,7 @@ CoTaS::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 }
 
 int
-CoTaS::RandomInt(int min, int max)
+GenericServer::RandomInt(int min, int max)
 {
     static std::random_device rd;
     static std::mt19937 gen(rd());
