@@ -41,6 +41,26 @@ class CoTaSHelper : public ApplicationHelper
     CoTaSHelper(const Address& address);
 };
 
+class GenericServerHelper : public ApplicationHelper
+{
+  public:
+    /**
+     * Create GenericServerHelper which will make life easier for people trying
+     * to set up simulations with echos.
+     *
+     * @param port The port the server will wait on for incoming packets
+     */
+    GenericServerHelper(uint16_t port);
+
+    /**
+     * Create GenericServerHelper which will make life easier for people trying
+     * to set up simulations with echos.
+     *
+     * @param address The address the server will bind to
+     */
+    GenericServerHelper(const Address& address);
+};
+
 /**
  * @ingroup cotas
  * @brief Create an application which sends a UDP packet and waits for an echo of this packet

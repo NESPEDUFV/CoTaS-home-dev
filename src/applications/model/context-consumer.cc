@@ -311,7 +311,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         switch (res)
         {
         case 200:
-            // NS_LOG_INFO("Requisição de consumidor respondida com sucesso");
+            NS_LOG_INFO("Chegou no conumidor " << data_json["response"]);
             break;
         case 400:
             NS_LOG_INFO("Bad request " << data_json["info"]);

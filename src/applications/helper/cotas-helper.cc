@@ -12,6 +12,7 @@
 #include "ns3/cotas.h"
 #include "ns3/context-consumer.h"
 #include "ns3/context-provider.h"
+#include "ns3/generic-server.h"
 #include "ns3/uinteger.h"
 
 namespace ns3
@@ -25,6 +26,18 @@ CoTaSHelper::CoTaSHelper(uint16_t port)
 
 CoTaSHelper::CoTaSHelper(const Address& address)
     : ApplicationHelper(CoTaS::GetTypeId())
+{
+    SetAttribute("Local", AddressValue(address));
+}
+
+GenericServerHelper::GenericServerHelper(uint16_t port)
+    : ApplicationHelper(GenericServer::GetTypeId())
+{
+    SetAttribute("Port", UintegerValue(port));
+}
+
+GenericServerHelper::GenericServerHelper(const Address& address)
+    : ApplicationHelper(GenericServer::GetTypeId())
 {
     SetAttribute("Local", AddressValue(address));
 }

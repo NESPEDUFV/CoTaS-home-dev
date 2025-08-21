@@ -347,7 +347,11 @@ CoTaS::HandleRequest(Address from, nlohmann::json data_json)
     }
     auto bson_query = bsoncxx::from_json(json_string);
 
-    auto cursor = collection.find(bson_query.view());
+    mongocxx::options::find opts{};
+    auto projection_doc = make_document(kvp("ip", 1), kvp("port", 1));
+    opts.projection(projection_doc.view());
+
+    auto cursor = collection.find(bson_query.view(), opts);
 
     // libera o cursor o quanto antes
     try

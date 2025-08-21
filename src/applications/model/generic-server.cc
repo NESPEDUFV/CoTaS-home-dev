@@ -47,6 +47,11 @@ GenericServer::GetTypeId()
                           UintegerValue(0),
                           MakeUintegerAccessor(&GenericServer::m_tos),
                           MakeUintegerChecker<uint8_t>())
+            .AddAttribute("ObjectType",
+                          "Which object the node refers to",
+                          UintegerValue(1),
+                          MakeUintegerAccessor(&GenericServer::m_objectType),
+                          MakeUintegerChecker<uint32_t>())
             .AddTraceSource("Rx",
                             "A packet has been received",
                             MakeTraceSourceAccessor(&GenericServer::m_rxTrace),
@@ -64,6 +69,18 @@ GenericServer::GenericServer()
       m_socket6{nullptr}
 {
     NS_LOG_FUNCTION(this);
+    
+    std::ifstream fm("all_data/messages2.json");
+
+    if (fm.is_open())
+    {
+        fm >> m_updateData;
+        m_updateData = m_updateData["updateMessages"][m_objectType];
+    }
+    else
+    {
+        std::cerr << "Erro ao abrir messages.json\n";
+    }
 }
 
 GenericServer::~GenericServer()
@@ -78,23 +95,6 @@ GenericServer::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
-    try
-    {
-        mongocxx::uri uri("mongodb://localhost:27017/");
-        m_client.emplace(uri);
-        std::string nome_banco = "GenericServer_db";
-
-        SetupDatabase(*m_client, nome_banco);
-
-        NS_LOG_INFO("Tentando pingar no servidor de dados:");
-        m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
-        NS_LOG_INFO("Banco de dados criado e conectado com sucesso.");
-    }
-    catch (const mongocxx::exception& e)
-    {
-        NS_LOG_ERROR("An exception occurred: " << e.what());
-        return;
-    }
     if (!m_socket)
     {
         auto tid = TypeId::LookupByName("ns3::UdpSocketFactory");
@@ -195,26 +195,10 @@ GenericServer::HandleRead(Ptr<Socket> socket)
             std::string req = data_json["req"].get<std::string>();
             std::string response_data;
             TimestampTag timestampTag;
-            NS_LOG_INFO("Chegou requisição no servidor");
+            NS_LOG_INFO("Chegou requisição no objeto inteligente");
+            
             // TODO: transformar num dicionário de funções
-            if (req.compare("subscribe") == 0)
-            {
-                response_data = HandleSubscription(from, data_json);
-                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                //                   << " se inscreveu");
-            }
-            else if (req.compare("update") == 0)
-            {
-                response_data = HandleUpdate(from, data_json);
-                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                //                   << " atualizou dados");
-            }
-            else if (req.compare("getContext") == 0)
-            {
-                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                //                   << " respondendo requisição...");
-                response_data = HandleRequest(from, data_json);
-            }
+            response_data = RandomData();
 
             Ptr<Packet> response = Create<Packet>((uint8_t*)response_data.c_str(), response_data.size());
             if(packet->PeekPacketTag(timestampTag))
@@ -222,7 +206,7 @@ GenericServer::HandleRead(Ptr<Socket> socket)
                 response->AddPacketTag(timestampTag);
             }
             
-            NS_LOG_INFO("Enviando resposta do servidor");
+            NS_LOG_INFO("Enviando resposta do objeto inteligente");
             socket->SendTo(response, 0, from);
         }
         // trata no ipv6
@@ -236,292 +220,6 @@ GenericServer::HandleRead(Ptr<Socket> socket)
     }
 }
 
-std::string
-GenericServer::HandleSubscription(Address from, nlohmann::json data_json)
-{
-    // verifica se já foi feita inscrição pelo endereço de ip
-    int valida = ValidateIP_Q(from);
-    data_json.erase("req");
-    if (valida)
-    {
-        // ip já inscrito, manda o id novamente.
-        // NS_LOG_INFO("IP já inscrito");
-        // NS_LOG_INFO("Id do ip inscrito: " << valida);
-        nlohmann::json res = {{"status", 200}, {"id", valida}};
-
-        std::string data = res.dump();
-        
-        return data;
-    }
-
-    // gera id seguro (vamos abstrair segurança)
-    int precisa_gerar = 1;
-    int id;
-    while (precisa_gerar)
-    {
-        id = RandomInt(20000, 20000000);
-        // validar id
-        if (!ValidateID_Q(id))
-        {
-            precisa_gerar = 0;
-        }
-    }
-
-    // insere dados json
-    InsertDataSub_Q(id, from, data_json);
-
-    // retorna status ok com id ou error sem id
-    nlohmann::json res = {{"status", 200}, {"id", id}};
-
-    std::string data = res.dump();
-    return data;
-}
-
-std::string
-GenericServer::HandleUpdate(Address from, nlohmann::json data_json)
-{
-    auto collection = m_bancoMongo["object"];
-    // verifica se id é válido
-    int id = data_json["id"];
-    data_json.erase("id");
-    data_json.erase("req");
-    data_json.erase("object");
-    if (!ValidateID_Q(id))
-    {
-        // id inválido
-        nlohmann::json res = {
-            {"status", 401},
-        };
-        std::string data = res.dump();
-
-        return data;
-    }
-
-    auto query_filter = make_document(kvp("id", id));
-    std::string json_string = data_json.dump();
-    try
-    {
-        auto bson_documento = bsoncxx::from_json(json_string);
-        auto update_doc = make_document(kvp("$set", bson_documento));
-
-        auto result = collection.update_one(query_filter.view(), update_doc.view());
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        abort();
-        nlohmann::json res = {{"status", 500}, {"msg", "Erro na consulta dso dados"}};
-        std::string data = res.dump();
-        
-        return data;
-    }
-
-    // retorna status ok ou error
-    nlohmann::json res = {{"status", 200}, {"id", id}};
-
-    std::string data = res.dump();
-
-    return data;
-}
-
-std::string
-GenericServer::HandleRequest(Address from, nlohmann::json data_json)
-{
-    auto collection = m_bancoMongo["object"];
-    nlohmann::json res = nlohmann::json::array();
-    nlohmann::json cap;
-    std::vector<bsoncxx::document::value> resultados;
-
-    std::string json_string = data_json["query"].dump();
-    if (json_string.empty())
-    {
-        cap = {{"status", 400}, {"info", "bad request"}};
-        NS_LOG_INFO("Consumidor enviou cabeçalho errado");
-        std::string data = cap.dump();
-
-        return data;
-    }
-    auto bson_query = bsoncxx::from_json(json_string);
-
-    auto cursor = collection.find(bson_query.view());
-
-    // libera o cursor o quanto antes
-    try
-    {
-        for (auto&& doc : cursor)
-        {
-            resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
-        }
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        abort();
-        nlohmann::json res = {{"status", 500}, {"msg", "Erro na consulta dso dados"}};
-        std::string data = res.dump();
-        
-        return data;
-    }
-
-    // faz a lógica que precisa
-    for (const auto& doc_value : resultados)
-    {
-        std::string json_db = bsoncxx::to_json(doc_value.view());
-        res.push_back(nlohmann::json::parse(json_db));
-    }
-    // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
-    cap = {{"status", 200}, {"response", res}};
-
-    std::string data = cap.dump();
-
-    return data;
-
-    // retorna dados
-}
-
-void
-GenericServer::SetupDatabase(mongocxx::client& client, std::string nome_banco)
-{
-    try
-    {
-        auto databases = client.list_database_names();
-        auto it = std::find(databases.begin(), databases.end(), nome_banco);
-        if (it != databases.end())
-        {
-            NS_LOG_INFO("Banco de dados encontrado. Resetando (drop)...");
-            client[nome_banco].drop();
-            NS_LOG_INFO("Banco de dados '" << nome_banco << "' foi dropado com sucesso.");
-        }
-        else
-        {
-            NS_LOG_INFO("Banco de dados '" << nome_banco << "' não existe.");
-        }
-        m_bancoMongo = client[nome_banco];
-        auto collection = m_bancoMongo["object"];
-
-        nlohmann::json j_documento = {{"nome", "Carlos"},
-                                      {"cidade", "Juatuba"},
-                                      {"ativo", true},
-                                      {"timestamp", "2025-07-04T10:15:38-03:00"},
-                                      {"id", 72},
-                                      {"ip", 27}};
-
-        std::string json_string = j_documento.dump();
-        auto bson_documento = bsoncxx::from_json(json_string);
-        auto result = collection.insert_one(bson_documento.view());
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        return;
-    }
-}
-
-int
-GenericServer::Simple_Q()
-{
-    auto collection = m_bancoMongo["object"];
-    std::vector<bsoncxx::document::value> resultados;
-    auto cursor = collection.find({});
-
-    // libera o cursor o quanto antes
-    try
-    {
-        for (auto&& doc : cursor)
-        {
-            resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
-        }
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        return 0;
-    }
-
-    // faz a lógica que precisa
-    for (const auto& doc_value : resultados)
-    {
-        std::cout << bsoncxx::to_json(doc_value) << std::endl;
-    }
-
-    return 0;
-}
-
-// se não existe ip com isso no banco retorna 0
-// se existe retorna id
-int
-GenericServer::ValidateIP_Q(Address ip)
-{
-    try
-    {
-        auto collection = m_bancoMongo["object"];
-        uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-        nlohmann::json j_query = {{"ip", ip_num}};
-        std::string json_string = j_query.dump();
-
-        auto bson_query = bsoncxx::from_json(json_string);
-        auto result = collection.find_one(bson_query.view());
-        if (result)
-        {
-            auto view = (*result).view();
-            int id_retornado = view["id"].get_int32().value;
-            return id_retornado;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        abort();
-        return 0;
-    }
-
-    return 0;
-}
-
-// se o id já existe, ele retorna o próprio id
-// se não, retorna 0
-int
-GenericServer::ValidateID_Q(int id)
-{
-    auto collection = m_bancoMongo["object"];
-    nlohmann::json j_query = {{"id", id}};
-
-    std::string json_string = j_query.dump();
-    auto bson_query = bsoncxx::from_json(json_string);
-    auto result = collection.find_one(bson_query.view());
-    if (result)
-    {
-        auto view = (*result).view();
-        int id_retornado = view["id"].get_int32().value;
-        return id_retornado;
-    }
-    return 0;
-}
-
-int
-GenericServer::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
-{
-    auto collection = m_bancoMongo["object"];
-    uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-
-    data_json["id"] = id;
-    data_json["ip"] = ip_num;
-
-    std::string json_string = data_json.dump();
-    try
-    {
-        auto bson_documento = bsoncxx::from_json(json_string);
-        auto result = collection.insert_one(bson_documento.view());
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        return 0;
-    }
-
-    return 1;
-}
-
 int
 GenericServer::RandomInt(int min, int max)
 {
@@ -531,6 +229,14 @@ GenericServer::RandomInt(int min, int max)
     std::uniform_int_distribution<> distrib(min, max);
 
     return distrib(gen);
+}
+
+std::string
+GenericServer::RandomData()
+{   
+    nlohmann::json data = m_updateData[RandomInt(0, 3)];
+    // add dados que variam com ns3 (localização, bateria...)
+    return data.dump();
 }
 
 } // Namespace ns3

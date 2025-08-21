@@ -182,9 +182,6 @@ ContextProvider::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
-    // set the messages that the object will send
-    SetDataMessage();
-
     if (!m_socket)
     {
         auto tid = TypeId::LookupByName("ns3::UdpSocketFactory");
@@ -227,6 +224,10 @@ ContextProvider::StartApplication()
         m_socket->Connect(m_peer);
         m_socket->SetRecvCallback(MakeCallback(&ContextProvider::HandleRead, this));
         m_socket->SetAllowBroadcast(true);
+
+        // set the messages that the object will send
+        SetDataMessage();
+
     }
 
     ScheduleTransmit(Seconds(0.));
@@ -267,6 +268,7 @@ ContextProvider::Send()
     if (m_objectId == 0)
     {
         data = m_firstData.dump();
+
         NS_LOG_INFO("Enviando dados de inscrição");
     }
     else
@@ -355,7 +357,9 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 void
 ContextProvider::SetDataMessage()
 {   
+
     m_firstData = m_messages["firstMessages"][m_objectType];
+    m_firstData["port"] = 19;
     m_updateData = m_messages["updateMessages"][m_objectType];
     
 }

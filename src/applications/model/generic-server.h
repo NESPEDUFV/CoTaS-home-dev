@@ -61,8 +61,6 @@ class GenericServer : public SinkApplication
 
     int RandomInt(int min, int max);
 
-    void SetDataMessage();
-
     std::string RandomData();
 
     uint32_t m_objectType;
