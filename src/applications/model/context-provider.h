@@ -21,10 +21,8 @@
 
 namespace ns3
 {
-
 class Socket;
 class Packet;
-
 /**
  * @ingroup udpecho
  * @brief A Context Provider client

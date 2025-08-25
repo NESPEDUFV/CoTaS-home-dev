@@ -192,10 +192,9 @@ GenericServer::HandleRead(Ptr<Socket> socket)
             nlohmann::json data_json =
                 nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
 
-            std::string req = data_json["req"].get<std::string>();
             std::string response_data;
             TimestampTag timestampTag;
-            NS_LOG_INFO("Chegou requisição no objeto inteligente");
+            NS_LOG_INFO("Chegou requisição de dados no objeto inteligente");
             
             // TODO: transformar num dicionário de funções
             response_data = RandomData();

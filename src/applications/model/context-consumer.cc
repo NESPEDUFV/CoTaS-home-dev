@@ -93,7 +93,9 @@ ContextConsumer::ContextConsumer()
     : m_sent{0},
       m_socket{nullptr},
       m_peerPort{},
-      m_sendEvent{}
+      m_sendEvent{},
+      m_state{Searching},
+      m_objectAdress{}
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -258,33 +260,41 @@ ContextConsumer::ScheduleTransmit(Time dt)
 void
 ContextConsumer::Send()
 {
-    NS_LOG_FUNCTION(this);
+    Ptr<Packet> p;
+    std::string data;
+    TimestampTag timestampTag;
+    Address localAddress;
 
+    NS_LOG_FUNCTION(this);
     NS_ASSERT(m_sendEvent.IsExpired());
 
-    Ptr<Packet> p;
-
-    std::string data;
-
     data = m_reqData.dump();
-    NS_LOG_INFO("Enviando dados de requisição consumidor");
-    
-
     p = Create<Packet>((uint8_t*)data.c_str(), data.size());
-
-    TimestampTag timestampTag;
+    
     timestampTag.SetTimestamp(Simulator::Now());
     p->AddPacketTag(timestampTag);
 
-    Address localAddress;
+    NS_LOG_INFO("Enviando dados de requisição consumidor");
+    
     m_socket->GetSockName(localAddress);
     
-    // call to the trace sinks before the packet is actually sent,
-    // so that tags added to the packet can be sent as well
-
     m_txTrace(p);
-    m_txTraceWithAddresses(p, localAddress, m_peer);
-    m_socket->Send(p);
+    
+    switch (m_state)
+    {
+    case Searching:
+        m_txTraceWithAddresses(p, localAddress, m_peer);
+        m_socket->Send(p);
+        break;
+    case Find:
+        m_txTraceWithAddresses(p, localAddress, m_objectAdress);
+        m_socket->SendTo(p, 0, m_objectAdress);
+        break;
+    default:
+        NS_LOG_INFO("Consumer in an undefined state");
+        break;
+    }
+    
     ++m_sent;
 
     if (m_sent < m_count || m_count == 0)
@@ -304,14 +314,30 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         packet->CopyData(raw_data, packet->GetSize());
         nlohmann::json data_json =
             nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
+        NS_LOG_INFO("Chegou no consumidor " << data_json);
         uint64_t res = data_json["status"];
         TimestampTag timestampTag;
-        NS_LOG_INFO("Chegou resposta do servidor no consumidor");
+        //NS_LOG_INFO("Chegou resposta do servidor no consumidor");
         
         switch (res)
         {
         case 200:
-            NS_LOG_INFO("Chegou no conumidor " << data_json["response"]);
+            //NS_LOG_INFO("Chegou no consumidor " << data_json);
+
+            // TODO: tratar aqui resposta dos objetos inteligentes
+            if(data_json["response"].empty()){
+                // NS_LOG_INFO("Chegou vazio, não há objetos que correspondem a pesquisa");
+            }
+            else{ // não chegou vazio, existe objeto que corresponde a pesquisa
+                // a priori vamos escolher o primeiro objeto para linkar
+                uint32_t ip_num = data_json["response"][0]["ip"];
+                Ipv4Address ip_object(ip_num);
+                uint16_t port = data_json["response"][0]["port"];
+                m_objectAdress = InetSocketAddress(ip_object, port);
+                
+                // atualiza o estado da aplicação
+                m_state = Find;
+            }
             break;
         case 400:
             NS_LOG_INFO("Bad request " << data_json["info"]);

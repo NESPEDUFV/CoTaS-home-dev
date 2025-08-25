@@ -24,7 +24,10 @@ namespace ns3
 
 class Socket;
 class Packet;
-
+enum State{
+  Searching,
+  Find
+};
 /**
  * @ingroup udpecho
  * @brief A Context Consumer client
@@ -107,7 +110,8 @@ class ContextConsumer : public SourceApplication
     uint32_t m_applicationType;
     nlohmann::json m_reqData;
     nlohmann::json m_messages;
-
+    State m_state;                     //!< State of application (sending messages for cotas|objects)
+    Address m_objectAdress;                //!< Address of the object of interest
     /// Callbacks for tracing the packet Tx events
     TracedCallback<Ptr<const Packet>> m_txTrace;
 

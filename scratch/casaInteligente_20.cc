@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
     LogComponentEnable("CoTaSApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("GenericServerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
 // 97 instancias
@@ -297,14 +298,54 @@ int main(int argc, char* argv[])
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     // -------------------------- CoTaS APP ---------------------------------
-    CoTaSHelper Service(9);
 
+    CoTaSHelper Service(9);
+    ApplicationContainer serverApplications;
     ApplicationContainer serverApp = Service.Install(CoTaSNode.Get(0));
-    serverApp.Start(Seconds(1));
-    serverApp.Stop(Seconds(20));
+    serverApplications.Add(serverApp);
+
+    // ------------------------- Serviço dos objetos inteligentes-----------
+
+    GenericServerHelper ObjectService(19);
+    
+    ApplicationContainer computadorServerApp, espelhoServerApps, televisaoServerApp, 
+                        echoDotServerApps, cameraServerApps, guardaRoupaServerApp, 
+                        aCServerApps;
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(0));
+    computadorServerApp = ObjectService.Install(computadorNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(1));
+    espelhoServerApps = ObjectService.Install(espelhoNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(2));
+    televisaoServerApp = ObjectService.Install(televisaoNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(3));
+    echoDotServerApps = ObjectService.Install(echoDotNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(4));
+    cameraServerApps = ObjectService.Install(cameraNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(5));
+    guardaRoupaServerApp = ObjectService.Install(guardaRoupaNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(8));
+    aCServerApps = ObjectService.Install(aCNodes);
+    
+    serverApplications.Add(computadorServerApp);
+    serverApplications.Add(espelhoServerApps);
+    serverApplications.Add(televisaoServerApp);
+    serverApplications.Add(echoDotServerApps);
+    serverApplications.Add(cameraServerApps);
+    serverApplications.Add(guardaRoupaServerApp);
+    serverApplications.Add(aCServerApps);
+
+    serverApplications.Start(Seconds(1));
+    serverApplications.Stop(Seconds(20));
 
     // ------------------------- Clientes provedores -----------------------
-
+    ApplicationContainer providerApplications;
     ContextProviderHelper ClientProvider(CoTaSInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
     ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
@@ -325,34 +366,24 @@ int main(int argc, char* argv[])
     ApplicationContainer cameraApp = ClientProvider.Install(cameraNodes);
     
     ClientProvider.SetAttribute("ObjectType", UintegerValue(5));
-    ApplicationContainer guardaRoupaApp  = ClientProvider.Install(guardaRoupaNode);
+    ApplicationContainer guardaRoupaApp = ClientProvider.Install(guardaRoupaNode);
     
     ClientProvider.SetAttribute("ObjectType", UintegerValue(8));
     ApplicationContainer aCApp = ClientProvider.Install(aCNodes);
 
-    computadorApp.Start(Seconds(10));
-    computadorApp.Stop(Seconds(20));
+    providerApplications.Add(computadorApp);
+    providerApplications.Add(espelhoApp);
+    providerApplications.Add(televisaoApp);
+    providerApplications.Add(echoDotApp);
+    providerApplications.Add(cameraApp);
+    providerApplications.Add(guardaRoupaApp);
+    providerApplications.Add(aCApp);
 
-    espelhoApp.Start(Seconds(10));
-    espelhoApp.Stop(Seconds(20));
-
-    televisaoApp.Start(Seconds(10));
-    televisaoApp.Stop(Seconds(20));
-
-    echoDotApp.Start(Seconds(10));
-    echoDotApp.Stop(Seconds(20));
-
-    cameraApp.Start(Seconds(10));
-    cameraApp.Stop(Seconds(20));
-
-    guardaRoupaApp.Start(Seconds(10));
-    guardaRoupaApp.Stop(Seconds(20));
-
-    aCApp.Start(Seconds(10));
-    aCApp.Stop(Seconds(20));
+    providerApplications.Start(Seconds(10));
+    providerApplications.Stop(Seconds(20));
 
     // -------------------------- Clientes consumidores ----------------
-    
+    ApplicationContainer consumerApplications;
     ContextConsumerHelper ClientConsumer(CoTaSInterface.GetAddress(0), 9);
     ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
     ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(100)));
@@ -405,54 +436,25 @@ int main(int argc, char* argv[])
     ClientConsumer.SetAttribute("ApplicationType", UintegerValue(15));
     ApplicationContainer InventoryManagement = ClientConsumer.Install(ApplicationsNodes.Get(15));
 
-    FallDetection.Start(Seconds(12));
-    FallDetection.Stop(Seconds(20));
+    consumerApplications.Add(FallDetection);
+    consumerApplications.Add(MicroControl);
+    consumerApplications.Add(PetCare);
+    consumerApplications.Add(EnergyManegement);
+    consumerApplications.Add(WaterManegement);
+    consumerApplications.Add(Security);
+    consumerApplications.Add(Localization);
+    consumerApplications.Add(GasSec);
+    consumerApplications.Add(HealthCare);
+    consumerApplications.Add(LightControl);
+    consumerApplications.Add(TempControl);
+    consumerApplications.Add(SmartCleaning);
+    consumerApplications.Add(Garden);
+    consumerApplications.Add(SmartMobility);
+    consumerApplications.Add(SmartCooking);
+    consumerApplications.Add(InventoryManagement);
 
-    MicroControl.Start(Seconds(12));
-    MicroControl.Stop(Seconds(20));
-
-    PetCare.Start(Seconds(12));
-    PetCare.Stop(Seconds(20));
-
-    EnergyManegement.Start(Seconds(12));
-    EnergyManegement.Stop(Seconds(20));
-
-    WaterManegement.Start(Seconds(12));
-    WaterManegement.Stop(Seconds(20));
-
-    Security.Start(Seconds(12));
-    Security.Stop(Seconds(20));
-
-    Localization.Start(Seconds(12));
-    Localization.Stop(Seconds(20));
-
-    GasSec.Start(Seconds(12));
-    GasSec.Stop(Seconds(20));
-
-    HealthCare.Start(Seconds(12));
-    HealthCare.Stop(Seconds(20));
-
-    LightControl.Start(Seconds(12));
-    LightControl.Stop(Seconds(20));
-
-    TempControl.Start(Seconds(12));
-    TempControl.Stop(Seconds(20));
-
-    SmartCleaning.Start(Seconds(12));
-    SmartCleaning.Stop(Seconds(20));
-
-    Garden.Start(Seconds(12));
-    Garden.Stop(Seconds(20));
-
-    SmartMobility.Start(Seconds(12));
-    SmartMobility.Stop(Seconds(20));
-
-    SmartCooking.Start(Seconds(12));
-    SmartCooking.Stop(Seconds(20));
-
-    InventoryManagement.Start(Seconds(12));
-    InventoryManagement.Stop(Seconds(20));
-
+    consumerApplications.Start(Seconds(12));
+    consumerApplications.Stop(Seconds(20));
     
     Simulator::Stop(Seconds(21.0));
     Simulator::Run();
