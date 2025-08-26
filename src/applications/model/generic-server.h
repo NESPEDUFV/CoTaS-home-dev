@@ -35,7 +35,7 @@ class Packet;
 class GenericServer : public SinkApplication
 {
   public:
-    static constexpr uint16_t DEFAULT_PORT{9}; //!< default port
+    static constexpr uint16_t DEFAULT_PORT{19}; //!< default port
 
     /**
      * @brief Get the type ID.
@@ -58,6 +58,8 @@ class GenericServer : public SinkApplication
      * @param socket the socket the packet was received to.
      */
     void HandleRead(Ptr<Socket> socket);
+
+    void SetDataMessage();
 
     int RandomInt(int min, int max);
 

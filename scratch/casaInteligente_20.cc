@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
 {
 // ----------------- Configura logs do terminal -------------------------
 
+    LogComponentEnable("smartHouse_20", LOG_LEVEL_INFO); 
     LogComponentEnable("CoTaSApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
@@ -26,6 +27,7 @@ int main(int argc, char* argv[])
 // ----------------- Cria grupos dos nós de cada objeto -----------------
 // 97 instancias
 // 16 aplicações + CoTaS
+    NS_LOG_INFO("Configurando nós");
 
     NodeContainer computadorNode;
     computadorNode.Create(1);
@@ -133,7 +135,7 @@ int main(int argc, char* argv[])
     // (considerando y de baixo para cima)
     
 // ------------------------- Objetos inteligentes ----------------------
-
+    NS_LOG_INFO("Posicionando nós");
     Ptr<MobilityModel> position;
     position = computadorNode.Get(0)->GetObject<MobilityModel>(); // 1
     position->SetPosition(Vector(6, 4, 0.1)); // Computador
@@ -298,41 +300,50 @@ int main(int argc, char* argv[])
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     // -------------------------- CoTaS APP ---------------------------------
-
+    NS_LOG_INFO("Configurando CoTaS");
     CoTaSHelper Service(9);
     ApplicationContainer serverApplications;
     ApplicationContainer serverApp = Service.Install(CoTaSNode.Get(0));
     serverApplications.Add(serverApp);
 
     // ------------------------- Serviço dos objetos inteligentes-----------
-
+    NS_LOG_INFO("Configurando serviço dos objetos");
+    NS_LOG_INFO("iniciando o helper");
     GenericServerHelper ObjectService(19);
     
     ApplicationContainer computadorServerApp, espelhoServerApps, televisaoServerApp, 
                         echoDotServerApps, cameraServerApps, guardaRoupaServerApp, 
                         aCServerApps;
     
+    NS_LOG_INFO("instalando no computador");
     ObjectService.SetAttribute("ObjectType", UintegerValue(0));
     computadorServerApp = ObjectService.Install(computadorNode);
     
+    NS_LOG_INFO("instalando no espelho");
     ObjectService.SetAttribute("ObjectType", UintegerValue(1));
     espelhoServerApps = ObjectService.Install(espelhoNodes);
-    
+
+    NS_LOG_INFO("instalando no televisão");
     ObjectService.SetAttribute("ObjectType", UintegerValue(2));
     televisaoServerApp = ObjectService.Install(televisaoNode);
-    
+
+    NS_LOG_INFO("instalando no echodot");
     ObjectService.SetAttribute("ObjectType", UintegerValue(3));
     echoDotServerApps = ObjectService.Install(echoDotNodes);
-    
+
+    NS_LOG_INFO("instalando no camera");
     ObjectService.SetAttribute("ObjectType", UintegerValue(4));
     cameraServerApps = ObjectService.Install(cameraNodes);
-    
+
+    NS_LOG_INFO("instalando no guardaroupa");
     ObjectService.SetAttribute("ObjectType", UintegerValue(5));
     guardaRoupaServerApp = ObjectService.Install(guardaRoupaNode);
-    
+
+    NS_LOG_INFO("instalando no AC");
     ObjectService.SetAttribute("ObjectType", UintegerValue(8));
     aCServerApps = ObjectService.Install(aCNodes);
     
+    NS_LOG_INFO("adicionando aplicações no conteiner");
     serverApplications.Add(computadorServerApp);
     serverApplications.Add(espelhoServerApps);
     serverApplications.Add(televisaoServerApp);
@@ -341,10 +352,12 @@ int main(int argc, char* argv[])
     serverApplications.Add(guardaRoupaServerApp);
     serverApplications.Add(aCServerApps);
 
+    NS_LOG_INFO("configurando aplicações");
     serverApplications.Start(Seconds(1));
     serverApplications.Stop(Seconds(20));
 
     // ------------------------- Clientes provedores -----------------------
+    NS_LOG_INFO("Configurando aplicação cliente dos objetos");
     ApplicationContainer providerApplications;
     ContextProviderHelper ClientProvider(CoTaSInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
@@ -383,6 +396,7 @@ int main(int argc, char* argv[])
     providerApplications.Stop(Seconds(20));
 
     // -------------------------- Clientes consumidores ----------------
+    NS_LOG_INFO("Configurando aplicação cliente dos consumidores");
     ApplicationContainer consumerApplications;
     ContextConsumerHelper ClientConsumer(CoTaSInterface.GetAddress(0), 9);
     ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
@@ -455,7 +469,8 @@ int main(int argc, char* argv[])
 
     consumerApplications.Start(Seconds(12));
     consumerApplications.Stop(Seconds(20));
-    
+
+    NS_LOG_INFO("Executando simulação...");
     Simulator::Stop(Seconds(21.0));
     Simulator::Run();
     Simulator::Destroy();

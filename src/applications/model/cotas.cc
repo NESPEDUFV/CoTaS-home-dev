@@ -228,6 +228,7 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             
             NS_LOG_INFO("Enviando resposta do servidor");
             socket->SendTo(response, 0, from);
+            delete[] raw_data;
         }
         // trata no ipv6
         else if (Inet6SocketAddress::IsMatchingType(from))

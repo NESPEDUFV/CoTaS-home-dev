@@ -351,6 +351,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
         m_rxTraceWithAddresses(packet, from, localAddress);
+        delete[] raw_data;
     }
 }
 

@@ -69,18 +69,6 @@ GenericServer::GenericServer()
       m_socket6{nullptr}
 {
     NS_LOG_FUNCTION(this);
-    
-    std::ifstream fm("all_data/messages2.json");
-
-    if (fm.is_open())
-    {
-        fm >> m_updateData;
-        m_updateData = m_updateData["updateMessages"][m_objectType];
-    }
-    else
-    {
-        std::cerr << "Erro ao abrir messages.json\n";
-    }
 }
 
 GenericServer::~GenericServer()
@@ -94,6 +82,8 @@ void
 GenericServer::StartApplication()
 {
     NS_LOG_FUNCTION(this);
+
+    SetDataMessage();
 
     if (!m_socket)
     {
@@ -207,6 +197,8 @@ GenericServer::HandleRead(Ptr<Socket> socket)
             
             NS_LOG_INFO("Enviando resposta do objeto inteligente");
             socket->SendTo(response, 0, from);
+            
+            delete[] raw_data;
         }
         // trata no ipv6
         else if (Inet6SocketAddress::IsMatchingType(from))
@@ -237,5 +229,20 @@ GenericServer::RandomData()
     // add dados que variam com ns3 (localização, bateria...)
     return data.dump();
 }
+void 
+GenericServer::SetDataMessage(){
 
+    std::ifstream fm("all_data/messages2.json");
+
+    if (fm.is_open())
+    {
+        fm >> m_updateData;
+        m_updateData = m_updateData["updateMessages"][m_objectType];
+        NS_LOG_INFO("settado objeto " << m_objectType);
+    }
+    else
+    {
+        std::cerr << "Erro ao abrir messages.json\n";
+    }
+}
 } // Namespace ns3
