@@ -99,6 +99,7 @@ class ContextConsumer : public SourceApplication
     void HandleRead(Ptr<Socket> socket);
 
     void SetDataMessage();
+    void ContextConsumer::HandleOK(nlohmann::json response);
 
     uint32_t m_count; //!< Maximum number of packets the application will send
     Time m_interval;  //!< Packet inter-send time

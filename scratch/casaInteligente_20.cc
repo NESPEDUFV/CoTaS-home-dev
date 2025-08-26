@@ -308,42 +308,33 @@ int main(int argc, char* argv[])
 
     // ------------------------- Serviço dos objetos inteligentes-----------
     NS_LOG_INFO("Configurando serviço dos objetos");
-    NS_LOG_INFO("iniciando o helper");
     GenericServerHelper ObjectService(19);
     
     ApplicationContainer computadorServerApp, espelhoServerApps, televisaoServerApp, 
                         echoDotServerApps, cameraServerApps, guardaRoupaServerApp, 
                         aCServerApps;
     
-    NS_LOG_INFO("instalando no computador");
     ObjectService.SetAttribute("ObjectType", UintegerValue(0));
     computadorServerApp = ObjectService.Install(computadorNode);
     
-    NS_LOG_INFO("instalando no espelho");
     ObjectService.SetAttribute("ObjectType", UintegerValue(1));
     espelhoServerApps = ObjectService.Install(espelhoNodes);
 
-    NS_LOG_INFO("instalando no televisão");
     ObjectService.SetAttribute("ObjectType", UintegerValue(2));
     televisaoServerApp = ObjectService.Install(televisaoNode);
 
-    NS_LOG_INFO("instalando no echodot");
     ObjectService.SetAttribute("ObjectType", UintegerValue(3));
     echoDotServerApps = ObjectService.Install(echoDotNodes);
 
-    NS_LOG_INFO("instalando no camera");
     ObjectService.SetAttribute("ObjectType", UintegerValue(4));
     cameraServerApps = ObjectService.Install(cameraNodes);
 
-    NS_LOG_INFO("instalando no guardaroupa");
     ObjectService.SetAttribute("ObjectType", UintegerValue(5));
     guardaRoupaServerApp = ObjectService.Install(guardaRoupaNode);
 
-    NS_LOG_INFO("instalando no AC");
     ObjectService.SetAttribute("ObjectType", UintegerValue(8));
     aCServerApps = ObjectService.Install(aCNodes);
     
-    NS_LOG_INFO("adicionando aplicações no conteiner");
     serverApplications.Add(computadorServerApp);
     serverApplications.Add(espelhoServerApps);
     serverApplications.Add(televisaoServerApp);
@@ -352,7 +343,6 @@ int main(int argc, char* argv[])
     serverApplications.Add(guardaRoupaServerApp);
     serverApplications.Add(aCServerApps);
 
-    NS_LOG_INFO("configurando aplicações");
     serverApplications.Start(Seconds(1));
     serverApplications.Stop(Seconds(20));
 

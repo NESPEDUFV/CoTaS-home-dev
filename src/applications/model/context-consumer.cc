@@ -310,34 +310,20 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
     Address from;
     while (auto packet = socket->RecvFrom(from))
     {
+        // recebe dados e faz parse
         uint8_t *raw_data = new uint8_t[packet->GetSize()];
         packet->CopyData(raw_data, packet->GetSize());
         nlohmann::json data_json =
             nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
-        NS_LOG_INFO("Chegou no consumidor " << data_json);
-        uint64_t res = data_json["status"];
+
+        // NS_LOG_INFO("Chegou no consumidor " << data_json);
+        uint64_t status_res = data_json["status"];
         TimestampTag timestampTag;
-        //NS_LOG_INFO("Chegou resposta do servidor no consumidor");
         
-        switch (res)
+        switch (status_res)
         {
         case 200:
-            //NS_LOG_INFO("Chegou no consumidor " << data_json);
-
-            // TODO: tratar aqui resposta dos objetos inteligentes
-            if(data_json["response"].empty()){
-                // NS_LOG_INFO("Chegou vazio, não há objetos que correspondem a pesquisa");
-            }
-            else{ // não chegou vazio, existe objeto que corresponde a pesquisa
-                // a priori vamos escolher o primeiro objeto para linkar
-                uint32_t ip_num = data_json["response"][0]["ip"];
-                Ipv4Address ip_object(ip_num);
-                uint16_t port = data_json["response"][0]["port"];
-                m_objectAdress = InetSocketAddress(ip_object, port);
-                
-                // atualiza o estado da aplicação
-                m_state = Find;
-            }
+            HandleOK(data_json["response"]);
             break;
         case 400:
             NS_LOG_INFO("Bad request " << data_json["info"]);
@@ -377,6 +363,37 @@ void
 ContextConsumer::SetDataMessage()
 {   
     m_reqData = m_messages["requestMessages"][m_applicationType];
+}
+
+void ContextConsumer::HandleOK(nlohmann::json response)
+{
+    switch (m_state)
+        {
+        case Searching:
+            if(response.empty()){
+                NS_LOG_INFO("Chegou resposta do cotas vazio,"
+                            << "não há objetos que correspondem a pesquisa");
+            }
+            else{ // não chegou vazio, existe objeto que corresponde a pesquisa
+                // se comunica com o objeto em si (abstraido pra pedir só para o
+                // primeiro objeto)
+                uint32_t ip_num = response[0]["ip"];
+                Ipv4Address ip_object(ip_num);
+                uint16_t port = response[0]["port"];
+                m_objectAdress = InetSocketAddress(ip_object, port);
+                
+                // atualiza o estado da aplicação
+                m_state = Find;
+                NS_LOG_INFO("Chegou resposta do cotas com objeto");
+            }
+            break;
+        case Find:
+            NS_LOG_INFO("Chegou resposta do objeto int. no consumidor");
+            // data_json["response"]
+            break;
+        default:
+            break;
+        }
 }
 
 } // Namespace ns3

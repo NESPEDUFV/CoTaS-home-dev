@@ -186,8 +186,10 @@ GenericServer::HandleRead(Ptr<Socket> socket)
             TimestampTag timestampTag;
             NS_LOG_INFO("Chegou requisição de dados no objeto inteligente");
             
-            // TODO: transformar num dicionário de funções
             response_data = RandomData();
+
+            nlohmann::json res = {{"status", 200}, {"response", response_data}};
+            response_data = res.dump();
 
             Ptr<Packet> response = Create<Packet>((uint8_t*)response_data.c_str(), response_data.size());
             if(packet->PeekPacketTag(timestampTag))
@@ -238,7 +240,6 @@ GenericServer::SetDataMessage(){
     {
         fm >> m_updateData;
         m_updateData = m_updateData["updateMessages"][m_objectType];
-        NS_LOG_INFO("settado objeto " << m_objectType);
     }
     else
     {
