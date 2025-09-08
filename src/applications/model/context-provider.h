@@ -23,6 +23,8 @@
 #include "ns3/ptr.h"
 #include "ns3/traced-callback.h"
 #include "json.hpp"
+#include "encapsulated-coap.h"
+
 #include <optional>
 #include <vector>
 #include <fstream>
@@ -32,12 +34,14 @@ namespace ns3
 {
 class Socket;
 class Packet;
+#define BUFSIZE 1500
 /**
  * @ingroup udpecho
  * @brief A Context Provider client
  *
  * Every packet sent should be returned by the server and received here.
  */
+
 class ContextProvider : public SourceApplication
 {
   public:
@@ -125,7 +129,6 @@ class ContextProvider : public SourceApplication
 
     // Contexto e sessão da libcoap
     coap_context_t *m_coapCtx;
-    coap_session_t *m_coapSession;
 
     /// Callbacks for tracing the packet Tx events
     TracedCallback<Ptr<const Packet>> m_txTrace;

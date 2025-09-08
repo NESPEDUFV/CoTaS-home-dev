@@ -20,8 +20,6 @@
 namespace ns3
 {
 
-#define BUFSIZE 1500
-
 NS_LOG_COMPONENT_DEFINE("ContextProviderApplication");
 
 NS_OBJECT_ENSURE_REGISTERED(ContextProvider);
@@ -96,8 +94,7 @@ ContextProvider::ContextProvider()
       m_peerPort{},
       m_sendEvent{},
       m_objectId{0},
-      m_coapCtx(nullptr),
-      m_coapSession(nullptr)
+      m_coapCtx(nullptr)
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -118,10 +115,6 @@ ContextProvider::~ContextProvider()
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
 
-    if (m_coapSession)
-    {
-        coap_session_release(m_coapSession);
-    }
     if (m_coapCtx)
     {
         coap_free_context(m_coapCtx);
@@ -291,63 +284,45 @@ ContextProvider::Send()
     Address localAddress;
     
     // coap
-    uint8_t dump_buffer[BUFSIZE];
-    uintptr_t pdu_total_len = 0;
     coap_pdu_code_t request_code;
-    coap_pdu_t *pdu;
     const char *uri_path;
-    coap_optlist_t *optlist_chain = NULL;
+    encoded_data data_pdu;
 
-    if (m_objectId == 0)
+    // seleciona caso específico
+    switch (m_objectId)
     {
+    case 0:
         data = m_firstData.dump();
         uri_path = "/subscribe/object";
         request_code = COAP_REQUEST_CODE_POST;
 
-        NS_LOG_INFO("Enviando dados de inscrição");
-    }
-    else
-    {
+        NS_LOG_INFO("Selecionou dados de inscrição");
+        break;
+    
+    default:
         data = RandomData();
         uri_path = "/update/object";
         request_code = COAP_REQUEST_CODE_PUT;
 
-        NS_LOG_INFO("Enviando dados de atualização");
-    }
-    
-    pdu = coap_new_pdu(COAP_MESSAGE_NON, request_code, m_coapSession);
-    
-    if (!pdu)
-    {
-        NS_LOG_ERROR("falha em criar PDU CoAP no provedor.");
-        abort();
+        NS_LOG_INFO("Selecionou dados de atualização");
     }
 
-    // coap_add_option(pdu, COAP_OPTION_URI_PATH, strlen(uri_path), (const uint8_t*)uri_path);
-
-    coap_path_into_optlist((const uint8_t *)uri_path, strlen(uri_path),
-                            COAP_OPTION_URI_PATH, &optlist_chain);
-
-    // TODO: ver COAP_OPTION_URI_PORT para adicionar no pdu
-
-    coap_add_data(pdu, data.size(), (const uint8_t*)data.c_str());
-
-    coap_pdu_encode_header(pdu, COAP_PROTO_UDP);
-    pdu_total_len = coap_pdu_dump(pdu, dump_buffer, BUFSIZE); 
+    // configura mensagens a serem trafegadas
+    data_pdu = EncodePduRequest(uri_path, request_code, data);
     
-    p = Create<Packet>(dump_buffer, pdu_total_len);
+    // cria o pacote
+    p = Create<Packet>(data_pdu.buffer, data_pdu.size);
 
     timestampTag.SetTimestamp(Simulator::Now());
     p->AddPacketTag(timestampTag);
 
     m_socket->GetSockName(localAddress);
     
-    // call to the trace sinks before the packet is actually sent,
-    // so that tags added to the packet can be sent as well
-    
+    // envia o pacote
     m_txTrace(p);
     m_txTraceWithAddresses(p, localAddress, m_peer);
     m_socket->Send(p);
+    NS_LOG_INFO("Enviou dados do provedor para cotas");
     ++m_sent;
 
     if (m_sent < m_count || m_count == 0)
@@ -364,25 +339,39 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
     while (auto packet = socket->RecvFrom(from))
     {
         uint8_t *raw_data = new uint8_t[packet->GetSize()];
-        packet->CopyData(raw_data, packet->GetSize());
-        nlohmann::json data_json =
-            nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
+        coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON, COAP_REQUEST_CODE_GET, 0, BUFSIZE);
+        u_int8_t check;
+        coap_pdu_code_t pdu_code;
 
-        uint64_t res = data_json["status"];
+        packet->CopyData(raw_data, packet->GetSize());
+        
+        check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
+        if (!check){
+            NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+            delete[] raw_data;
+            abort();
+        }
+
+        pdu_code = coap_pdu_get_code(pdu);
+        
+        nlohmann::json data_json = GetPduPayload(pdu);
+
         NS_LOG_INFO("Chegou resposta do servidor no provedor");
-        switch (res)
+        switch (pdu_code)
         {
-        case 200:
+        case COAP_RESPONSE_CODE_CREATED:
             m_objectId = data_json["id"];
             break;
-        case 204:
+        case COAP_RESPONSE_CODE_CHANGED:
             // resposta do update, não faz nada
-        break;
-        case 401:
+            break;
+        case COAP_RESPONSE_CODE_UNAUTHORIZED:
             NS_LOG_INFO("Tentou enviar update sem inscrição");
             break;
-        case 500:
+        case COAP_RESPONSE_CODE_INTERNAL_ERROR:
             NS_LOG_INFO("Erro no servidor");
+            break;
+        case COAP_RESPONSE_CODE_CONTENT:
             break;
         default:
             NS_LOG_INFO("status não reconhecido");
@@ -440,4 +429,6 @@ ContextProvider::RandomInt(int min, int max)
 
     return distrib(gen);
 }
+
+
 } // Namespace ns3

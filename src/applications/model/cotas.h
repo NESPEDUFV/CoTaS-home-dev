@@ -21,6 +21,7 @@
 #include "ns3/ptr.h"
 #include "ns3/traced-callback.h"
 #include "json.hpp"
+#include "encapsulated-coap.h"
 
 #include <bsoncxx/json.hpp>
 #include <mongocxx/client.hpp>
@@ -28,6 +29,8 @@
 #include <mongocxx/instance.hpp>
 #include <mongocxx/uri.hpp>
 #include <sstream>
+#include <unordered_map>
+#include <functional>
 
 namespace ns3
 {
@@ -73,17 +76,17 @@ class CoTaS : public SinkApplication
      */
     void HandleRead(Ptr<Socket> socket);
 
-    std::string HandleSubscription( 
+    nlohmann::json HandleSubscription( 
       Address from,
       nlohmann::json data_json
     );
 
-    std::string HandleUpdate( 
+    nlohmann::json HandleUpdate( 
       Address from,
       nlohmann::json data_json
     );
 
-    std::string HandleRequest( 
+    nlohmann::json HandleRequest( 
       Address from,
       nlohmann::json data_json
     );
@@ -99,12 +102,15 @@ class CoTaS : public SinkApplication
     int Simple_Q();
 
     int InsertDataSub_Q(int id, Address ip, nlohmann::json data_json);
-    
-    std::string GetPduPath(coap_pdu_t* pdu);
+
+    void StartHandlerDict();
 
     mongocxx::v_noabi::database m_bancoMongo;
     mongocxx::instance m_instance{};
     std::optional<mongocxx::client> m_client;
+
+    using HandlersFunctions = std::function<nlohmann::json(Address, nlohmann::json)>;
+    std::unordered_map<std::string, HandlersFunctions> m_handlerDict;
 
     uint8_t m_tos;         //!< The packets Type of Service
     Ptr<Socket> m_socket;  //!< Socket

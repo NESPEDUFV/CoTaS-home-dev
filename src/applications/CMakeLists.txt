@@ -23,6 +23,7 @@ build_lib(
     model/context-provider.cc
     model/context-consumer.cc
     model/cotas.cc
+    model/encapsulated-coap.cc
     model/generic-app.cc
     model/generic-server.cc
     model/packet-loss-counter.cc
@@ -59,6 +60,7 @@ build_lib(
     model/context-provider.h
     model/context-consumer.h
     model/cotas.h
+    model/encapsulated-coap.h
     model/generic-app.h
     model/generic-server.h
     model/seq-ts-echo-header.h

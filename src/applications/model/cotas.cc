@@ -24,15 +24,15 @@
 #include <fstream>
 #include <iostream>
 #include <random>
-#include <sstream>
+
 
 using bsoncxx::builder::basic::kvp;
 
 using bsoncxx::builder::basic::make_document;
-
 namespace ns3
 {
-
+    
+#define BUFSIZE 1500
 NS_LOG_COMPONENT_DEFINE("CoTaSApplication");
 
 NS_OBJECT_ENSURE_REGISTERED(CoTaS);
@@ -82,6 +82,7 @@ CoTaS::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    // inicia a conexão com o banco
     try
     {
         mongocxx::uri uri("mongodb://localhost:27017/");
@@ -99,6 +100,10 @@ CoTaS::StartApplication()
         NS_LOG_ERROR("An exception occurred: " << e.what());
         return;
     }
+
+    StartHandlerDict();
+
+    // coisas do ns3
     if (!m_socket)
     {
         auto tid = TypeId::LookupByName("ns3::UdpSocketFactory");
@@ -183,57 +188,58 @@ CoTaS::HandleRead(Ptr<Socket> socket)
     while (auto packet = socket->RecvFrom(from))
     {
         Address localAddress;
+        
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
         m_rxTraceWithAddresses(packet, from, localAddress);
+        
 
         // trata no ipv4
         if (InetSocketAddress::IsMatchingType(from))
         {
             // raw_data são os dados que os objetos mandaram para o serviço
             uint8_t* raw_data = new uint8_t[packet->GetSize()];
-            coap_pdu_t *pdu;
-            uint8_t check;
+            coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON, COAP_REQUEST_CODE_GET, 0, BUFSIZE);
+            u_int8_t check;
+            std::string path;
+            nlohmann::json response_data;
+            TimestampTag timestampTag;
+            nlohmann::json data;
+            encoded_data data_pdu;
+            Ptr<Packet> response;
 
             packet->CopyData(raw_data, packet->GetSize());
 
-            // TODO: fazer função que encapsula o parse
             check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
-
             if (!check){
                 NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
                 delete[] raw_data;
                 abort();
             }
             
-            nlohmann::json data_json =
-                nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
+            path = GetPduPath(pdu);
+            // NS_LOG_INFO("caminho que chegou no cotas:" << path);
 
-            std::string req = data_json["req"].get<std::string>();
-            std::string response_data;
-            TimestampTag timestampTag;
+            data = GetPduPayload(pdu);
+            // NS_LOG_INFO("json resultante: " << data.dump());
+            
             NS_LOG_INFO("Chegou requisição no servidor");
-            // TODO: transformar num dicionário de funções
-            if (req.compare("subscribe") == 0)
-            {
-                response_data = HandleSubscription(from, data_json);
-                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                //                   << " se inscreveu");
-            }
-            else if (req.compare("update") == 0)
-            {
-                response_data = HandleUpdate(from, data_json);
-                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                //                   << " atualizou dados");
-            }
-            else if (req.compare("getContext") == 0)
-            {
-                // NS_LOG_INFO("IP " << InetSocketAddress::ConvertFrom(from).GetIpv4()
-                //                   << " respondendo requisição...");
-                response_data = HandleRequest(from, data_json);
+            if(m_handlerDict.count(path)){ // existe a operação que responde a requisição:
+                // usa o dicionário de funções
+                HandlersFunctions handler = m_handlerDict[path];
+                response_data = handler(from, data);
+
+            }else{
+                // não existe a operação 
+                // TODO: tratar
+                // respose_data = HandleBadRequest();
             }
 
-            Ptr<Packet> response = Create<Packet>((uint8_t*)response_data.c_str(), response_data.size());
+            // TODO: encapsular pdu com coap
+            data_pdu = EncodePduResponse(response_data["status"], response_data.dump());
+
+            response = Create<Packet>(data_pdu.buffer, data_pdu.size);
+            
             if(packet->PeekPacketTag(timestampTag))
             {
                 response->AddPacketTag(timestampTag);
@@ -254,7 +260,7 @@ CoTaS::HandleRead(Ptr<Socket> socket)
     }
 }
 
-std::string
+nlohmann::json
 CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
 {
     // verifica se já foi feita inscrição pelo endereço de ip
@@ -265,11 +271,9 @@ CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
         // ip já inscrito, manda o id novamente.
         // NS_LOG_INFO("IP já inscrito");
         // NS_LOG_INFO("Id do ip inscrito: " << valida);
-        nlohmann::json res = {{"status", 200}, {"id", valida}};
-
-        std::string data = res.dump();
+        nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CREATED}, {"id", valida}};
         
-        return data;
+        return res;
     }
 
     // gera id seguro (vamos abstrair segurança)
@@ -289,13 +293,12 @@ CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
     InsertDataSub_Q(id, from, data_json);
 
     // retorna status ok com id ou error sem id
-    nlohmann::json res = {{"status", 200}, {"id", id}};
+    nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CREATED}, {"id", id}};
 
-    std::string data = res.dump();
-    return data;
+    return res;
 }
 
-std::string
+nlohmann::json
 CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
@@ -308,11 +311,10 @@ CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
     {
         // id inválido
         nlohmann::json res = {
-            {"status", 401},
+            {"status", COAP_RESPONSE_CODE_UNAUTHORIZED},
         };
-        std::string data = res.dump();
 
-        return data;
+        return res;
     }
 
     auto query_filter = make_document(kvp("id", id));
@@ -328,21 +330,19 @@ CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
     {
         NS_LOG_INFO("Exceção: " << e.what());
         abort();
-        nlohmann::json res = {{"status", 500}, {"msg", "Erro na consulta dso dados"}};
-        std::string data = res.dump();
+        nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
+                            {"msg", "Erro na consulta dso dados"}};
         
-        return data;
+        return res;
     }
 
     // retorna status ok ou error
-    nlohmann::json res = {{"status", 200}, {"id", id}};
+    nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CHANGED}, {"id", id}};
 
-    std::string data = res.dump();
-
-    return data;
+    return res;
 }
 
-std::string
+nlohmann::json
 CoTaS::HandleRequest(Address from, nlohmann::json data_json)
 {
     auto collection = m_bancoMongo["object"];
@@ -353,11 +353,10 @@ CoTaS::HandleRequest(Address from, nlohmann::json data_json)
     std::string json_string = data_json["query"].dump();
     if (json_string.empty())
     {
-        cap = {{"status", 400}, {"info", "bad request"}};
+        cap = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}, {"info", "bad request"}};
         NS_LOG_INFO("Consumidor enviou cabeçalho errado");
-        std::string data = cap.dump();
 
-        return data;
+        return cap;
     }
     auto bson_query = bsoncxx::from_json(json_string);
 
@@ -379,10 +378,10 @@ CoTaS::HandleRequest(Address from, nlohmann::json data_json)
     {
         NS_LOG_INFO("Exceção: " << e.what());
         abort();
-        nlohmann::json res = {{"status", 500}, {"msg", "Erro na consulta dso dados"}};
-        std::string data = res.dump();
+        nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
+                                {"msg", "Erro na consulta dso dados"}};
         
-        return data;
+        return res;
     }
 
     // faz a lógica que precisa
@@ -392,11 +391,9 @@ CoTaS::HandleRequest(Address from, nlohmann::json data_json)
         res.push_back(nlohmann::json::parse(json_db));
     }
     // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
-    cap = {{"status", 200}, {"response", res}};
+    cap = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", res}};
 
-    std::string data = cap.dump();
-
-    return data;
+    return cap;
 
     // retorna dados
 }
@@ -555,46 +552,22 @@ CoTaS::RandomInt(int min, int max)
     return distrib(gen);
 }
 
-std::string 
-CoTaS::GetPduPath(coap_pdu_t* pdu)
-{
-    std::stringstream path_stream;
-    coap_opt_iterator_t opt_iter;
-    coap_opt_t* opt;
-    std::string path;
-    coap_opt_filter_t ignore_options;
+void
+CoTaS::StartHandlerDict(){
+    m_handlerDict["/subscribe/object"] = [this](Address from, nlohmann::json data_json) {
+        return this->HandleSubscription(from, data_json);
+    };
 
-    /* Specific option check */
-    opt = coap_check_option(pdu, COAP_OPTION_URI_PATH, &opt_iter);
-    if (opt) {
-        path = reinterpret_cast<const char*>(coap_opt_value(opt),
-                                            coap_opt_length(opt));
-        
-        NS_LOG_INFO("Chegou requisição " << path);
-    }else{
-        NS_LOG_INFO("Não foi possível obter o path");
-    }
+    m_handlerDict["/subscribe/application"] = [this](Address from, nlohmann::json data_json) {
+        return this->HandleSubscription(from, data_json);
+    };
 
-    // // Inicializa o iterador para encontrar TODAS as opções do tipo Uri-Path
-    // coap_option_iterator_init(pdu, &opt_iter, COAP_OPT_ALL);
-    // coap_option_filter_clear(&ignore_options);
-    // coap_option_filter_set(&ignore_options, COAP_OPTION_OBSERVE);
-    // while ((opt = coap_option_next(&opt_iter)))
-    // {
-    //     path_stream << "/";
-    //     // O valor da opção não é um C-string (não termina com '\0'),
-    //     // então precisamos especificar o tamanho.
-    //     path_stream.write(reinterpret_cast<const char*>(coap_opt_value(opt)),
-    //                       coap_opt_length(opt));
-    // }
+    m_handlerDict["/update/object"] = [this](Address from, nlohmann::json data_json) {
+        return this->HandleUpdate(from, data_json);
+    };
 
-    // path = path_stream.str();
-    if (path.empty())
-    {
-        return "/"; // Se nenhum path foi encontrado, é uma requisição para a raiz.
-    }
-
-    return path;
+    m_handlerDict["/search"] = [this](Address from, nlohmann::json data_json) {
+        return this->HandleRequest(from, data_json);
+    };
 }
-
 } // Namespace ns3
