@@ -7,6 +7,14 @@
 #ifndef CONTEXT_CONSUMER_H
 #define CONTEXT_CONSUMER_H
 
+#include <coap3/coap.h>
+#ifdef LOG_INFO
+#undef LOG_INFO
+#endif
+#ifdef LOG_DEBUG
+#undef LOG_DEBUG
+#endif
+
 #include "source-application.h"
 
 #include "ns3/deprecated.h"
@@ -99,7 +107,8 @@ class ContextConsumer : public SourceApplication
     void HandleRead(Ptr<Socket> socket);
 
     void SetDataMessage();
-    void ContextConsumer::HandleOK(nlohmann::json response);
+    void HandleOK(nlohmann::json response);
+
 
     uint32_t m_count; //!< Maximum number of packets the application will send
     Time m_interval;  //!< Packet inter-send time
@@ -113,6 +122,11 @@ class ContextConsumer : public SourceApplication
     nlohmann::json m_messages;
     State m_state;                     //!< State of application (sending messages for cotas|objects)
     Address m_objectAdress;                //!< Address of the object of interest
+    
+    // Contexto e sessão da libcoap
+    coap_context_t *m_coapCtx;
+    coap_session_t *m_coapSession;
+    
     /// Callbacks for tracing the packet Tx events
     TracedCallback<Ptr<const Packet>> m_txTrace;
 

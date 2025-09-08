@@ -95,7 +95,9 @@ ContextConsumer::ContextConsumer()
       m_peerPort{},
       m_sendEvent{},
       m_state{Searching},
-      m_objectAdress{}
+      m_objectAdress{},
+      m_coapCtx(nullptr),
+      m_coapSession(nullptr)
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -115,6 +117,15 @@ ContextConsumer::~ContextConsumer()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
+    if (m_coapSession)
+    {
+        coap_session_release(m_coapSession);
+    }
+    if (m_coapCtx)
+    {
+        coap_free_context(m_coapCtx);
+    }
+    coap_cleanup();
 
 }
 
@@ -187,6 +198,14 @@ ContextConsumer::StartApplication()
 
     // set the messages that the object will send
     SetDataMessage();
+
+    coap_startup();
+    m_coapCtx = coap_new_context(nullptr);
+    if (!m_coapCtx)
+    {
+        NS_LOG_ERROR("Falha em criar contexto do libcoap consumidor.");
+        abort();
+    }
 
     if (!m_socket)
     {
@@ -365,7 +384,8 @@ ContextConsumer::SetDataMessage()
     m_reqData = m_messages["requestMessages"][m_applicationType];
 }
 
-void ContextConsumer::HandleOK(nlohmann::json response)
+void 
+ContextConsumer::HandleOK(nlohmann::json response)
 {
     switch (m_state)
         {

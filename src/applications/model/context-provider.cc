@@ -20,6 +20,8 @@
 namespace ns3
 {
 
+#define BUFSIZE 1500
+
 NS_LOG_COMPONENT_DEFINE("ContextProviderApplication");
 
 NS_OBJECT_ENSURE_REGISTERED(ContextProvider);
@@ -93,7 +95,9 @@ ContextProvider::ContextProvider()
       m_socket{nullptr},
       m_peerPort{},
       m_sendEvent{},
-      m_objectId{0}
+      m_objectId{0},
+      m_coapCtx(nullptr),
+      m_coapSession(nullptr)
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -113,6 +117,16 @@ ContextProvider::~ContextProvider()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
+
+    if (m_coapSession)
+    {
+        coap_session_release(m_coapSession);
+    }
+    if (m_coapCtx)
+    {
+        coap_free_context(m_coapCtx);
+    }
+    coap_cleanup();
 }
 
 void
@@ -228,6 +242,14 @@ ContextProvider::StartApplication()
         // set the messages that the object will send
         SetDataMessage();
 
+        coap_startup();
+        m_coapCtx = coap_new_context(nullptr);
+        if (!m_coapCtx)
+        {
+            NS_LOG_ERROR("Falha em criar contexto do libcoap provedor.");
+            abort();
+        }
+
     }
 
     ScheduleTransmit(Seconds(0.));
@@ -262,28 +284,62 @@ ContextProvider::Send()
 
     NS_ASSERT(m_sendEvent.IsExpired());
 
+    // ns3
     Ptr<Packet> p;
-
     std::string data;
+    TimestampTag timestampTag;
+    Address localAddress;
+    
+    // coap
+    uint8_t dump_buffer[BUFSIZE];
+    uintptr_t pdu_total_len = 0;
+    coap_pdu_code_t request_code;
+    coap_pdu_t *pdu;
+    const char *uri_path;
+    coap_optlist_t *optlist_chain = NULL;
+
     if (m_objectId == 0)
     {
         data = m_firstData.dump();
+        uri_path = "/subscribe/object";
+        request_code = COAP_REQUEST_CODE_POST;
 
         NS_LOG_INFO("Enviando dados de inscrição");
     }
     else
     {
         data = RandomData();
+        uri_path = "/update/object";
+        request_code = COAP_REQUEST_CODE_PUT;
+
         NS_LOG_INFO("Enviando dados de atualização");
     }
+    
+    pdu = coap_new_pdu(COAP_MESSAGE_NON, request_code, m_coapSession);
+    
+    if (!pdu)
+    {
+        NS_LOG_ERROR("falha em criar PDU CoAP no provedor.");
+        abort();
+    }
 
-    p = Create<Packet>((uint8_t*)data.c_str(), data.size());
+    // coap_add_option(pdu, COAP_OPTION_URI_PATH, strlen(uri_path), (const uint8_t*)uri_path);
 
-    TimestampTag timestampTag;
+    coap_path_into_optlist((const uint8_t *)uri_path, strlen(uri_path),
+                            COAP_OPTION_URI_PATH, &optlist_chain);
+
+    // TODO: ver COAP_OPTION_URI_PORT para adicionar no pdu
+
+    coap_add_data(pdu, data.size(), (const uint8_t*)data.c_str());
+
+    coap_pdu_encode_header(pdu, COAP_PROTO_UDP);
+    pdu_total_len = coap_pdu_dump(pdu, dump_buffer, BUFSIZE); 
+    
+    p = Create<Packet>(dump_buffer, pdu_total_len);
+
     timestampTag.SetTimestamp(Simulator::Now());
     p->AddPacketTag(timestampTag);
 
-    Address localAddress;
     m_socket->GetSockName(localAddress);
     
     // call to the trace sinks before the packet is actually sent,

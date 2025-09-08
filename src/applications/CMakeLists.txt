@@ -76,6 +76,7 @@ build_lib(
     model/udp-server.h
     model/udp-trace-client.h
   LIBRARIES_TO_LINK 
+    coap-3
     ${libinternet}
     ${LIBMONGOCXX_LIBRARIES}
   TEST_SOURCES

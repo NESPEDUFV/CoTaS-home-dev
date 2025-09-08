@@ -7,6 +7,14 @@
 #ifndef CONTEXT_PROVIDER_H
 #define CONTEXT_PROVIDER_H
 
+#include <coap3/coap.h>
+#ifdef LOG_INFO
+#undef LOG_INFO
+#endif
+#ifdef LOG_DEBUG
+#undef LOG_DEBUG
+#endif
+
 #include "source-application.h"
 
 #include "ns3/deprecated.h"
@@ -18,6 +26,7 @@
 #include <optional>
 #include <vector>
 #include <fstream>
+
 
 namespace ns3
 {
@@ -113,6 +122,10 @@ class ContextProvider : public SourceApplication
     nlohmann::json m_firstData;
     nlohmann::json m_updateData;
     nlohmann::json m_messages;
+
+    // Contexto e sessão da libcoap
+    coap_context_t *m_coapCtx;
+    coap_session_t *m_coapSession;
 
     /// Callbacks for tracing the packet Tx events
     TracedCallback<Ptr<const Packet>> m_txTrace;

@@ -7,6 +7,14 @@
 #ifndef COTAS_H
 #define COTAS_H
 
+#include <coap3/coap.h>
+#ifdef LOG_INFO
+#undef LOG_INFO
+#endif
+#ifdef LOG_DEBUG
+#undef LOG_DEBUG
+#endif
+
 #include "sink-application.h"
 
 #include "ns3/event-id.h"
@@ -19,6 +27,7 @@
 #include <mongocxx/exception/exception.hpp>
 #include <mongocxx/instance.hpp>
 #include <mongocxx/uri.hpp>
+#include <sstream>
 
 namespace ns3
 {
@@ -91,6 +100,8 @@ class CoTaS : public SinkApplication
 
     int InsertDataSub_Q(int id, Address ip, nlohmann::json data_json);
     
+    std::string GetPduPath(coap_pdu_t* pdu);
+
     mongocxx::v_noabi::database m_bancoMongo;
     mongocxx::instance m_instance{};
     std::optional<mongocxx::client> m_client;

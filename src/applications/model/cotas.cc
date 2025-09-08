@@ -192,7 +192,20 @@ CoTaS::HandleRead(Ptr<Socket> socket)
         {
             // raw_data são os dados que os objetos mandaram para o serviço
             uint8_t* raw_data = new uint8_t[packet->GetSize()];
+            coap_pdu_t *pdu;
+            uint8_t check;
+
             packet->CopyData(raw_data, packet->GetSize());
+
+            // TODO: fazer função que encapsula o parse
+            check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
+
+            if (!check){
+                NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+                delete[] raw_data;
+                abort();
+            }
+            
             nlohmann::json data_json =
                 nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
 
@@ -540,6 +553,48 @@ CoTaS::RandomInt(int min, int max)
     std::uniform_int_distribution<> distrib(min, max);
 
     return distrib(gen);
+}
+
+std::string 
+CoTaS::GetPduPath(coap_pdu_t* pdu)
+{
+    std::stringstream path_stream;
+    coap_opt_iterator_t opt_iter;
+    coap_opt_t* opt;
+    std::string path;
+    coap_opt_filter_t ignore_options;
+
+    /* Specific option check */
+    opt = coap_check_option(pdu, COAP_OPTION_URI_PATH, &opt_iter);
+    if (opt) {
+        path = reinterpret_cast<const char*>(coap_opt_value(opt),
+                                            coap_opt_length(opt));
+        
+        NS_LOG_INFO("Chegou requisição " << path);
+    }else{
+        NS_LOG_INFO("Não foi possível obter o path");
+    }
+
+    // // Inicializa o iterador para encontrar TODAS as opções do tipo Uri-Path
+    // coap_option_iterator_init(pdu, &opt_iter, COAP_OPT_ALL);
+    // coap_option_filter_clear(&ignore_options);
+    // coap_option_filter_set(&ignore_options, COAP_OPTION_OBSERVE);
+    // while ((opt = coap_option_next(&opt_iter)))
+    // {
+    //     path_stream << "/";
+    //     // O valor da opção não é um C-string (não termina com '\0'),
+    //     // então precisamos especificar o tamanho.
+    //     path_stream.write(reinterpret_cast<const char*>(coap_opt_value(opt)),
+    //                       coap_opt_length(opt));
+    // }
+
+    // path = path_stream.str();
+    if (path.empty())
+    {
+        return "/"; // Se nenhum path foi encontrado, é uma requisição para a raiz.
+    }
+
+    return path;
 }
 
 } // Namespace ns3
