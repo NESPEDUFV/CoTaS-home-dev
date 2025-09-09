@@ -13,6 +13,7 @@
 #include "ns3/ptr.h"
 #include "ns3/traced-callback.h"
 #include "json.hpp"
+#include "encapsulated-coap.h"
 
 namespace ns3
 {

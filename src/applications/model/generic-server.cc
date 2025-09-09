@@ -76,6 +76,9 @@ GenericServer::~GenericServer()
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
     m_socket6 = nullptr;
+
+    coap_cleanup();
+
 }
 
 void
@@ -141,6 +144,8 @@ GenericServer::StartApplication()
         }
         m_socket6->SetRecvCallback(MakeCallback(&GenericServer::HandleRead, this));
     }
+
+    coap_startup();
 }
 
 void
@@ -178,20 +183,41 @@ GenericServer::HandleRead(Ptr<Socket> socket)
         {
             // raw_data são os dados que os objetos mandaram para o serviço
             uint8_t* raw_data = new uint8_t[packet->GetSize()];
-            packet->CopyData(raw_data, packet->GetSize());
-            nlohmann::json data_json =
-                nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
-
+            nlohmann::json data;
             std::string response_data;
+            nlohmann::json res;
             TimestampTag timestampTag;
+            Ptr<Packet> response;
+            encoded_data data_pdu;
+
+            //* o seguinte trecho de código desembrulha os dados de requisição
+            //* mas não faz nada com eles até agora (abstraído)
+            coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON, COAP_REQUEST_CODE_GET, 0, BUFSIZE);
+            u_int8_t check;
+            std::string path;
+
+            packet->CopyData(raw_data, packet->GetSize());
+            
+            check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
+            if (!check){
+                NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+                delete[] raw_data;
+                abort();
+            }
+
+            data = GetPduPayload(pdu);
+            //* acaba aqui
+
             NS_LOG_INFO("Chegou requisição de dados no objeto inteligente");
             
             response_data = RandomData();
+            res = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", response_data}};
 
-            nlohmann::json res = {{"status", 200}, {"response", response_data}};
-            response_data = res.dump();
+            data_pdu = EncodePduResponse(res["status"], res.dump());
 
-            Ptr<Packet> response = Create<Packet>((uint8_t*)response_data.c_str(), response_data.size());
+
+            response = Create<Packet>(data_pdu.buffer, data_pdu.size);
+            
             if(packet->PeekPacketTag(timestampTag))
             {
                 response->AddPacketTag(timestampTag);

@@ -409,7 +409,7 @@ void
 ContextConsumer::HandleOK(nlohmann::json response)
 {
     switch (m_state)
-        {
+    {
         case Searching:
             if(response.empty()){
                 NS_LOG_INFO("Chegou resposta do cotas vazio,"
@@ -434,7 +434,7 @@ ContextConsumer::HandleOK(nlohmann::json response)
             break;
         default:
             break;
-        }
+    }
 }
 
 } // Namespace ns3
