@@ -93,8 +93,7 @@ ContextProvider::ContextProvider()
       m_socket{nullptr},
       m_peerPort{},
       m_sendEvent{},
-      m_objectId{0},
-      m_coapCtx(nullptr)
+      m_objectId{0}
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -115,10 +114,6 @@ ContextProvider::~ContextProvider()
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
 
-    if (m_coapCtx)
-    {
-        coap_free_context(m_coapCtx);
-    }
     coap_cleanup();
 }
 
@@ -236,12 +231,6 @@ ContextProvider::StartApplication()
         SetDataMessage();
 
         coap_startup();
-        m_coapCtx = coap_new_context(nullptr);
-        if (!m_coapCtx)
-        {
-            NS_LOG_ERROR("Falha em criar contexto do libcoap provedor.");
-            abort();
-        }
 
     }
 
@@ -343,6 +332,11 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
         u_int8_t check;
         coap_pdu_code_t pdu_code;
 
+        TimestampTag timestampTag;
+        Address localAddress;
+        
+        nlohmann::json data_json;
+
         packet->CopyData(raw_data, packet->GetSize());
         
         check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
@@ -354,7 +348,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 
         pdu_code = coap_pdu_get_code(pdu);
         
-        nlohmann::json data_json = GetPduPayload(pdu);
+        data_json = GetPduPayload(pdu);
 
         NS_LOG_INFO("Chegou resposta do servidor no provedor");
         switch (pdu_code)
@@ -377,7 +371,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
             NS_LOG_INFO("status não reconhecido");
         }
 
-        TimestampTag timestampTag;
+
 
         if (packet->PeekPacketTag(timestampTag))
         {
@@ -392,7 +386,6 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
         }
 
 
-        Address localAddress;
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
         m_rxTraceWithAddresses(packet, from, localAddress);

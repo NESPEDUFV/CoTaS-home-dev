@@ -127,9 +127,6 @@ class ContextProvider : public SourceApplication
     nlohmann::json m_updateData;
     nlohmann::json m_messages;
 
-    // Contexto e sessão da libcoap
-    coap_context_t *m_coapCtx;
-
     /// Callbacks for tracing the packet Tx events
     TracedCallback<Ptr<const Packet>> m_txTrace;
 

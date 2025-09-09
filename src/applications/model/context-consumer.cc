@@ -95,9 +95,7 @@ ContextConsumer::ContextConsumer()
       m_peerPort{},
       m_sendEvent{},
       m_state{Searching},
-      m_objectAdress{},
-      m_coapCtx(nullptr),
-      m_coapSession(nullptr)
+      m_objectAdress{}
 {
     std::ifstream fm("all_data/messages2.json");
 
@@ -117,14 +115,7 @@ ContextConsumer::~ContextConsumer()
 {
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
-    if (m_coapSession)
-    {
-        coap_session_release(m_coapSession);
-    }
-    if (m_coapCtx)
-    {
-        coap_free_context(m_coapCtx);
-    }
+    
     coap_cleanup();
 
 }
@@ -200,12 +191,6 @@ ContextConsumer::StartApplication()
     SetDataMessage();
 
     coap_startup();
-    m_coapCtx = coap_new_context(nullptr);
-    if (!m_coapCtx)
-    {
-        NS_LOG_ERROR("Falha em criar contexto do libcoap consumidor.");
-        abort();
-    }
 
     if (!m_socket)
     {
@@ -279,16 +264,33 @@ ContextConsumer::ScheduleTransmit(Time dt)
 void
 ContextConsumer::Send()
 {
+    // ns3
     Ptr<Packet> p;
     std::string data;
     TimestampTag timestampTag;
     Address localAddress;
+ 
+    // coap
+    coap_pdu_code_t request_code;
+    const char *uri_path;
+    encoded_data data_pdu;
 
     NS_LOG_FUNCTION(this);
     NS_ASSERT(m_sendEvent.IsExpired());
 
+    // O "como solicitar dados do objeto inteligente" 
+    // foi abstraído
+
+    // TODO: inscrever aplicações, elas estão pedindo 
+    //       direto sem inscrever
+
     data = m_reqData.dump();
-    p = Create<Packet>((uint8_t*)data.c_str(), data.size());
+    uri_path = "/search";
+    request_code = COAP_REQUEST_CODE_GET;
+
+    data_pdu = EncodePduRequest(uri_path, request_code, data);
+
+    p = Create<Packet>(data_pdu.buffer, data_pdu.size);
     
     timestampTag.SetTimestamp(Simulator::Now());
     p->AddPacketTag(timestampTag);
@@ -299,6 +301,11 @@ ContextConsumer::Send()
     
     m_txTrace(p);
     
+    // escolhe pra onde vai mandar 
+    // TODO: talvez usar um padrão de projeto chamado state
+    // https://refactoring.guru/pt-br/design-patterns/state
+    // usar apenas se aumentar muito os estados
+
     switch (m_state)
     {
     case Searching:
@@ -331,27 +338,41 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
     {
         // recebe dados e faz parse
         uint8_t *raw_data = new uint8_t[packet->GetSize()];
-        packet->CopyData(raw_data, packet->GetSize());
-        nlohmann::json data_json =
-            nlohmann::json::parse(raw_data, raw_data + packet->GetSize());
+        coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON, COAP_REQUEST_CODE_GET, 0, BUFSIZE);
+        u_int8_t check;
+        coap_pdu_code_t pdu_code;
 
-        // NS_LOG_INFO("Chegou no consumidor " << data_json);
-        uint64_t status_res = data_json["status"];
+        Address localAddress;
         TimestampTag timestampTag;
+
+        nlohmann::json data_json;
+
+        packet->CopyData(raw_data, packet->GetSize());
         
-        switch (status_res)
+        check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
+        if (!check){
+            NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+            delete[] raw_data;
+            abort();
+        }
+
+        pdu_code = coap_pdu_get_code(pdu);
+        
+        data_json = GetPduPayload(pdu);
+
+        switch (pdu_code)
         {
-        case 200:
+        case COAP_RESPONSE_CODE_CONTENT:
             HandleOK(data_json["response"]);
             break;
-        case 400:
+        case COAP_RESPONSE_CODE_BAD_REQUEST:
             NS_LOG_INFO("Bad request " << data_json["info"]);
             break;
-        case 401:
-            // TODO
+        case COAP_RESPONSE_CODE_UNAUTHORIZED: 
+            // TODO ainda não implementado inscrição dos consumidores
             NS_LOG_INFO("Tentou enviar request sem inscrição");
             break;
-        case 500:
+        case COAP_RESPONSE_CODE_INTERNAL_ERROR:
             NS_LOG_INFO("Erro no servidor");
             break;
         default:
@@ -370,7 +391,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         
         }
 
-        Address localAddress;
+        
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
         m_rxTraceWithAddresses(packet, from, localAddress);
