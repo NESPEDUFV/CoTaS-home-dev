@@ -22,6 +22,7 @@
 #include "ns3/traced-callback.h"
 #include "json.hpp"
 #include "encapsulated-coap.h"
+#include "httplib.h"
 
 #include <bsoncxx/json.hpp>
 #include <mongocxx/client.hpp>
@@ -108,6 +109,8 @@ class CoTaS : public SinkApplication
     mongocxx::v_noabi::database m_bancoMongo;
     mongocxx::instance m_instance{};
     std::optional<mongocxx::client> m_client;
+    
+    httplib::Client m_cli;
 
     using HandlersFunctions = std::function<nlohmann::json(Address, nlohmann::json)>;
     std::unordered_map<std::string, HandlersFunctions> m_handlerDict;

@@ -85,6 +85,10 @@ CoTaS::StartApplication()
     // inicia a conexão com o banco
     try
     {
+        httplib::Client uri_2("localhost", 8080);
+
+        // m_cli.
+
         mongocxx::uri uri("mongodb://localhost:27017/");
         m_client.emplace(uri);
         std::string nome_banco = "cotas_db";

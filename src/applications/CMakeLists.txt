@@ -53,6 +53,7 @@ build_lib(
     helper/udp-echo-helper.h
     model/application-packet-probe.h
     model/json.hpp
+    model/httplib.h
     model/bulk-send-application.h
     model/onoff-application.h
     model/packet-loss-counter.h
