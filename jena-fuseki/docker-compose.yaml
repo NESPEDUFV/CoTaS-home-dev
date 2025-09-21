@@ -23,6 +23,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        JENA_VERSION: 5.5.0
     image: fuseki
     ports:
       - "3030:3030"

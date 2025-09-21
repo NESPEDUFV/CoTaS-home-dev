@@ -65,7 +65,9 @@ CoTaS::GetTypeId()
 CoTaS::CoTaS()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
-      m_socket6{nullptr}
+      m_socket6{nullptr},
+      //   m_cli{"localhost", 3030}
+      m_cli{"www.google.com"}
 {
     NS_LOG_FUNCTION(this);
 }
@@ -75,6 +77,7 @@ CoTaS::~CoTaS()
     NS_LOG_FUNCTION(this);
     m_socket = nullptr;
     m_socket6 = nullptr;
+    m_cli.stop();
 }
 
 void
@@ -85,9 +88,14 @@ CoTaS::StartApplication()
     // inicia a conexão com o banco
     try
     {
-        httplib::Client uri_2("localhost", 8080);
-
-        // m_cli.
+        // faz put dos dados iniciais
+        if (auto res = m_cli.Get("/")) {
+        NS_LOG_INFO("Foi" << res->status << "\n" 
+                    << res->get_header_value("Content-Type") << "\n" 
+                    << res->body);
+        } else {
+            NS_LOG_INFO("error code: " << res.error());
+        }
 
         mongocxx::uri uri("mongodb://localhost:27017/");
         m_client.emplace(uri);
