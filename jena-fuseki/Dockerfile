@@ -103,6 +103,8 @@ RUN addgroup -g "${JENA_GID}" "${JENA_GROUP}" && \
 RUN mkdir --parents "${FUSEKI_DIR}" && \
     chown -R $JENA_USER ${FUSEKI_DIR}
 
+RUN apk add --no-cache ruby
+
 USER $JENA_USER
 
 RUN \

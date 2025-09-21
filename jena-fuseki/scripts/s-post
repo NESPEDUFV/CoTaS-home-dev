@@ -161,12 +161,12 @@ def HEAD(dataset, graph)
 end
 
 def PUT(dataset, graph, file)
-  print "PUT #{dataset} #{graph} #{file}\n" if $verbose
+  print "PUT #{dataset} #{graph} #{file}\n"
   send_body(dataset, graph, file, Net::HTTP::Put)
 end
 
 def POST(dataset, graph, file)
-  print "POST #{dataset} #{graph} #{file}\n" if $verbose
+  print "POST #{dataset} #{graph} #{file}\n"
   send_body(dataset, graph, file, Net::HTTP::Post)
 end
 

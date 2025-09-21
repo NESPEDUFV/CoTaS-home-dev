@@ -66,8 +66,7 @@ CoTaS::CoTaS()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
       m_socket6{nullptr},
-      //   m_cli{"localhost", 3030}
-      m_cli{"www.google.com"}
+      m_cli{"localhost", 3030}
 {
     NS_LOG_FUNCTION(this);
 }
@@ -89,19 +88,13 @@ CoTaS::StartApplication()
     try
     {
         // faz put dos dados iniciais
-        if (auto res = m_cli.Get("/")) {
-        NS_LOG_INFO("Foi" << res->status << "\n" 
-                    << res->get_header_value("Content-Type") << "\n" 
-                    << res->body);
-        } else {
-            NS_LOG_INFO("error code: " << res.error());
-        }
+        SetupDatabase();
 
         mongocxx::uri uri("mongodb://localhost:27017/");
         m_client.emplace(uri);
         std::string nome_banco = "cotas_db";
 
-        SetupDatabase(*m_client, nome_banco);
+        SetupDatabase_old(*m_client, nome_banco);
 
         NS_LOG_INFO("Tentando pingar no servidor de dados:");
         m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
@@ -411,7 +404,58 @@ CoTaS::HandleRequest(Address from, nlohmann::json data_json)
 }
 
 void
-CoTaS::SetupDatabase(mongocxx::client& client, std::string nome_banco)
+CoTaS::SetupDatabase(){
+
+    // le os dados do primeiro arquivo
+    std::string payload;
+    std::vector<std::string> arquivos;
+
+    payload = ReadFile("definition.ttl");
+    
+    // primeiro arquivo
+    if (auto res = m_cli.Put("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
+    {
+        NS_LOG_INFO("Arquivo definition.ttl" << res->status << "\n" 
+                    << res->get_header_value("Content-Type") << "\n" 
+                    << res->body);
+    } else 
+    {
+        NS_LOG_INFO("error code: " << res.error());
+    }
+
+    // restante dos arquivos
+    arquivos = {"application.ttl", "context.ttl",
+                "object.ttl", "unit.ttl"}; 
+    
+    for(auto nome_arquivo : arquivos){
+        payload = ReadFile(nome_arquivo);
+        if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
+        {
+            NS_LOG_INFO("Arquivo" << nome_arquivo << res->status << "\n" 
+                        << res->get_header_value("Content-Type") << "\n" 
+                        << res->body);
+        } else 
+        {
+            NS_LOG_INFO("error code: " << res.error());
+        }
+    }
+}
+
+std::string 
+CoTaS::ReadFile(std::string filename){
+    filename = "all_data/data_ttl/"+filename;
+    std::ifstream arquivo(filename);
+    if (!arquivo.is_open()) {
+        NS_LOG_INFO("Erro: Nao foi possivel abrir o arquivo: " << filename);
+        return "";
+    }
+    std::stringstream buffer;
+    buffer << arquivo.rdbuf();
+    return buffer.str();
+}
+
+void
+CoTaS::SetupDatabase_old(mongocxx::client& client, std::string nome_banco)
 {
     try
     {

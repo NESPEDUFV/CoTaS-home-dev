@@ -98,7 +98,11 @@ class CoTaS : public SinkApplication
 
     int ValidateID_Q(int id);
     
-    void SetupDatabase(mongocxx::client &client, std::string nome_banco);
+    void SetupDatabase_old(mongocxx::client &client, std::string nome_banco);
+    
+    void SetupDatabase();
+
+    std::string ReadFile(std::string filename);
 
     int Simple_Q();
 
