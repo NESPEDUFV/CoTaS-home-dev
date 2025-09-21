@@ -5,7 +5,8 @@
 - [All Data](#all-data)
   - [Table of contents](#table-of-contents)
   - [Introdução](#introdução)
-
+  - [data\_ttl](#data_ttl)
+  
 ## Introdução
 
 Este diretório é dedicado para o versionamento dos dados utilizados na pesquisa
@@ -73,3 +74,8 @@ requestMessages representa mensagens de requisição de diversas aplicações, q
 |13 |"mobility" |
 |14 |"SmartCooking" |
 |15 |"inventoryManagement" |
+
+## data_ttl
+
+Diretório dedicado para as informações da ontologia.
+Index.ttl guarda os contextos dos objetos

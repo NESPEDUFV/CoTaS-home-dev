@@ -128,5 +128,4 @@ src/applications/test/
 .editorconfig
 .lock*
 setup.cfg
-
-
+jena-fuseki/databases/

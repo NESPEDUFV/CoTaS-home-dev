@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+JENA_CONTAINER=jena-fuseki
+JENA_ENDPOINT=http://localhost:3030/dataset
+JENA_USER=fuseki
+JENA_DIR=/fuseki
+
+if [[ -z "$1" ]]; then
+    echo "Nenhum arquivo foi selecionado." >&2
+    exit 0
+fi
+
+if [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]]; then
+    cat >&2 << EOF
+Uso: $0 ARQUIVO...
+
+Exemplo:
+
+    $ $0 data/example2-1.ttl data/at10.ttl data/at11.ttl
+
+Carrega os dados contidos em cada um dos ARQUIVOs RDF para o
+Apache Jena Fuseki em execução em ${JENA_ENDPOINT@Q}.
+Dados anteriores são sobrescritos para refletir exatamente o
+conjunto total dos arquivos especificados.
+EOF
+    exit 0
+fi
+
+
+docker cp "$1" "${JENA_CONTAINER}:${JENA_DIR}/input.ttl"
+docker exec -t "${JENA_CONTAINER}" s-put "${JENA_ENDPOINT}/data" default "${JENA_DIR}/input.ttl"
+for f in "${@:2}"; do
+    docker cp "$f" "${JENA_CONTAINER}:${JENA_DIR}/input.ttl"
+    docker exec -t "${JENA_CONTAINER}" s-post "${JENA_ENDPOINT}/data" default "${JENA_DIR}/input.ttl"
+done

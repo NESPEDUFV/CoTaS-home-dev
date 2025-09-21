@@ -1,0 +1,1251 @@
+BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+
+
+</object> a owl:Ontology ;
+    rdfs:comment "OD4CoT smart objects module." ;
+    owl:imports </definition>, </application> ;
+    .
+
+cot:Sensor a owl:Class ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+# Types of smart objects
+
+cot:SmartFeeder a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PetCare, cot:VoiceControl ;
+    .
+
+cot:SmartCabinet a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:InventoryManagement
+    .
+
+cot:SmartPackaging a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartPackaging
+    .
+
+cot:SmartCookware a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCooking
+    .
+
+cot:SmartRefrigerator a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartHumidity, cot:InventoryManagement
+    .
+
+cot:SmartTrough a owl:Class, cot:SmartObjectCategory ; # TODO: It is not necessarily water, it can be food too
+    rdfs:comment "" ;                                          # maybe "SmartTrough" is a better name
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PetCare
+    .
+
+cot:SmartFreezer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartHumidity, cot:InventoryManagement
+    .
+
+cot:SmartSilo a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:InventoryManagement ;
+    .
+
+cot:SmartAirConditioner a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartBedRoom, cot:SmartTemperature, cot:VoiceControl ;
+    .
+
+cot:SmartHeater a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartTemperature ;
+    .
+
+cot:SmartFan a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartTemperature, cot:SmartBedRoom, cot:VoiceControl ;
+    .
+
+cot:SmartThermostat a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartTemperature, cot:VoiceControl ;
+    .
+
+cot:SmartStove a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCooking ;
+    .
+
+cot:SmartAirFryer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCooking ;
+    .
+
+cot:SmartOven a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCooking ;
+    .
+
+cot:SmartWindow a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartLighting ;
+    .
+
+cot:SmartCurtain a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartLighting ;
+    .
+
+cot:SmartPowerOutlet a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:VoiceControl ;
+    .
+
+# cot:SmartSprinkler a owl:Class, cot:SmartObjectCategory ;
+#     rdfs:comment "" ;
+#     rdfs:subClassOf cot:SmartObject ;
+#     cot:usedFor cot:SmartGarden, cot:VoiceControl ;
+#    .
+
+cot:SmartIrrigationController a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartGarden, cot:VoiceControl ;
+    .
+
+cot:SmartShower a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:WaterManagement ;
+    .
+
+cot:SmartWaterDispenser a owl:Class, cot:SmartObjectCategory ;  # TODO: how does it relate to a SmartWateringTrough?
+    rdfs:comment "" ;                                           # TODO: well, i think SmartWateringTrough has the wrong name
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:WaterManagement ;
+    .
+
+cot:SmartWaterFilter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:WaterManagement ;
+    .
+
+cot:SmartShirt a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartFootwear a owl:Class ;  # TODO: for later, other groups of object categories exist
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    .
+
+cot:SmartSneaker a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartFootwear ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:MultiTreatmentStation a owl:Class, cot:SmartObjectCategory ;  # TODO: not a very clear name
+    rdfs:comment "" ;                                             # maybe SmartPointOfCare?
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology, cot:PreventiveHealthMeasures ;
+    .
+
+cot:ElectrochemicalBioSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "A biosensor that measures electrical signals from electrochemical reactions to detect biological or chemical substances." ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology, cot:PreventiveHealthMeasures ;
+    .
+
+cot:SmartWatch a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:VirtualRealityHeadset a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology, cot:SmartClassroom ;
+    .
+
+cot:SmartHelmet a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:SmartRing a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartNecklace a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns, cot:AgedCareMonitoring ;
+    .
+
+cot:SmartBelt a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartEarring a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartMask a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns, cot:PreventiveHealthMeasures ;
+    .
+
+cot:SmartGlucoseMonitor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PreventiveHealthMeasures, cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartAnklet a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AgedCareMonitoring, cot:AssistiveTechnology, cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartCap a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    .
+
+cot:SmartCollar a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PetCare ;
+    .
+
+cot:SmartPetTag a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PetCare ;
+    .
+
+cot:SmartBoot a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns, cot:AssistiveTechnology ;
+    .
+
+cot:SmartHeadphones a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:VoiceControl, cot:MonitoringVitalSigns, cot:SmartBedRoom ;
+    .
+
+cot:SmartVest a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns, cot:AssistiveTechnology ;
+    .
+
+cot:SmartProsthesis a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartOrthosis a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartExoskeleton a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartRehabilitationGlove a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartHearingAid a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:HapticSuit a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns ;
+    .
+
+cot:SmartChair a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartClassroom ;
+    .
+
+cot:OlfactorySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl ;
+    .
+
+cot:GustatorySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:FoodRating, cot:EnvironmentalMonitoringControl ;
+    .
+
+cot:ElectricalConductivityMeter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:WaterPHMeter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:WaterManagement, cot:SmartGarden ;
+    .
+
+cot:RedoxPotentialSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:WaterSalinityMeter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:SmartGarden, cot:DisasterManagement ;
+    .
+
+cot:RelativeDensityMeter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:FoodRating ;
+    .
+
+cot:TotalDissolvedSolidsMeter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:CarbonMonoxideSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:FineParticulateMatterSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:OzoneSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:ElectrochemicalSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:ElectroacousticSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SulfurDioxideSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:NitrousOxideSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:AirHumiditySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement, cot:SmartTemperatureHumidity ;
+    .
+
+cot:SoilNitrogenSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SoilPhosphorusSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SoilPotassiumSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SoilCarbonDioxideSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SoilPHSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SoilMoistureSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:SmartIrrigation ;
+    .
+
+cot:SoilElectricalConductivitySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SoilSalinitySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:InfraredGasSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:ElectrochemicalGasSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SemiconductorGasSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:CatalyticGasSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:GasLeakSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;  # TODO: how does this relate to the previous sensors?
+    rdfs:subClassOf cot:SmartObject ; # TODO: They really are very similar, maybe we could merge them
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:SmokeSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:BiometricSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:BodyTemperatureSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns, cot:PreventiveHealthMeasures ;
+    .
+
+cot:GPSSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility ;
+    .
+
+cot:TemperatureSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartTemperatureHumidity, cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:LightSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartLighting ;
+    .
+
+cot:InfraredSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:ContactSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity, cot:SmartHome, cot:SmartIndustry ;
+    .
+
+cot:ProximitySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility, cot:SmartSecurity, cot:SmartParking ;
+    .
+
+cot:SoundPressureSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity, cot:EmergencyAlarmSystem, cot:EnvironmentalMonitoringControl ;
+    .
+
+cot:PrecipitationSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartIrrigation, cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:FlameSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity, cot:EmergencyAlarmSystem, cot:DisasterManagement ;
+    .
+
+cot:PiezoelectricSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:FallDetection, cot:MonitoringVitalSigns, cot:AssistiveTechnology ;
+    .
+
+cot:PiezoresistivePressureSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MonitoringVitalSigns, cot:SmartMobility, cot:AssistiveTechnology ;
+    .
+
+cot:ElectricCurrentSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartLighting ;
+    .
+
+cot:VoltageSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement ;
+    .
+
+cot:SolarRadiationSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl, cot:EnergyManagement ;
+    .
+
+cot:FloodSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCity, cot:SmartFarm, cot:DisasterManagement ;
+    .
+
+cot:MotionSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity, cot:SmartMobility ;
+    .
+
+cot:MechanicalPartsIntegritySensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    .
+
+cot:WaterFlowSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:WaterManagement, cot:EnvironmentalMonitoringControl, cot:DisasterManagement
+    .
+
+cot:Accelerometer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject, cot:Sensor ;
+    cot:usedFor cot:FallDetection, cot:SmartMobility, cot:SupplyChainManagement ;
+    .
+
+cot:SmartMicrophone a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:VoiceControl, cot:SmartSecurity, cot:EmergencyAlarmSystem ;
+    .
+
+cot:VibrationSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity, cot:SupplyChainManagement, cot:DisasterManagement ;
+    .
+
+cot:SmartSonar a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl ;
+    .
+
+cot:SmartFloor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:FallDetection ;
+    .
+
+cot:SmartParkingSpace a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartParking ;
+    .
+
+cot:SmartSpeedBump a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility ;
+    .
+
+cot:SmartTrafficLight a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility ;
+    .
+
+cot:SmartStreeLight a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartLighting
+    .
+
+cot:SmartElectricFence a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:SmartFence a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnvironmentalMonitoringControl ;
+    .
+
+cot:PerimeterSensor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:Computer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:CampusTalk, cot:SmartBedroom ;
+    .
+
+cot:SmartTelevision a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartBedroom ;
+    .
+
+cot:SmartSetTopBox a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject
+    .
+
+cot:MediaPlayer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartBedroom
+    .
+
+cot:SmartPanelDisplay a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:CampusTalk ;
+    .
+
+cot:SmartTelemetry a owl:Class, cot:SmartObjectCategory ;  # TODO: what is this? this does not seem like an _object_, it rather feels like a _system_
+    rdfs:comment "" ;                                      # There is one suspect object in this category; the others are actually systems.
+    rdfs:subClassOf cot:SmartObject ;                      # Just out of curiosity, why did you use underscores around 'object'?
+    cot:usedFor cot:SmartMobility ;
+    .
+
+cot:SelfServiceKiosk a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject
+    .
+
+cot:SmartProjector a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:CampusTalk ;
+    .
+
+cot:SmartWhiteboard a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:CampusTalk ;
+    .
+
+cot:InformationKiosk a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject
+    .
+
+cot:SmartCar a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility ;
+    .
+
+cot:SmartThreeWheelScooter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;   # TODO: there are different types of objects in this category
+    cot:usedFor cot:SmartMobility ;     # TODO: well observed, I hadn't noticed
+    .
+
+cot:SmartMotorcycle a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility ;
+    .
+
+cot:SmartAnimalTrap a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AnimalMonitoring, cot:SmartSecurity ;
+    .
+
+cot:HarvestingRobot a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartGreenhouse, cot:PlantMonitoring ;
+    .
+
+cot:RoboticArm a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:WeedingRobot a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartGreenhouse, cot:PlantMonitoring ;
+    .
+
+cot:SmartLightSwitch a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartLighting ;
+    .
+
+cot:SmartCircuitBreaker a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartSecurity ;
+    .
+
+cot:SmartWalker a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartCommunicationBoard a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartVocalizer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:AssistiveTechnology ;
+    .
+
+cot:SmartClothesDryer a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCleaning ;
+    .
+
+cot:SmartLaundryMachine a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartCleaning ;
+    .
+
+cot:SmartPillBlisterPack a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MedicationAdherence ;
+    .
+
+cot:SmartPillDispenser a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PreventiveHealthMeasures, cot:MedicationAdherence ;
+    .
+
+cot:SmartLightBulb a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:EnergyManagement, cot:SmartLighting ;
+    .
+
+cot:SmartSatellite a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartMobility, cot:EnvironmentalMonitoringControl, cot:DisasterManagement ;
+    .
+
+cot:RFIDTag a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:InventoryManagement, cot:SupplyChainManagement ;
+    .
+
+cot:Drone a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity, cot:AnimalMonitoring, cot:PlantMonitoring ;
+    .
+
+cot:Smart3DPrinter a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    .
+
+cot:SmartMat a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:PreventiveHealthMeasures, cot:AssistiveTechnology
+    .
+
+cot:SmartSpeaker a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:VoiceControl, cot:IndoorLocation
+    .
+
+cot:SmartMirror a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartBedroom, cot:MentalCare, cot:AssistiveTechnology
+    .
+
+cot:SmartDoor a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:SmartLock a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:SmartSecurity ;
+    .
+
+cot:SmartCamera a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject, cot:Camera ;
+    cot:usedFor cot:SmartSecurity, cot:SmartSecurity, cot:SmartParking ;
+    .
+
+cot:SmartMedicalKit a owl:Class, cot:SmartObjectCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:SmartObject ;
+    cot:usedFor cot:MedicationAdherence, cot:AssistiveTechnology, cot:AgedCareMonitoring ;
+    .
+
+cot:Camera a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:FrontCamera a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Camera ;
+    .
+
+cot:BackCamera a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Camera ;
+    .
+
+cot:ForceSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:ElectromagneticSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:LightSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:ElectromagneticSensor ;
+    .
+
+cot:CarbonDioxideSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:HumiditySensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:ImpactSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:OpticalHeartRateSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:Oximeter a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:PressureSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:RFIDSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:WeightSensor a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:ECGSensor a owl:Class ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:Gyroscope a owl:Class ;
+    rdfs:subClassOf cot:Sensor ;
+    .
+
+cot:Microphone a owl:Class ;
+    rdfs:comment "A transducer that converts sound waves into corresponding electrical audio signal." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:AudioAmplifier a owl:Class ;
+    rdfs:comment "A device that amplifies audio signals so that it is high enough for loudspeakers." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Loudspeaker a owl:Class ;
+    rdfs:comment "A transducer that converts electrical audio signal into corresponding sound waves." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:HiFiSpeaker a owl:Class ;
+    rdfs:comment "A loudspeaker with high fidelity audio, i.e., audio with inaudible noise and distortions." ;
+    rdfs:subClassOf cot:Loudspeaker ;
+    .
+
+cot:Tweeter a owl:Class ;
+    rdfs:comment "A type of loudspeaker designed to produce high frequency sound waves." ;
+    rdfs:subClassOf cot:Loudspeaker ;
+    .
+
+cot:Woofer a owl:Class ;
+    rdfs:comment "A type of loudspeaker designed to produce low frequency sound waves." ;
+    rdfs:subClassOf cot:Loudspeaker ;
+    .
+
+cot:MidRangeSpeaker a owl:Class ;
+    rdfs:comment "A type of loudspeaker designed to produce middle frequency sound waves." ;
+    rdfs:subClassOf cot:Loudspeaker ;
+    .
+
+cot:Burner a owl:Class ;
+    rdfs:comment "A device on a stove, such as a gas jet or electric element, that produces heat." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:BackLeftBurner a owl:Class; rdfs:subClassOf cot:Burner .
+cot:BackCenterBurner a owl:Class; rdfs:subClassOf cot:Burner .
+cot:BackRightBurner a owl:Class; rdfs:subClassOf cot:Burner .
+cot:FrontLeftBurner a owl:Class; rdfs:subClassOf cot:Burner .
+cot:FrontCenterBurner a owl:Class; rdfs:subClassOf cot:Burner .
+cot:FrontRightBurner a owl:Class; rdfs:subClassOf cot:Burner .
+cot:CentralBurner a owl:Class; rdfs:subClassOf cot:Burner .
+
+
+cot:OvenChamber a owl:Class ;
+    rdfs:comment "A space inside an oven where food can be placed to be heated." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:UpperOvenChamber a owl:Class; rdfs:subClassOf cot:OvenChamber .
+cot:LowerOvenChamber a owl:Class; rdfs:subClassOf cot:OvenChamber .
+cot:OvenWarmingDrawer a owl:Class; rdfs:subClassOf cot:OvenChamber .
+
+cot:Bottle a owl:Class ;
+    rdfs:comment "A narrow-necked container that stores and transports liquids." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Door a owl:Class ;
+    rdfs:comment "A movable structure that allows entry into and exit from an enclosure." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:3DPrinterExtruder a owl:Class ;
+    rdfs:comment "A filament feeding mechanism used by 3D printers." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:3DPrinterLaser a owl:Class ;
+    rdfs:comment "A laser used by a 3D printer." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:3DPrintingArea a owl:Class ;
+    rdfs:comment "A space in a 3D printer where the printed object is produced." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:RefrigeratorCompartment a owl:Class ;
+    rdfs:comment "A thermally insulated compartment of a refrigerator." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:FreezerCompartment a owl:Class ;
+    rdfs:comment "A specialized refrigerator compartment that maintains its contents below the freezing point of water." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:HapticFeedbackPoint a owl:Class ;
+    rdfs:comment "A device in a haptic suit capable of simulating tactile stimuli to a user." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:AirConditionerUnit a owl:Class ;
+    rdfs:comment "A part of an air conditioner." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:IndoorAirConditionerUnit a owl:Class ;
+    rdfs:comment "The part of an air conditioner directed to the indoor environment." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:OutdoorAirConditionerUnit a owl:Class ;
+    rdfs:comment "The part of an air conditioner directed to the outdoor environment." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:LockSide a owl:Class ;
+    rdfs:comment "A part of a door lock." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:IndoorLockSide a owl:Class ;
+    rdfs:comment "The part of a door lock directed to the indoor environment." ;
+    rdfs:subClassOf cot:LockSide ;
+    .
+
+cot:OutdoorLockSide a owl:Class ;
+    rdfs:comment "The part of a door lock directed to the outdoor environment." ;
+    rdfs:subClassOf cot:LockSide ;
+    .
+
+cot:AirFryerBasket a owl:Class ;
+    rdfs:comment "A container inside an air fryer on which food can be placed." ;
+    .
+
+cot:LowerAirFryerBasket a owl:Class ; rdfs:subClassOf cot:AirFryerBasket .
+cot:UpperAirFryerBasket a owl:Class ; rdfs:subClassOf cot:AirFryerBasket .
+
+cot:Display a owl:Class ;
+    rdfs:comment "An output device for presenting information." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:LcdDisplay a owl:Class ; rdfs:subClassOf cot:Display .
+cot:MicroOledDisplay a owl:Class ; rdfs:subClassOf cot:Display .
+cot:TouchscreenDisplay a owl:Class ; rdfs:subClassOf cot:Display .
+
+cot:LightSource a owl:Class ;
+    rdfs:comment "A device capable of producing visible light." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:LedFloodlight a owl:Ccot:ElectricCircuitlass ;
+    rdfs:comment "A broad-beamed, LED based, high-intensity artificial light." ;
+    rdfs:subClassOf cot:LightSource ;
+    .
+
+cot:LedLightSource a owl:Class ;
+    rdfs:comment "A light source that uses one or more LEDs (Light-Emitting Diode)." ;
+    rdfs:subClassOf cot:LightSource ;
+    .
+
+cot:LedFloodlight a owl:Class ;
+    rdfs:comment "A broad-beamed, LED based, high-intensity artificial light." ;
+    rdfs:subClassOf cot:LedLightSource ;
+    .
+
+cot:LedStripLight a owl:Class ;
+    rdfs:comment "A flexible circuit board populated by surface-mount LEDs." ;
+    rdfs:subClassOf cot:LedLightSource ;
+    .
+
+cot:SmdLed a owl:Class ;
+    rdfs:comment "Surface Mounted LED." ;
+    rdfs:subClassOf cot:LedLightSource ;
+    .
+
+cot:MeteredDoseInhaler a owl:Class ;
+    rdfs:comment "A device that delivers a specific amount of medication to the lungs, usually self-administered by the patient via inhalation." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Motor a owl:Class ;
+    rdfs:comment "A machine designed to convert one or more forms of energy into mechanical energy." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Brake a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Tire a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:CargoCompartment a owl:Class ; 
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Parcel a owl:Class ;
+    rdfs:comment "An object wrapped in a package to be sent through a mail service." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:RoboticEndEffector a owl:Class ;
+    rdfs:comment "The device at the end of a robotic arm, designed to interact with the environment." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:Tablet a owl:Class ;
+    rdfs:comment "A mobile device." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:WatchBand a owl:Class ;
+    rdfs:comment "The band or strip connected to a watch case that allows its user to attach the watch to their wrist." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:WatchCase a owl:Class ;
+    rdfs:comment "The main part of a watch." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:WaterPump a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:ElectricCircuit a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+
+cot:Wheel a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:BackWheel a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Wheel ;
+    .
+
+cot:FrontWheel a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Wheel ;
+    .

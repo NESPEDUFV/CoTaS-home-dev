@@ -1,0 +1,2067 @@
+BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+
+
+</context> a owl:Ontology ;
+    rdfs:comment "OD4CoT applications and application domains module." ;
+    owl:imports </definition> ;
+    .
+
+
+cot:Component a owl:Class ;
+    rdfs:comment "A part that composes the whole of an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:contains a owl:ObjectProperty ;
+    rdfs:comment "Indicates that an object has another object as one of its components." ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Component ;
+    .
+
+cot:component a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates which object is the contained component of another." ;
+    rdfs:subPropertyOf cot:hasSpec ;
+    rdfs:domain cot:Component ;
+    .
+
+
+cot:Connection a owl:Class ;
+    rdfs:comment "A physical or digital connection between objects." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:connects a owl:ObjectProperty ;
+    rdfs:comment "Indicates a possible connection between objects." ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Connection ;
+    .
+
+cot:to a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the object to which the possible connection refers." ;
+    rdfs:subPropertyOf cot:hasSpec ;
+    rdfs:domain cot:Connection ;
+    .
+
+cot:through a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the medium through which a connection can happen." ;
+    rdfs:subPropertyOf cot:hasSpec ;
+    rdfs:domain cot:Connection ;
+    rdfs:range cot:ConnectionInterface ;
+    .
+
+cot:value a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates a specific value assigned to a context." ;
+    rdfs:domain cot:Context ;
+    .
+
+cot:oneOf a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates a list of specific values that can be assigned to a context." ;
+    rdfs:domain cot:Context ;
+    rdfs:range rdf:List ;
+    .
+
+cot:minInclusive a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates an inclusive minimum value that can be assigned to a context." ;
+    rdfs:seeAlso xsd:minInclusive ;
+    rdfs:domain cot:Context ;
+    .
+
+cot:maxInclusive a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates an inclusive maximum value that can be assigned to a context." ;
+    rdfs:seeAlso xsd:maxInclusive ;
+    rdfs:domain cot:Context ;
+    .
+
+cot:minExclusive a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates an exclusive minimum value that can be assigned to a context." ;
+    rdfs:seeAlso xsd:minExclusive ;
+    rdfs:domain cot:Context ;
+    .
+
+cot:maxExclusive a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates an exclusive maximum value that can be assigned to a context." ;
+    rdfs:seeAlso xsd:maxExclusive ;
+    rdfs:domain cot:Context ;
+    .
+
+cot:cardinality a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the exact number of times a context repeats." ;
+    rdfs:seeAlso owl:cardinality ;
+    rdfs:domain cot:Context ;
+    rdfs:range xsd:nonNegativeInteger ;
+    .
+
+cot:minCardinality a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the minimum number of times a context repeats." ;
+    rdfs:seeAlso owl:minCardinality ;
+    rdfs:domain cot:Context ;
+    rdfs:range xsd:nonNegativeInteger ;
+    .
+
+cot:maxCardinality a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the maximum number of times a context repeats." ;
+    rdfs:seeAlso owl:maxCardinality ;
+    rdfs:domain cot:Context ;
+    rdfs:range xsd:nonNegativeInteger ;
+    .
+
+cot:DynamicContextCondition a owl:Class ;
+    rdfs:comment "A condition under which a dynamic context assumes a certain value or range of values." ;
+    .
+
+cot:case a owl:ObjectProperty ;
+    rdfs:comment "Indicates a condition under which a dynamic context assumes a certain value or range of values." ;
+    rdfs:domain cot:DynamicContext ;
+    rdfs:range cot:DynamicContextCondition ; 
+    .
+
+cot:else a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the default value the dynamic context will assume if no condition applies." ;
+    rdfs:domain cot:DynamicContext ;
+    rdfs:range cot:Context ;
+    .
+
+cot:when a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the specific condition under which the dynamic context will assume a value." ;
+    rdfs:domain cot:DynamicContextCondition ;
+    rdfs:range cot:Context ;
+    .
+
+cot:then a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:comment "Indicates the value assumed by the dynamic context if the condition is met." ;
+    rdfs:domain cot:DynamicContextCondition ;
+    rdfs:range cot:Context ;
+    .
+
+# Shape
+
+cot:Shape a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The approximate shape and size of an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:shape a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Shape ;
+    .
+
+cot:RectBox a owl:Class ;
+    rdfs:comment "The shape of an object as a rectangular box." ;
+    rdfs:subClassOf cot:Shape ;
+    owl:hasKey ( cot:width cot:height cot:length ) ;
+    .
+
+cot:Cylinder a owl:Class ;
+    rdfs:comment "The shape of an object as a cylinder." ;
+    rdfs:subClassOf cot:Shape ;
+    owl:hasKey ( cot:radius cot:height ) ;
+    .
+
+cot:CylindricalShell a owl:Class ;
+    rdfs:comment "Represents the shape of an object as a cylindrical shell." ;
+    rdfs:subClassOf cot:Shape ;
+    owl:hasKey ( cot:radius cot:height cot:thickness ) ;
+    .
+
+cot:ShapeParameter a owl:Class ; rdfs:subClassOf cot:Context .
+cot:Width a owl:Class ; rdfs:subClassOf cot:ShapeParameter .
+cot:Height a owl:Class ; rdfs:subClassOf cot:ShapeParameter .
+cot:Length a owl:Class ; rdfs:subClassOf cot:ShapeParameter .
+cot:Radius a owl:Class ; rdfs:subClassOf cot:ShapeParameter .
+cot:Thickness a owl:Class ; rdfs:subClassOf cot:ShapeParameter .
+cot:Circumference a owl:Class ; rdfs:subClassOf cot:ShapeParameter .
+
+cot:width a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Width ;
+    .
+
+cot:height a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Height ;
+    .
+
+cot:length a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Length ;
+    .
+
+cot:radius a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Radius ;
+    .
+
+cot:thickness a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Thickness ;
+    .
+
+cot:thickness a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Thickness ;
+    .
+
+cot:circumference a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Shape ;
+    rdfs:range cot:Circumference ;
+    .
+
+# Storage
+
+cot:Storage a owl:Class ;
+    rdfs:comment "The capacity of an object to store information or other things." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:PhysicalStorage a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The capacity of an object to physically store other things inside itself." ;
+    rdfs:subClassOf cot:Storage ;
+    .
+
+cot:physicalStorage a owl:ObjectProperty ;
+    rdfs:comment "Indicates that a smart object is capable of physically storing other things inside itself. " ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:PhysicalStorage ;
+    .
+
+cot:ItemStorage a owl:Class ;
+    rdfs:comment "The capacity of an object to store and keep track of discrete items." ;
+    rdfs:subClassOf cot:PhysicalStorage ;
+    .
+
+## Energy storage
+
+cot:EnergyStorage a owl:Class, cot:ContextCategory ;
+    rdfs:comment "Represents the capacity of an object to store energy." ;
+    rdfs:subClassOf cot:Storage ;
+    .
+
+cot:energyStorage a owl:ObjectProperty ;
+    rdfs:comment "Indicates that a object is capable of storing energy." ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:EnergyStorage ;
+    .
+
+## Data storage
+
+cot:DataStorage a owl:Class, cot:ContextCategory ;
+    rdfs:subClassOf cot:Storage ;
+    rdfs:comment "The capacity of an object to store digital information." ;
+    .
+
+cot:dataStorage a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:DataStorage ;
+    .
+
+cot:AudioRecordStorage a owl:Class ;
+    rdfs:subClassOf cot:DataStorage ;
+    rdfs:comment "The capacity of an object to store audio recordings." ;
+    .
+
+cot:CredentialsStorage a owl:Class ;
+    rdfs:subClassOf cot:DataStorage ;
+    rdfs:comment "The capacity of an object to store credentials." ;
+    .
+
+# Power supply
+
+cot:PowerSupply a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The means through which electric power is supplied to a device." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:powerSupply a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:PowerSupply ;
+    .
+
+## USB Supply
+
+cot:UsbSupply a owl:Class ;
+    rdfs:subClassOf cot:PowerSupply ;
+    .
+
+cot:UsbCSupply a owl:Class ;
+    rdfs:subClassOf cot:UsbSupply ;
+    .
+
+cot:MicroUsbSuply a owl:Class ;
+    rdfs:subClassOf cot:UsbSupply ;
+    .
+
+## Battery Supply
+
+cot:BatterySupply a owl:Class ;
+    rdfs:comment "The usage of battery cell(s) to supply electric power to a device." ;
+    rdfs:subClassOf cot:PowerSupply ;
+    .
+
+cot:BatteryCell a owl:Class ;
+    rdfs:comment "A device that generates electrical energy through chemical reactions." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:batteryCell a owl:ObjectProperty ;
+    rdfs:subClassOf cot:hasSpec ;
+    rdfs:domain cot:BatterySupply ;
+    rdfs:range cot:BatteryCell ;
+    .
+
+cot:BatteryChargingTime a owl:Class ;
+    rdfs:comment "The average time it takes to fully charge a battery." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:chargingTime a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:BatteryChargingTime ;
+    .
+
+cot:AaBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:AaaBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:DBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:LiIonBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:LiPoBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:ReplaceableBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:UnreplaceableBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+cot:RechargeableBattery a owl:Class ; rdfs:subClassOf cot:BatteryCell .
+
+
+## AC power supply
+
+cot:DcPowerSupply a owl:Class ;
+    rdfs:comment "A direct current (DC) power supply." ;
+    rdfs:subClassOf cot:PowerSupply ;
+    .
+
+cot:AcPowerSupply a owl:Class ;
+    rdfs:comment "An alternated current (AC) power supply." ;
+    rdfs:subClassOf cot:PowerSupply ;
+    .
+
+cot:Voltage a owl:Class ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:EnergyPower a owl:Class ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:acInputPower a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:AcPowerSupply ;
+    rdfs:range cot:EnergyPower ;
+    .
+
+cot:cableLength a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:AcPowerSupply ;
+    rdfs:range cot:length ;
+    .
+
+cot:acInputVoltage a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:AcPowerSupply ;
+    rdfs:range cot:Voltage ;
+    .
+
+cot:acInputAmpere a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:AcPowerSupply ;
+    rdfs:range cot:Voltage ;
+    .
+
+cot:acOutputVoltage a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:AcPowerSupply ;
+    rdfs:range cot:Voltage ;
+    .
+
+# Color
+
+cot:Color a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The visual perception presented by an object based on the frequency of incident light." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:color a owl:ObjectProperty ;
+    rdfs:subClassOf cot:hasContext ;
+    rdfs:range cot:Color ;
+    .
+
+# Material
+
+cot:Material a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A substance or mixture of substances that constitutes an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:material a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Material ;
+    .
+
+cot:StainlessSteel a owl:Class ;
+    rdfs:comment "Stainless steel is a durable, corrosion-resistant metal." ;
+    rdfs:subClassOf cot:Material ;
+    . #??
+
+cot:HypoallergenicZirconiaCeramic a owl:Class ;
+    rdfs:comment "Strong, metal-free material made from zirconium dioxide. It's biocompatible, resistant to wear, and ideal for people with metal allergies." ;
+    rdfs:subClassOf cot:Material ;
+    .
+
+cot:LiquidMetal a owl:Class ;
+    rdfs:comment "An amorphous metal alloy primarily composed of zirconium, known as liquid metal." ;
+    rdfs:subClassOf cot:Material ;
+    .
+
+cot:TitaniumPVDCoating a owl:Class ;
+    rdfs:comment "A titanium-based coating applied using Physical Vapor Deposition for durability and aesthetics." ;
+    rdfs:subClassOf cot:Material ;
+    .
+
+cot:MetalAlloy a owl:Class ;
+    rdfs:comment "A metal alloy is a mixture of two or more metals, or a metal and non-metal, designed to improve properties like strength and durability." ;
+    rdfs:subClassOf cot:Material ;
+    .
+
+# Connection Interface
+
+cot:ConnectionInterface a owl:Class ;
+    rdfs:comment "An interface for connecting with other devices." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+# Data transfer interface
+
+cot:DataTransferInterface a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A data transfer interface for connectivity with other devices." ;
+    .
+
+cot:UsbInterface a owl:Class ;
+    rdfs:comment "TODO" ;
+    rdfs:subClassOf cot:DataTransferInterface ;
+    .
+
+cot:HdmiInterface a owl:Class ;
+    rdfs:comment "TODO" ;
+    rdfs:subClassOf cot:DataTransferInterface ;
+    .
+
+cot:dataTransferInterface a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:DataTransferInterface ;
+    .
+
+# Network interface
+
+cot:NetworkInterface a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A network interface for connectivity with other devices." ;
+    rdfs:subClassOf cot:ConnectionInterface ;
+    .
+
+cot:networkInterface a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:NetworkInterface ;
+    .
+
+cot:WiFiInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:ZWaveInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:ZigBeeInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+
+cot:NfcInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:MatterInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:EthernetInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:AntInterface a owl:Class ;
+    rdfs:comment "Adaptive Network Topology, a multicast wireless sensor network technology for PANs." ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:AntPlusInterface a owl:Class ;
+    rdfs:subClassOf cot:AntInterface ;
+    .
+
+cot:BluetoothInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:frequency a owl:ObjectProperty ;
+    rdfs:subClassOf cot:hasContext ;
+    .
+
+cot:BluetoothProfile a owl:Class ;
+    rdfs:comment "A specification of Bluetooth-based wireless communications a device is compatible with." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:bluetoothProfile a owl:ObjectProperty ;
+    rdfs:subClassOf cot:hasSpec ;
+    rdfs:domain cot:BluetoothInterface ;
+    rdfs:range cot:BluetoothProfile ;
+    .
+
+cot:A2DP1.3.2 a cot:BluetoothProfile .
+cot:AVRCP1.6.2 a cot:BluetoothProfile .
+cot:HFP1.7.2 a cot:BluetoothProfile .
+
+cot:BLEInterface a owl:Class ;
+    rdfs:comment "Bluetooth Low Energy" ;
+    rdfs:subClassOf cot:BluetoothInterface ;
+    .
+
+cot:CellularNetworkInterface a owl:Class ;
+    rdfs:subClassOf cot:NetworkInterface ;
+    .
+
+cot:3GInterface a owl:Class ;
+    rdfs:subClassOf cot:CellularNetworkInterface ;
+    .
+
+cot:4GInterface a owl:Class ;
+    rdfs:subClassOf cot:CellularNetworkInterface ;
+    .
+
+cot:5GInterface a owl:Class ;
+    rdfs:subClassOf cot:CellularNetworkInterface ;
+    .
+
+# Control Interface
+
+cot:ControlInterface a owl:Class, cot:ContextCategory ;
+    rdfs:comment "An interface through which a smart object can be controlled or interacted with." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:controlInterface a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:ControlInterface ;
+    .
+
+cot:IntegratedControlInterface a owl:Class ;
+    rdfs:comment "A control interface integrated into the object itself." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:TouchscreenInterface a owl:Class ;
+    rdfs:comment "An integrated control interface that uses a touchscreen." ;
+    rdfs:subClassOf cot:IntegratedControlInterface ;
+    .
+
+cot:EyeTrackingInterface a owl:ControlInterface ;
+    rdfs:comment "An integrated control interface that captures the user's point of gaze." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:MotionControlInterface a owl:ControlInterface ;
+    rdfs:comment "An integrated control interface that captures the user's body movement." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:MicrocontrollerInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through a microcontroller." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:RemoteControlInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through an IR remote controller." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:VoiceControlInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through voice commands." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:MobileAppInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through a mobile application." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:SmartTvAppInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through a smart tv application." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:DesktopAppInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through a desktop application." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+cot:WebAppInterface a owl:Class ;
+    rdfs:comment "A control interface mediated through a web application." ;
+    rdfs:subClassOf cot:ControlInterface ;
+    .
+
+# Operating System
+
+cot:OperatingSystemFamily a owl:Class ;
+    rdfs:comment "A group of system softwares that manage hardware and software resources." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+     
+cot:MobileOs a owl:Class ;
+    rdfs:comment "A family of operating systems for mobile devices." ;
+    rdfs:subClassOf cot:OperatingSystemFamily ;
+    .
+
+cot:DesktopOs a owl:Class ;
+    rdfs:comment "A family of operating systems for desktop devices." ;
+    rdfs:subClassOf cot:OperatingSystemFamily ;
+    .
+
+cot:SmartTvOs a owl:Class ;
+    rdfs:comment "A family of operating systems for smart televisions." ;
+    rdfs:subClassOf cot:OperatingSystemFamily 
+    .
+
+cot:VerconSmartMirrorOs a cot:OperatingSystemFamily .
+cot:Linux a cot:OperatingSystemFamily .
+cot:Windows a cot:OperatingSystemFamily .
+cot:WatchOS a cot:OperatingSystemFamily .
+cot:WearOS a cot:OperatingSystemFamily .
+cot:Android a cot:MobileOs .
+cot:iOS a cot:MobileOs .
+cot:WebOs a cot:SmartTvOs .
+cot:AndroidTV a cot:SmartTvOs .
+cot:Tizen a cot:SmartTvOs .
+
+cot:OperatingSystem a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A range of operating systems used by a device." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:os a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperatingSystem ;
+    .
+
+cot:OperatingSystemSupport a owl:Class ;
+    rdfs:comment "A range of operating systems supported by an application." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:osSupport a owl:ObjectProperty ;
+    rdfs:comment "Indicates a range of operating systems that are supported by an application or device." ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperatingSystemSupport ;
+    .
+
+cot:osFamily a owl:ObjectProperty ;
+    rdfs:comment "Indicates which operating system is supported by an application or device." ;
+    rdfs:subPropertyOf cot:hasSpec ;
+    rdfs:domain cot:OperatingSystemSupport ;
+    rdfs:range cot:OperatingSystem ;
+    .
+
+cot:Version a owl:Class ;
+    rdfs:comment: "A version of a software, standard or specification." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:version a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Version ;
+    .
+
+
+# Language availability
+
+cot:LanguageAvailability a owl:Class, cot:ContextCategory ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:languageAvailability a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:LanguageAvailability ;
+    .
+
+cot:language a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasSpec ;
+    rdfs:domain cot:LanguageAvailability ;
+    rdfs:range mads:Language ;
+    .
+
+mads:Language rdfs:subClassOf cot:Resource .
+
+
+cot:Name a owl:Class ;
+    rdfs:comment "Word or expression that designates something to someone" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:name a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Name ;
+    .
+
+# Temperature
+
+cot:Temperature a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A physical quantity that expresses how hot or cold an object is." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:temperature a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Temperature ;
+    .
+
+cot:Feature a owl:Class ; # , cot:ContextCategory ;
+    rdfs:comment "A feature that a context-aware smart object has that can be used in a system." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:feature a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Feature ;
+    .
+
+cot:FrostFreeFeat a owl:Class ;
+    rdfs:subClassOf cot:Feature ;
+    rdfs:comment "A feature that prevents frost from forming inside the object." ;
+    .
+
+cot:PressureMonFeat a owl:Class ;
+    rdfs:comment "An ambient pressure monitor" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:EnvHumidMonFeat a owl:Class ;
+    rdfs:comment "An ambient humidity monitor" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:OutsideTempMonFeat a owl:Class ;
+    rdfs:comment "the ability to sense the temperature outside the object" ;
+    rdfs:subClassOf cot:Temperature ;    
+    .
+
+cot:BodyTempMonFeat a owl:Class ;
+    rdfs:comment "A feature of a body temperature monitor/sensor" ;
+    rdfs:subClassOf cot:Temperature ;
+    .
+
+cot:BloodOxygMonFeat a owl:Class ;
+    rdfs:comment "A feature of a blood oxygen monitor/sensor" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:HeartRateMonFeat a owl:Class ;
+    rdfs:comment "A feature of a heart rate monitor/sensor" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:MotionMonFeat a owl:Class ;
+    rdfs:comment "A feature of a motion monitor/sensor" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:SleepMonFeat a owl:Class ;
+    rdfs:comment "A feature for tracking sleep." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:SteamVBARemoverFeat a owl:Class ;
+    rdfs:comment "function that removes viruses, bacteria, and allergens using steam" ;
+    rdfs:subClassOf cot:Feature ;
+    . 
+
+cot:OdorRemoverFeat a owl:Class ;
+    rdfs:comment "Function that removes odor from clothes" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:AutoWeighingFeat a owl:Class ;
+    rdfs:comment "Automatic weighing function." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:AutoClassGrainsFeat a owl:Class ;
+    rdfs:comment "Automatic classification of grains." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:AutoIssuanceInvoicesFeat a owl:Class ;
+    rdfs:comment "Automatic issuance of invoices." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:RoyaltyControlFeat a owl:Class ;
+    rdfs:comment "Royalty control function." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:BloodGlucoseMonFeat rdfs:subClassOf cot:Feature .
+cot:CarbonMonoxideAlarmFeat rdfs:subClassOf cot:Feature .
+cot:ContinuousMonFeat rdfs:subClassOf cot:Feature .
+cot:DoseReminder rdfs:subClassOf cot:Feature .
+cot:EnergySavingFeat rdfs:subClassOf cot:Feature .
+cot:LowNoiseFeat rdfs:subClassOf cot:Feature .
+cot:MedicationReminder rdfs:subClassOf cot:Feature .
+cot:SanitizationFeat rdfs:subClassOf cot:Feature .
+cot:SmokeAlarmFeat rdfs:subClassOf cot:Feature .
+cot:SmoothDryingFeat rdfs:subClassOf cot:Feature .
+cot:TemperatureAlarmFeat rdfs:subClassOf cot:Feature .
+
+cot:AutobillingServices a owl:Class ;
+    rdfs:comment "Automatic billing of services." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:OnlineStockCheckFeat a owl:Class ;
+    rdfs:comment "Online inventory consultation." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:PurchaseAndSaleFeat a owl:Class ;
+    rdfs:comment "Management of purchase and sale contracts." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+
+cot:FinancialResultsFeat a owl:Class ;
+    rdfs:comment "Financial results of the unit." ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:DehumidifyFeat a owl:Class ;
+    rdfs:comment "Removes the indoor humidity" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:PHMonFeat a owl:Class ;
+    rdfs:comment "A feature of a pH monitor/sensor" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:WaterPurifierFeat a owl:Class ;
+    rdfs:comment "The object's ability to purify water" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:VolumeMonFeat a owl:Class ;
+    rdfs:comment "The capacity of the object that allows monitoring the filled internal volume" ;
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:PeriodMonFeat a owl:Class ; 
+    rdfs:comment "A feature that monitors the menstrual cycle for health insights." ; 
+    rdfs:subClassOf cot:Feature ;
+    .
+
+cot:SmartClimateControlFeat a owl:Class ;
+    rdfs:subClassOf cot:Feature ;
+    rdfs:comment "Presence-based temperature control with auto shutoff." ;
+    .
+
+cot:AutoPowerSwitchFeat a owl:Class ;
+    rdfs:subClassOf cot:Feature ;
+    rdfs:comment "Automatic on/off switching based on schedules or sensors." ;
+    .
+
+# Feeding control
+
+cot:FeedingControl a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The ability of a device to provide automatic feeding to animals." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:feedingControl a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FeedingControl ;
+    .
+
+cot:MealFrequency a owl:Class ;
+    rdfs:comment "The frequency of meals served by a feeding control." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:mealFrequency a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:FeedingControl ;
+    rdfs:range cot:MealFrequency ;
+    .
+
+cot:ServingSize a owl:Class ;
+    rdfs:comment "The amount of food in a single serving." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:servingSize a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:FeedingControl ;
+    rdfs:range cot:ServingSize ;
+    .
+
+cot:ServingsPerMeal a owl:Class ;
+    rdfs:comment "The number of servings in each meal." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:servingsPerMeal a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:comain cot:FeedingControl ;
+    rdfs:range cot:ServingsPerMeal ;
+    .
+
+
+cot:Location a owl:Class ;
+    rdfs:comment "The location of the smart object" ;
+    rdfs:subClassOf cot:Context ;
+    owl:hasKey ( cot:latitude cot:longitude ) ;
+    .
+
+cot:latitude a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Location ;
+    .
+
+cot:longitude a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:Location ;
+    .
+
+# Irrigation control
+
+cot:IrrigationControl a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The ability of a device to provide automatic irrigation to plants." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:AutomaticIrrigationControl a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:IrrigationControl ;
+    .
+
+cot:irrigationControl a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:IrrigationControl ;
+    .
+
+cot:IrrigationDuration a owl:Class ;
+    rdfs:comment "The period of time a device irrigates plants in a single irrigation session." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:irrigationDuration a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:IrrigationControl ;
+    rdfs:range cot:IrrigationDuration ;
+    .
+
+cot:IrrigationInterval a owl:Class ;
+    rdfs:comment "The period of time between irrigation sessions." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:irrigationInterval a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:IrrigationControl ;
+    rdfs:range cot:IrrigationInterval ;
+    .
+
+# Water Flow Rate
+
+
+cot:WaterFlowRate a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The rate at which water flows through an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:waterFlowRate a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ; 
+    rdfs:range cot:WaterFlowRate ;
+    .
+
+# Water pressure
+
+cot:WaterPressure a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The rate at which water flows through an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:waterPressure a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ; 
+    rdfs:range cot:WaterPressure ;
+    .
+
+# Enegy Consumption
+
+cot:EnergyConsumption a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The electrical energy consumed by an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:energyConsumption a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ; 
+    rdfs:range cot:EnergyConsumption ;
+    .
+
+# Warranty
+
+cot:Warranty a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A period of time assured by a manufacturer against defects in a product." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:warranty a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Warranty ;
+    .
+
+cot:Filter a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The filter an object uses" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:filter a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Filter ;
+    .
+
+cot:AirFilter a owl:Class ;
+    rdfs:subClassOf cot:Filter ;
+    .
+
+cot:WaterFilter a owl:Class ;
+    rdfs:subClassOf cot:Filter ;
+    .
+
+cot:ActivatedCarbonFilter a owl:Class ;
+    rdfs:subClassOf cot:Filter ;
+    .
+
+cot:ReverseOsmosisFilter a owl:Class ;
+    rdfs:subClassOf cot:Filter ;
+    .
+
+cot:UVFilter a owl:Class ;
+    rdfs:subClassOf cot:Filter ;
+    .
+
+# Model
+
+cot:Model a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The object model" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:model a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Model ;
+    .
+
+# Noise Level
+
+cot:NoiseLevel a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The measure of sound noise added by an object to the environment." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:noiseLevel a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:NoiseLevel ;
+    .
+
+
+# Weight
+
+cot:Weight a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The weight of an object in the colloquial sense, i.e., its mass." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:weight a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+# Cooling Capacity
+
+cot:CoolingCapacity a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The measure of a cooling system's ability to remove heat from the environment." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:coolingCapacity a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:CoolingCapacity ;
+    .
+
+# Operating Condition
+
+cot:OperatingCondition a owl:Class ;
+    rdfs:comment "The allowable environment conditions at which a device operates." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:OperatingHumidity a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The allowable humidity range of the environment at which a device operates." ;
+    rdfs:subClassOf cot:OperatingCondition ;
+    .
+
+cot:OperatingTemperature a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The allowable temperature range of the environment at which a device operates." ;
+    rdfs:subClassOf cot:OperatingCondition ;
+    .
+ 
+cot:OperatingFrequency a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The allowable temperature range of the environment at which a device operates." ;
+    rdfs:subClassOf cot:OperatingCondition ;
+    .
+
+cot:OperatingSpeed a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The allowable temperature range of the environment at which a device operates." ;
+    rdfs:subClassOf cot:OperatingCondition ;
+    .
+
+
+cot:operatingHumidity a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperatingHumidity ;
+    .
+
+cot:operatingTemperature a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperatingTemperature ;
+    .
+
+cot:operatingFrequency a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperatingHumidity ;
+    .
+
+cot:operatingSpeed a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperatingTemperature ;
+    .
+
+# Brand
+
+cot:Brand a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The brand of an object" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:brand a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Brand ;
+    .
+
+# Manufacturer
+
+cot:Manufacturer a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The manufacturer of an object" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:manufacturer a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Manufacturer ;
+    .
+
+# Image Resolution
+
+cot:ImageResolution a owl:Class ;
+    rdfs:comment "The level of detail that can be represented in an image." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:resolution a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:ImageResolution ;
+    .
+
+cot:ImageResolutionParameter a owl:Class ; rdfs:subClassOf cot:Context .
+cot:ImageWidth a owl:Class ; rdfs:subClassOf cot:ImageResolutionParameter .
+cot:ImageHeight a owl:Class ; rdfs:subClassOf cot:ImageResolutionParameter .
+
+cot:imageWidth a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:ImageResolution ;
+    rdfs:range cot:ImageWidth ;
+    .
+
+cot:imageHeight a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:ImageResolution ;
+    rdfs:range cot:ImageHeight ;
+    .
+
+# Field of View
+
+cot:FieldOfView a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The angular extent of the observable world that is seen by a sensor." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:fieldOfView a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FieldOfView ;
+    .
+
+cot:horizontalAngle a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    .
+
+cot:verticalAngle a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    .
+
+cot:diagonalAngle a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    .
+
+# Night vision
+
+cot:NightVision a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The ability of a device to capture images in low light conditions." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:nightVision a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:NightVision ;
+    .
+
+
+# Video Recording
+
+cot:VideoRecording a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The ability of a device to record video." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:videoRecording a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:VideoRecording ;
+    .
+
+cot:VideoCompressionFormat a owl:Class ;
+    rdfs:comment "A representation format of digital video content." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:videoCompression a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:VideoCompressionFormat ;
+    .
+
+cot:H264 a cot:VideoCompressionFormat .
+cot:H265 a cot:VideoCompressionFormat .
+
+# Audio recording
+
+cot:AudioRecording a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The ability of a device to record audio." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:audioRecording a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:AudioRecording ;
+    .
+
+# Photo recording
+
+cot:PhotoRecording a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The ability of a device to record photographs." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:photoRecording a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:PhotoRecording ;
+    .
+
+# IP Rating
+
+cot:IngressProtectionRating a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The level of protection against dust and water" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:ipRating a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:IngressProtectionRating ;
+    .
+
+cot:ipDigit a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:domain cot:IngressProtectionRating ;
+    rdfs:range cot:IPDigit ;
+    .
+
+cot:IPDigit a owl:Class ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:IPSolidDigit rdfs:subClassOf cot:IPDigit .
+cot:IPSolidX a cot:IPSolidDigit; rdfs:comment "There is no data available to specify a degree of protection" .
+cot:IPSolid0 a cot:IPSolidDigit; rdfs:comment "Not protected" .
+cot:IPSolid1 a cot:IPSolidDigit; rdfs:comment "Protection against solid objects 50 mm in diameter or more" .
+cot:IPSolid2 a cot:IPSolidDigit; rdfs:comment "Protection against solid objects 12.5 mm in diameter or more" .
+cot:IPSolid3 a cot:IPSolidDigit; rdfs:comment "Protection against solid objects 2.5 mm in diameter or more" .
+cot:IPSolid4 a cot:IPSolidDigit; rdfs:comment "Protection against solid objects 1.0 mm in diameter or more" .
+cot:IPSolid5 a cot:IPSolidDigit; rdfs:comment "Protection against dust" .
+cot:IPSolid6 a cot:IPSolidDigit; rdfs:comment "Dustproof" .
+
+cot:IPLiquidDigit rdfs:subClassOf cot:IPDigit .
+cot:IPLiquidX a cot:IPLiquidDigit; rdfs:comment "There is no data available to specify a degree of protection" .
+cot:IPLiquid0 a cot:IPLiquidDigit; rdfs:comment "Not protected" .
+cot:IPLiquid1 a cot:IPLiquidDigit; rdfs:comment "Protected against drops falling vertically" .
+cot:IPLiquid2 a cot:IPLiquidDigit; rdfs:comment "Protected against drops falling vertically with the body inclined at up to 15°" .
+cot:IPLiquid3 a cot:IPLiquidDigit; rdfs:comment "Protected against water spray" .
+cot:IPLiquid4 a cot:IPLiquidDigit; rdfs:comment "Protected against water jets" .
+cot:IPLiquid5 a cot:IPLiquidDigit; rdfs:comment "Protected against water jets" .
+cot:IPLiquid6 a cot:IPLiquidDigit; rdfs:comment "Protected against powerful water jets" .
+cot:IPLiquid7 a cot:IPLiquidDigit; rdfs:comment "Protected against temporary immersion in water up to 1 meter for 30 minutes" .
+cot:IPLiquid8 a cot:IPLiquidDigit; rdfs:comment "Protected against continuous immersion in water" .
+cot:IPLiquid9 a cot:IPLiquidDigit; rdfs:comment "Protected against water from high-pressure and high-temperature jets" .
+
+# Geopositioning
+
+cot:Geoposition a owl:Class, cot:ContextCategory ;
+    rdfs:comment "Geographical position of an object." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:geopositioning a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Geoposition ;
+    .
+
+cot:SatelliteNavigationSystem a owl:Class ;
+    rdfs:comment "A satellite navigation system." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:navigationSystem a owl:ObjectProperty ;
+    rdfs:comment "Indicates the satellite navigation (satnav) system through which geopositioning can be provided." ;
+    rdfs:subPropertyOf cot:hasSpec ;
+    rdfs:domain cot:Geoposition ;
+    rdfs:range cot:SatelliteNavigationSystem ;
+    .
+
+cot:GpsSatnav a cot:SatelliteNavigationSystem ;
+    rdfs:comment "The Global Positioning System (GPS)." ;
+    .
+
+cot:GlonassSatnav a cot:SatelliteNavigationSystem ;
+    rdfs:comment "The Global Navigation Satellite System (GLONASS)." ;
+    .
+
+cot:BeiDouSatnav a cot:SatelliteNavigationSystem ;
+    rdfs:comment "The BeiDou Navigation Satellite System." ;
+    .
+
+cot:GalileoSatnav a cot:SatelliteNavigationSystem ;
+    rdfs:comment "The Galileo navigation system." ;
+    .
+
+cot:QzssSatnav a cot:SatelliteNavigationSystem ;
+    rdfs:comment "The Quasi-Zenith Satellite System" ;
+    .
+
+
+# CPU
+
+cot:CentralProcessingUnit a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:cpu a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:CentralProcessingUnit ;
+    .
+
+# GPU
+
+cot:GraphicsProcessingUnit a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:gpu a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:GraphicsProcessingUnit ;
+    .
+
+
+# Memory (RAM)
+
+cot:Memory a owl:Class, cot:ContextCategory ;
+    rdfs:comment "Primary memory, or main memory, memory for immediate computer usage." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:memory a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Memory ;
+    .
+
+# Brightness
+# TODO: talvez separar fluxo luminoso de iluminância, se necessário
+# TODO: acredito não ser necessário, não vi objetos q separavam isso
+
+cot:Brightness a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A measure of light intensity, in terms of luminous flux or illuminance." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:brightness a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Brightness ;
+    .
+
+# CRI
+
+cot:ColorRenderingIndex a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A measure of the ability of a light source to reveal the colors of other objects." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:colorRenderingIndex a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:ColorRenderingIndex ;
+    .
+
+# Light Color
+
+cot:LightColor a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:lightColor a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:LightColor ;
+    .
+
+# Color temperature
+
+cot:ColorTemperature a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A parameter for the color of a light source, compared to the light emitted by a blackbody." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:colorTemperature a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:ColorRenderingIndex ;
+    .
+
+# Durability
+
+cot:Durability a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A measure of the time a product remains functional." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:durability a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Durability ;
+    .
+
+# Backset
+
+cot:LockBackset a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The distance between a lock and the door edge it connects to." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:lockBackset a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:LockBackset ;
+    .
+
+# Energy Efficiency
+
+cot:EnergyEfficiencyLabel a owl:Class ;
+    rdfs:comment "A standardized rating of the energy efficiency of a device." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:energyEfficiency a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:EnergyEfficiencyLabel ;
+    .
+
+# TODO: observar se essa modelagem é suficiente.
+cot:A3PlusEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:A2PlusEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:APlusEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:AEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:BEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:CEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:DEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:EEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:FEnergyLabel a cot:EnergyEfficiencyLabel .
+cot:GEnergyLabel a cot:EnergyEfficiencyLabel .
+
+
+# Operational State
+
+cot:OperationalState a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A general description of how a device is currently operating." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:operationalState a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:OperationalState ;
+    .
+
+cot:PowerState a owl:Class ;
+    rdfs:comment "An operational state decribing whether an electrical device is on or off." ;
+    rdfs:subClassOf cot:OperationalState ;
+    .
+
+cot:On a cot:PowerState .
+cot:Off a cot:PowerState .
+cot:Standby a cot:PowerState .
+
+
+# Weight capacity
+
+cot:WeightCapacity a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The capacity of an object to sustain weight of other things." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:weightCapacity a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:WeightCapacity ;
+    .
+
+
+# Defrosting
+
+cot:Defrosting a owl:Class ;
+    rdfs:comment "A technique for removing frost and ice from a refrigerator." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:defrosting a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Defrosting ;
+    .
+
+cot:AutomaticDefrosting a cot:Defrosting .
+
+
+# Fuel
+
+cot:Fuel a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A material that can be made to react with other substances so that it releases energy as thermal energy or to be used for work" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:fuel a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Fuel ;
+    .
+
+cot:ElectricalEnergyFuel a cot:Fuel ;
+    rdfs:comment "Used to indicate devices that operate on electrical energy, instead of using conventional substances that release chemical energy." ;
+    .
+
+cot:NaturalGasFuel a cot:Fuel .
+cot:LiquidPropaneFuel a cot:Fuel .
+
+
+# Timer
+
+cot:Timer a owl:Class, cot:ContextCategory ;
+    rdfs:comment "A clock used to count down a period of time and alert its user." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:timer a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Timer ;
+    .
+
+# Aperture
+
+cot:Aperture a owl:Class, cot:ContextCategory ;
+    rdfs:comment "The size of a hole or an opening that limits light propagated through an optical system." ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:aperture a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Aperture ;
+    .
+
+cot:FocalLength a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:focalLength a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FocalLength ;
+    .
+
+cot:DigitalZoom a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:digitalZoom a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:DigitalZoom ;
+    .
+
+cot:LightSocket a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:lightSocket a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:LightSocket ;
+    .
+
+cot:CalibrationTime a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:calibrationTime a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:CalibrationTime ;
+    .
+
+cot:CentrifugeRotation a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:centrifugeRotation a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:CentrifugeRotation ;
+    .
+
+cot:DetectionRange a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:detectionRange a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:DetectionRange ;
+    .
+
+cot:DetectionAngle a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:detectionAngle a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:DetectionAngle ;
+    .
+
+cot:ExtrusionMode a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:extrusionMode a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:ExtrusionMode ;
+    .
+
+cot:3DPrintingMaterial a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:printingMaterial a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:3DPrintingMaterial ;
+    .
+
+cot:3DPrintingTechnology a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:printingTechnology a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:3DPrintingTechnology ;
+    .
+
+cot:3DPrintingFilament a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:filaments a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:3DPrintingFilament ;
+    .
+
+cot:3DPrintingLayerResolution a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:layerResolution a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:3DPrintingLayerResolution ;
+    .
+
+cot:FileCompatibility a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:fileCompatibility a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FileCompatibility ;
+    .
+
+
+cot:PillCompatibility a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:pillCompatibility a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:PillCompatibility ;
+    .
+
+
+cot:VideoTransmission a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:videoTransmission a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:VideoTransmission ;
+    .
+
+cot:WindResistance a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:windResistance a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:WindResistance ;
+    .
+
+
+cot:DroneStabilization a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:stabilization a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:DroneStabilization ;
+    .
+
+
+cot:FlightDistance a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:flightDistance a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FlightDistance ;
+    .
+
+cot:FlightHeight a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+
+cot:flightHeight a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FlightHeight ;
+    .
+
+cot:FlightSpeed a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:flightSpeed a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FlightSpeed ;
+    .
+
+cot:AscentSpeed a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:FlightSpeed ;
+    .
+
+cot:DescentSpeed a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:FlightSpeed ;
+    .
+
+cot:HorizontalSpeed a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:FlightSpeed ;
+    .
+
+cot:FlightTime a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:flightTime a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:FlightTime ;
+    .
+
+
+cot:Framerate a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:framerate a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Framerate ;
+    .
+
+cot:HarvestCompatibility a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:harvestCompatibility a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:HarvestCompatibility ;
+    .
+
+
+cot:UsbPorts a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:usbPorts a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:UsbPorts ;
+    .
+
+
+cot:HdmiPorts a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:hdmiPorts a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:HdmiPorts ;
+    .
+
+cot:HeatingCapacity a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:heatingCapacity a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:HeatingCapacity ;
+    .
+
+
+cot:HeatingCapacity a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:heatingCapacity a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:HeatingCapacity ;
+    .
+
+cot:RfidProtocol a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:rfidProtocol a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:RfidProtocol ;
+    .
+
+cot:RfidMemorySetting a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:rfidMemorySetting a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:RfidMemorySetting ;
+    .
+
+
+cot:MotionRange a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:motionRange a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:MotionRange ;
+    .
+
+cot:HorizontalMotionRange a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:MotionRange ;
+    .
+cot:VerticalMotionRange a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:MotionRange ;
+    .
+
+
+cot:MotionDegreesOfFreedom a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:motionDegreesOfFreedom a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:MotionDegreesOfFreedom ;
+    .
+
+
+cot:Range a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:range a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Range ;
+    .
+
+cot:SensibilityRange a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:sensibilityRange a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:SensibilityRange ;
+    .
+
+cot:SensingDelay a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:sensingDelay a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:SensingDelay ;
+    .
+
+cot:PowerOutput a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:powerOutput a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:PowerOutput ;
+    .
+
+
+cot:Precision a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:precision a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Precision ;
+    .
+
+
+cot:WaterLevel a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:OperationalState ;
+    .
+
+cot:waterLevel a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:WaterLevel ;
+    .
+
+
+cot:WaterTemperature a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:OperationalState ;
+    .
+
+cot:waterTemperature a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:WaterTemperature ;
+    .
+
+cot:WeedingMechanism a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:weedingMechanism a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:WeedingMechanism ;
+    .
+
+
+cot:Vocabulary a owl:Class, cot:ContextCategory ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Context ;
+    .
+
+cot:vocabulary a owl:ObjectProperty ;
+    rdfs:subPropertyOf cot:hasContext ;
+    rdfs:range cot:Vocabulary ;
+    .

@@ -1,0 +1,91 @@
+BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+
+
+</definition> a owl:Ontology ;
+    rdfs:comment "OD4CoT upper level definitions module." ;
+    .
+
+cot:ApplicationDomain a owl:Class ;
+    rdfs:comment "A domain of related IoT applications." ;
+    .
+
+cot:Application a owl:Class ;
+    rdfs:comment "A smart application that uses IoT resources." ;
+    .
+
+cot:relatedTo a owl:ObjectProperty ;
+    rdfs:comment "Indicates an application in related to an application domain." ;
+    rdfs:domain cot:Application ;
+    rdfs:range cot:ApplicationDomain ;
+    .
+
+cot:usedFor a owl:ObjectProperty ;
+    rdfs:comment "Indicates a smart object category is used for an application." ;
+    rdfs:domain cot:SmartObjectCategory ;
+    rdfs:range cot:Application ;
+    .
+
+cot:usedIn a owl:ObjectProperty ;
+    rdfs:comment "Indicates a smart object is used in an application domain." ;
+    owl:propertyChainAxiom  ( cot:usedFor  cot:relatedTo ) ;
+    .
+
+cot:Resource a owl:Class ;
+    rdfs:comment "An informational or material resource." ;
+    .
+
+cot:SmartObject a owl:Class ;
+    rdfs:comment "" ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:SmartObjectCategory a owl:Class ;
+    rdfs:comment "Meta class that indicates which smart object subclasses were targeted during the research." ;
+    .
+
+cot:Context a owl:Class ;
+    rdfs:comment "A piece of information about the status or capabilities of an entity." ;
+    rdfs:subClassOf cot:Resource ;
+    .
+
+cot:hasContext a owl:ObjectProperty ;
+    rdfs:comment "Indicates that an object has a context." ;
+    rdfs:domain cot:Resource ;
+    rdfs:range cot:Context ;
+    .
+
+cot:hasSpec a owl:ObjectProperty ;
+    rdfs:comment "Indicates a further specification of a context." ;
+    rdfs:domain cot:Context ;
+    rdfs:range cot:Resource ;
+    .
+
+cot:DynamicContext a owl:Class ;
+    rdfs:comment "A context whose current value can change over time, thus requiring a range of possible values to be specified." ;
+    rdfs:subClassOf cot:Context,
+                    [ a owl:Restriction ;
+                      owl:onProperty cot:hasContext ;
+                      owl:someValuesFrom cot:DynamicContext
+                    ] ;
+    .
+
+cot:StaticContext a owl:Class ;
+    rdfs:comment "A context whose value does not change over time." ;
+    rdfs:subClassOf cot:Context ;
+    owl:intersectionOf ( cot:Context [ owl:complementOf cot:DynamicContext ] ) ;
+    .
+
+
+cot:ContextCategory a owl:Class ;
+    rdfs:comment "Meta class that indicates which context subclasses are labeled as categories." ;
+    .
+

@@ -1,0 +1,217 @@
+BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+
+
+</application> a owl:Ontology ;
+    rdfs:comment "OD4CoT applications and application domains module." ;
+    owl:imports </definition> ;
+    .
+
+cot:SmartHome a cot:ApplicationDomain, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    .
+
+cot:SmartHealth a cot:ApplicationDomain, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    .
+
+cot:SmartFarm a cot:ApplicationDomain, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    .
+
+cot:SmartCity a cot:ApplicationDomain, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    .
+
+cot:SmartIndustry a cot:ApplicationDomain, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    .
+
+cot:SmartCampus a cot:ApplicationDomain, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    .
+
+cot:FallDetection a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth, cot:SmartHome ;
+    .
+
+cot:VoiceControl a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Control of microprocessors via voice, mobile application or web application." ;
+    cot:relatedTo cot:SmartHome, cot:SmartCampus, cot:SmartHealth ;
+    .
+    
+cot:PetCare a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth, cot:SmartHome ;
+    .
+
+cot:EnergyManagement a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Monitoring and consumption reduction." ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartCity, cot:SmartIndustry, cot:SmartCampus ;
+    .
+
+cot:WaterManagement a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Monitoring and consumption reduction." ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartCity, cot:SmartIndustry, cot:SmartCampus ;
+    .
+
+cot:SmartSecurity a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Camera and sensor control for privacy and security" ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartCity, cot:SmartIndustry ;
+    .
+
+cot:IndoorLocation a cot:Application, owl:NamedIndividual ; 
+    rdfs:comment "Fingerprint based indoor localization system" ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm ;
+    .
+    
+cot:SmartGasDetection a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHome, cot:SmartIndustry, cot:SmartCampus, cot:SmartHealth ;
+    .
+
+cot:SmartLighting a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Brightness control and monitor" ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartCity, cot:SmartIndustry, cot:SmartCampus, cot:SmartHealth ;
+    .
+
+cot:SmartTemperatureHumidity a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Control and monitor" ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartIndustry, cot:SmartCampus, cot:SmartHealth ;
+    .
+
+cot:SmartCleaning a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Applications that help with general cleaning, such as dishes, clothes and floors" ;
+    cot:relatedTo cot:SmartHome ;
+    .
+
+cot:SmartGarden a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHome ;
+    .
+
+cot:SmartCooking a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Applications that make cooking easier and safer" ;
+    cot:relatedTo cot:SmartHome ;
+    .
+
+cot:InventoryManagement a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Preserve and manage anything" ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartIndustry, cot:SmartCampus, cot:SmartHealth ;
+    .
+
+cot:SmartParking a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartCity ;
+    .
+
+cot:SmartClassroom a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartCampus ;
+    .
+
+cot:SmartBedroom a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHome, cot:SmartHealth, cot:SmartCampus ;
+    .
+
+cot:CampusTalk a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "An application that centralizes multiple smart campus applications" ;
+    rdfs:seeAlso <https://doi.org/10.1109/ACCESS.2018.2832222> ;
+    cot:relatedTo cot:SmartCampus ;
+    .
+
+cot:SmartMobility a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "It is a concept that aims to improve urban mobility by making travel more efficient, sustainable and safe, using cars, motorcycles, drones, among others." ;
+    cot:relatedTo cot:SmartCity, cot:SmartCampus ;
+    .
+
+cot:SupplyChainManagement a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "It's about managing the supply chain of any product with sensor data" ;
+    cot:relatedTo cot:SmartFarm, cot:SmartCity, cot:SmartIndustry, cot:SmartCampus, cot:SmartHealth ;
+    .
+ 
+cot:SmartMining a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Encompasses everything from worker safety to increasing extraction efficiency" ;
+    cot:relatedTo cot:SmartIndustry ;
+    .
+
+cot:DisasterManagement a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm, cot:SmartCity, cot:SmartIndustry ;
+    .
+
+cot:EnvironmentalMonitoringControl a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm, cot:SmartCity, cot:SmartIndustry ;
+    .
+
+cot:SmartIrrigation a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm ;
+    .
+
+cot:PlantMonitoring a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm ;
+    .
+
+cot:AnimalMonitoring a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm ;
+    .
+
+cot:SmartGreenhouse a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm, cot:SmartCampus ;
+    .
+
+cot:FoodRating a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "Food quality control" ;
+    cot:relatedTo cot:SmartHealth, cot:SmartFarm ;
+    .
+
+cot:FertilizerPesticideControl a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartFarm ;
+    .
+
+cot:MonitoringVitalSigns a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth ;
+    .
+
+cot:MedicationAdherence a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth ;
+    .
+
+cot:AssistiveTechnology a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth ;
+    .
+
+cot:AgedCareMonitoring a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth ;
+    .
+
+cot:PreventiveHealthMeasures a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth ;
+    .
+
+cot:MentalCare a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHealth ;
+    .
+
+cot:EmergencyAlarmSystem a cot:Application, owl:NamedIndividual ;
+    rdfs:comment "" ;
+    cot:relatedTo cot:SmartHome, cot:SmartFarm, cot:SmartCity, cot:SmartIndustry, cot:SmartCampus ;
+    .

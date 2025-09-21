@@ -1,0 +1,55 @@
+BASE             <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:      <#>
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:      <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:      <http://www.w3.org/2002/07/owl#>
+PREFIX qu:       <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:      <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit:     <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX quantity: <http://purl.oclc.org/NET/ssnx/qu/quantity#>
+PREFIX prefix:   <http://purl.oclc.org/NET/ssnx/qu/prefix#>
+
+
+</unit> a owl:Ontology ;
+    rdfs:comment "OD4CoT extension to SSN units ontology." ;
+    .
+
+dim:ImageResolution a owl:Class ;
+    rdfs:subClassOf qu:QuantityKind,
+        [ a owl:Restriction ;
+          owl:onProperty qu:unitKind ;
+          owl:allValuesFrom dim:ImageResolutionUnit ;
+        ] .
+
+quantity:imageResolution a dim:ImageResolution, owl:NamedIndividual ;
+    rdfs:comment "Image resolution is the level of detail of an image." ;
+    rdfs:label "image resolution" ;
+    .
+
+dim:ImageResolutionUnit a owl:Class ;
+    rdfs:subClassOf qu:Unit ;
+    .
+
+unit:pixel a dim:ImageResolutionUnit, owl:NamedIndividual ;
+    qu:quantityKind quantity:imageResolution ;
+    qu:symbol "px" ;
+    rdfs:label "pixel" ;
+    .
+
+unit:megapixel a dim:ImageResolutionUnit, owl:NamedIndividual ;
+    qu:prefix prefix:mega ;
+    qu:referenceUnit unit:pixel ;
+    qu:conversionFactor "1000000.0"^^xsd:double ;
+    qu:symbol "MP" ;
+    rdfs:label "megapixel" ;
+    .
+
+
+unit:fps owl:sameAs unit:hertz .
+unit:item owl:sameAs unit:euclid .
+
+unit:perDay a dim:FrequencyUnit, owl:NamedIndividual ;
+    qu:quantityKind quantity:frequency ;
+    rdfs:label "times per day" ;
+    .

@@ -15,11 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: '3.0'
 services:
   fuseki:
-    ## Example:
-    ## command: [ "--tdb2", "--update", "--loc", "databases/DB2", "/ds" ]
+    container_name: jena-fuseki
+    command: --conf config.ttl
     build:
       context: .
       dockerfile: Dockerfile
@@ -31,4 +30,5 @@ services:
     volumes:
       - ./logs:/fuseki/logs
       - ./databases:/fuseki/databases
-#volumes:
+      - ./config.ttl:/fuseki/config.ttl
+      - ./scripts:/usr/local/bin
