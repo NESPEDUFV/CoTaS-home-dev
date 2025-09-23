@@ -296,7 +296,8 @@ CoTaS::HandleSubscription(Address from, std::string data_json)
 
 nlohmann::json
 CoTaS::HandleUpdate(Address from, std::string data_json)
-{
+{   
+    // TODO: tratar update
     auto collection = m_bancoMongo["object"];
     // verifica se id é válido
     // int id = data_json["id"];
@@ -677,8 +678,8 @@ CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
     uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
 
     // trata payload adicionando id e ip
-    std::string idip = " cot:id " + std::to_string(id) + 
-                       "; cot:ip " + std::to_string(ip_num) + " ; .";
+    std::string idip = " cot:objectId " + std::to_string(id) + 
+                       "; cot:IpAddress " + std::to_string(ip_num) + " ; .";
     
     // adiciona os prefixos necessários 
     std::string prefix = "BASE         <http://nesped1.caf.ufv.br/od4cot>\n"
@@ -698,6 +699,7 @@ CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
     payload = prefix+payload;
 
     //NS_LOG_INFO("Payload pós tratamento: " << payload);
+    // tratar rslashing ta indo com....
 
     if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {

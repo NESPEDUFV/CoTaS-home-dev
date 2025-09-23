@@ -99,8 +99,6 @@ GetPduPayloadJson(coap_pdu_t* pdu)
         printf("Ocorreu um erro ao pega o payload");
         abort();
     }
-    std::string payload (reinterpret_cast<const char*>(pdu_data), pdu_data_total_length);
-    std::clog << "testando payload: " << payload;
     return nlohmann::json::parse(pdu_data, pdu_data + pdu_data_total_length);
 }
 
