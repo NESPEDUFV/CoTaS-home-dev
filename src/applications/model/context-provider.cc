@@ -284,7 +284,7 @@ ContextProvider::Send()
         data = m_firstData.dump();
         data.erase(0, 1);
         data.erase(data.find_last_of("\""));
-        // NS_LOG_INFO("dados que saem do provedor: " << data);
+        data.erase(std::remove(data.begin(), data.end(), '\\'), data.end());
         uri_path = "/subscribe/object";
         request_code = COAP_REQUEST_CODE_POST;
 

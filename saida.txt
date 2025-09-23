@@ -1,0 +1,724 @@
+Configurando nós
+Posicionando nós
+Configurando CoTaS
+Configurando serviço dos objetos
+Configurando aplicação cliente dos objetos
+Configurando aplicação cliente dos consumidores
+Executando simulação...
+Arquivo definition.ttl200
+application/json;charset=utf-8
+{ 
+  "count" : 57 ,
+  "tripleCount" : 57 ,
+  "quadCount" : 0
+}
+
+Arquivoapplication.ttl200
+application/json;charset=utf-8
+{ 
+  "count" : 215 ,
+  "tripleCount" : 215 ,
+  "quadCount" : 0
+}
+
+Arquivocontext.ttl200
+application/json;charset=utf-8
+{ 
+  "count" : 1365 ,
+  "tripleCount" : 1365 ,
+  "quadCount" : 0
+}
+
+Arquivoobject.ttl200
+application/json;charset=utf-8
+{ 
+  "count" : 1073 ,
+  "tripleCount" : 1073 ,
+  "quadCount" : 0
+}
+
+Arquivounit.ttl200
+application/json;charset=utf-8
+{ 
+  "count" : 32 ,
+  "tripleCount" : 32 ,
+  "quadCount" : 0
+}
+
+Banco de dados criado e conectado com sucesso.
+tenta setar mensagem
+seta mensagem"cot:DellXPSDesktop8960 a cot:Computer, owl:NamedIndividual ; rdfs:seeAlso <https://www.dell.com/pt-br/shop/computadores-all-in-ones-e-workstations/xps-desktop/spd/xps-8960-desktop/x8960w10w> ; cot:networkInterface [ a cot:WiFiInterface ; ] ; cot:networkInterface [ a cot:BluetoothInterface ; ] ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 17.30; qu:unit unit:centimetre ] ; cot:height [ cot:value 37.29 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 42.69 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 13.34 ; qu:unit unit:kilogram ] ; cot:warranty [ cot:value 4 ; qu:unit unit:year ] ; cot:powerSupply [ a cot:ACPowerSupply ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:TVSamsungNeoQLED4K a cot:SmartTelevision, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/tvs/qled-tv/qn85d-55-inch-neo-qled-4k-tizen-os-smart-tv-qn55qn85dbgxzd/> ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:BluetoothInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:name \"SmartThings\" ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ]; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:LGStyler a cot:SmartCabinet, owl:NamedIndividual ; rdfs:seeAlso <https://www.lg.com/my/lg-styler/lg-s3mfc> ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 44.5 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 185.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 58.5 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 78.0 ; qu:unit unit:kilogram ] ; cot:controlInterface [ a cot:IntegratedControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ] ; cot:controlInterface [ a cot:SmartTvAppInterface ; cot:osSupport [ cot:osFamily cot:WebOs ] ; ] ; cot:weightCapacity [ a cot:DynamicContext ; cot:maxInclusive 5.2 ; cot:minInclusive 0.0 ; qu:unit qu:kilogram ; ] ; cot:operationalState [ a cot:DynamicContext ; cot:oneOf ( ) ; ] ; cot:physicalStorage [ cot:minInclusive 0 ; cot:maxInclusive 1 ; qu:unit unit:item ; ] ; cot:physicalStorage [ cot:minInclusive 0 ; cot:maxInclusive 1 ; qu:unit unit:item ; ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; ."
+tenta setar mensagem
+seta mensagem"cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; ."
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837703
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 12047777
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ;  cot:objectId 12047777; cot:IpAddress 167837703 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 53 ,
+  "tripleCount" : 53 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:LGStyler a cot:SmartCabinet, owl:NamedIndividual ; rdfs:seeAlso <https://www.lg.com/my/lg-styler/lg-s3mfc> ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 44.5 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 185.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 58.5 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 78.0 ; qu:unit unit:kilogram ] ; cot:controlInterface [ a cot:IntegratedControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ] ; cot:controlInterface [ a cot:SmartTvAppInterface ; cot:osSupport [ cot:osFamily cot:WebOs ] ; ] ; cot:weightCapacity [ a cot:DynamicContext ; cot:maxInclusive 5.2 ; cot:minInclusive 0.0 ; qu:unit qu:kilogram ; ] ; cot:operationalState [ a cot:DynamicContext ; cot:oneOf ( ) ; ] ; cot:physicalStorage [ cot:minInclusive 0 ; cot:maxInclusive 1 ; qu:unit unit:item ; ] ; cot:physicalStorage [ cot:minInclusive 0 ; cot:maxInclusive 1 ; qu:unit unit:item ; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837710
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 12501726
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:LGStyler a cot:SmartCabinet, owl:NamedIndividual ; rdfs:seeAlso <https://www.lg.com/my/lg-styler/lg-s3mfc> ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 44.5 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 185.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 58.5 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 78.0 ; qu:unit unit:kilogram ] ; cot:controlInterface [ a cot:IntegratedControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ] ; cot:controlInterface [ a cot:SmartTvAppInterface ; cot:osSupport [ cot:osFamily cot:WebOs ] ; ] ; cot:weightCapacity [ a cot:DynamicContext ; cot:maxInclusive 5.2 ; cot:minInclusive 0.0 ; qu:unit qu:kilogram ; ] ; cot:operationalState [ a cot:DynamicContext ; cot:oneOf ( ) ; ] ; cot:physicalStorage [ cot:minInclusive 0 ; cot:maxInclusive 1 ; qu:unit unit:item ; ] ; cot:physicalStorage [ cot:minInclusive 0 ; cot:maxInclusive 1 ; qu:unit unit:item ; ] ; cot:port 19 ;  cot:objectId 12501726; cot:IpAddress 167837710 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 48 ,
+  "tripleCount" : 48 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837713
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 2926033
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ;  cot:objectId 2926033; cot:IpAddress 167837713 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 59 ,
+  "tripleCount" : 59 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837711
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 10794722
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ;  cot:objectId 10794722; cot:IpAddress 167837711 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 59 ,
+  "tripleCount" : 59 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837712
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 17076965
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ;  cot:objectId 17076965; cot:IpAddress 167837712 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 59 ,
+  "tripleCount" : 59 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837708
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 9640281
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ;  cot:objectId 9640281; cot:IpAddress 167837708 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 52 ,
+  "tripleCount" : 52 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837698
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 14778300
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ;  cot:objectId 14778300; cot:IpAddress 167837698 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 50 ,
+  "tripleCount" : 50 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837701
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 17461286
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ;  cot:objectId 17461286; cot:IpAddress 167837701 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 53 ,
+  "tripleCount" : 53 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837706
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 6726547
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ;  cot:objectId 6726547; cot:IpAddress 167837706 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 52 ,
+  "tripleCount" : 52 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837707
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 7319808
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ;  cot:objectId 7319808; cot:IpAddress 167837707 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 52 ,
+  "tripleCount" : 52 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837704
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 15052991
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ;  cot:objectId 15052991; cot:IpAddress 167837704 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 52 ,
+  "tripleCount" : 52 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837709
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 8263701
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:IME500Intelbras a cot:SmartCamera, owl:NamedIndividual ; rdfs:seeAlso <https://loja.intelbras.com.br/kit-2-cameras-de-video-full-hd-wifi-full-color-intelbras-ime-500/p> ; cot:resolution [ cot:width  [ cot:value 1920 ; qu:unit unit:pixel ] ; cot:height [ cot:value 1080 ; qu:unit unit:pixel ] ; ] ; cot:aperture [ cot:value 2.8; qu:unit unit:millimetre ] ; cot:fieldOfView [ cot:horizontalAngle [ cot:value 97 ; qu:unit unit:degreeUnitOfAngle ] ; cot:verticalAngle   [ cot:value 52 ; qu:unit unit:degreeUnitOfAngle ] ; cot:diagonalAngle   [ cot:value 114 ; qu:unit unit:degreeUnitOfAngle ] ; ] ; cot:digitalZoom [ cot:value 16.0 ] ; cot:contains [ cot:component [ a cot:LedFloodlight ; cot:range [ cot:value 15.0 ; qu:unit unit:metre ] ;  ] ] ; cot:contains [ cot:component [ a cot:InfraredSensor ; cot:range [ cot:value 20.0 ; qu:unit unit:metre ] ; ] ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:weight [ ] ; cot:color  [ ] ; cot:material [ ] ; cot:ipRating [ ] ; cot:operatingTemperature [  ] ; cot:operatingHumidity [  ] ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:videoRecording [ ] ; cot:audioRecording [ ] ; cot:port 19 ;  cot:objectId 8263701; cot:IpAddress 167837709 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 52 ,
+  "tripleCount" : 52 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837699
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 6673000
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ;  cot:objectId 6673000; cot:IpAddress 167837699 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 50 ,
+  "tripleCount" : 50 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837714
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 10027471
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ;  cot:objectId 10027471; cot:IpAddress 167837714 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 59 ,
+  "tripleCount" : 59 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837716
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 7537447
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ;  cot:objectId 7537447; cot:IpAddress 167837716 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 59 ,
+  "tripleCount" : 59 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837715
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 8766262
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:WindFree a cot:SmartAirConditioner, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/> ; cot:warranty [] ; cot:controlInterface [] ; cot:contains [ cot:component [ a cot:OutdoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 28.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 54.8 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 79; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 42.7 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ cot:value 51.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:contains [ cot:component [ a cot:IndoorAirConditionerUnit ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 21.5 ; qu:unit unit:centimetre] ; cot:height [ cot:value 29.9 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 105.5; qu:unit unit:centimetre] ; ] ; cot:weight [ cot:value 11.4 ; qu:unit unit:kilogram ] ; cot:noiseLevel [ a cot:DynamicContext ; cot:minInclusive 25.0 ; cot:maxInclusive 43.0 ; qu:unit qu:decibel ] ; ] ; ] ; cot:coolingCapacity [ cot:oneOf ( 12000 18000 22000 ) ; qu:unit unit:btu; ] ; cot:port 19 ;  cot:objectId 8766262; cot:IpAddress 167837715 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 59 ,
+  "tripleCount" : 59 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:DellXPSDesktop8960 a cot:Computer, owl:NamedIndividual ; rdfs:seeAlso <https://www.dell.com/pt-br/shop/computadores-all-in-ones-e-workstations/xps-desktop/spd/xps-8960-desktop/x8960w10w> ; cot:networkInterface [ a cot:WiFiInterface ; ] ; cot:networkInterface [ a cot:BluetoothInterface ; ] ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 17.30; qu:unit unit:centimetre ] ; cot:height [ cot:value 37.29 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 42.69 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 13.34 ; qu:unit unit:kilogram ] ; cot:warranty [ cot:value 4 ; qu:unit unit:year ] ; cot:powerSupply [ a cot:ACPowerSupply ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837697
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 13608606
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:DellXPSDesktop8960 a cot:Computer, owl:NamedIndividual ; rdfs:seeAlso <https://www.dell.com/pt-br/shop/computadores-all-in-ones-e-workstations/xps-desktop/spd/xps-8960-desktop/x8960w10w> ; cot:networkInterface [ a cot:WiFiInterface ; ] ; cot:networkInterface [ a cot:BluetoothInterface ; ] ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 17.30; qu:unit unit:centimetre ] ; cot:height [ cot:value 37.29 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 42.69 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 13.34 ; qu:unit unit:kilogram ] ; cot:warranty [ cot:value 4 ; qu:unit unit:year ] ; cot:powerSupply [ a cot:ACPowerSupply ] ; cot:port 19 ;  cot:objectId 13608606; cot:IpAddress 167837697 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 29 ,
+  "tripleCount" : 29 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:TVSamsungNeoQLED4K a cot:SmartTelevision, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/tvs/qled-tv/qn85d-55-inch-neo-qled-4k-tizen-os-smart-tv-qn55qn85dbgxzd/> ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:BluetoothInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:name "SmartThings" ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ]; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837700
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 12187698
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:TVSamsungNeoQLED4K a cot:SmartTelevision, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/tvs/qled-tv/qn85d-55-inch-neo-qled-4k-tizen-os-smart-tv-qn55qn85dbgxzd/> ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:BluetoothInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:name "SmartThings" ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ]; cot:port 19 ;  cot:objectId 12187698; cot:IpAddress 167837700 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 17 ,
+  "tripleCount" : 17 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+caminho que chegou no cotas:/subscribe/object
+dados no cotas: cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ; .
+Chegou requisição no servidor
+json que chegou do fuseki: (IP){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o IP: 167837702
+json que chegou do fuseki: (ID){"head":{"vars":["device"]},"results":{"bindings":[]}}
+Nenhum resultado encontrado para o ID: 3281545
+Payload pós tratamento: BASE         <http://nesped1.caf.ufv.br/od4cot>
+PREFIX cot:  <#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>
+PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>
+PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>
+PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>
+cot:AmazonEchoStudio a cot:SmartSpeaker, owl:NamedIndividual ; rdfs:seeAlso <https://www.amazon.com/Echo-Studio/dp/B07G9Y3ZMC> ; cot:shape [ a cot:Cylinder ; cot:radius [ cot:value  87.5 ; qu:unit unit:millimetre ] ; cot:height [ cot:value 206.0 ; qu:unit unit:millimetre ] ; ] ; cot:weight [ cot:value 3.5 ; qu:unit unit:kilogram ] ; cot:contains [ cot:component [ a cot:Tweeter ; cot:shape [ cot:radius 12.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:MidRangeSpeaker ; cot:shape [ cot:radius 25.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:cardinality 1 ; cot:component [ a cot:Woofer ; cot:shape [ cot:radius 66.5 ; qu:unit unit:millimetre ] ; ] ; ]; cot:contains [ cot:component [ a cot:AudioAmplifier ] ; ]; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:ZigBeeInterface ] ; cot:networkInterface [ a cot:MatterInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:warranty [ cot:value 1 ; qu:unit unit:year ] ; cot:port 19 ;  cot:objectId 3281545; cot:IpAddress 167837702 ; .
+Inseriu dados no fuseki? 200
+application/json;charset=utf-8
+{ 
+  "count" : 53 ,
+  "tripleCount" : 53 ,
+  "quadCount" : 0
+}
+
+Enviando resposta do servidor
+Chegou resposta do servidor no provedor
+RTT: 0.0375824 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0385495 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0415327 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0418057 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0420698 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0424808 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0438369 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0442479 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0446679 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.044878 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0476413 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0478153 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0479714 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0481634 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0483104 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0489735 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0491565 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0493395 segundos.
+Chegou resposta do servidor no provedor
+RTT: 0.0496036 segundos.
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de inscrição
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+Selecionou dados de atualização
+Enviou dados do provedor para cotas
+caminho que chegou no cotas:/update/object
+dados no cotas: {"id":7319808,"object":"cot:SmartCamera","req":"update","state.angle":270,"state.turnedOn":1}
+Chegou requisição no servidor
+terminate called after throwing an instance of 'mongocxx::v_noabi::logic_error'
+  what():  invalid use of default constructed or moved-from mongocxx::database object

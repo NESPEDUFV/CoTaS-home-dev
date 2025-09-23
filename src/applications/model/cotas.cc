@@ -529,8 +529,9 @@ CoTaS::ValidateIP_Q(Address ip)
         std::ostringstream sparql_stream;
         sparql_stream << "BASE <http://nesped1.caf.ufv.br/od4cot> "
                       << "PREFIX cot:  <#> "
-                      << "SELECT ?device WHERE { "
+                      << "SELECT ?device ?id WHERE { "
                       << "  ?device cot:IpAddress \"" << ip_num << "\" . "
+                      << "  ?device cot:objectId ?id ."
                       << "}";
         std::string sparql_query = sparql_stream.str();
 
@@ -560,16 +561,22 @@ CoTaS::ValidateIP_Q(Address ip)
                     return 0;
                 } else 
                 {
-                    NS_LOG_INFO("Resultados encontrados: TODO: fazer esse passo IP");
+                    NS_LOG_INFO("Resultados encontrados: ");
+                    NS_LOG_INFO("bindings " << bindings.dump());
                     // Itera sobre cada "linha" de resultado
                     // aqui é pra ter só um 
                     // não há iteração
-                    NS_LOG_INFO("bindings " << bindings.dump());
-                    // for (const auto& item : bindings) {
-                    //     // Pega o valor da variável "?device"
-                    //     std::string device_uri = item["device"]["value"];
-                    //     NS_LOG_INFO(" - Dispositivo: " << device_uri );
-                    // }
+                    for (const auto& item : bindings) 
+                    {
+                        // Pega o valor da variável "?device"
+                        std::string raw_id = item["id"]["value"];
+                        int id = std::stoi(raw_id);
+
+                        NS_LOG_INFO("Dispositivo de IP: " << ip_num 
+                                    << "já cadastrado com id" << id 
+                                    << ", reenviando");
+                        return id;
+                    }
                 }
             } catch (const nlohmann::json::parse_error& e) 
             {
@@ -638,16 +645,8 @@ CoTaS::ValidateID_Q(int id)
                     return 0;
                 } else 
                 {
-                    NS_LOG_INFO("Resultados encontrados: TODO: fazer esse passo ID");
-                    // Itera sobre cada "linha" de resultado
-                    // aqui é pra ter só um 
-                    // não há iteração
-                    NS_LOG_INFO("bindings " << bindings.dump());
-                    // for (const auto& item : bindings) {
-                    //     // Pega o valor da variável "?device"
-                    //     std::string device_uri = item["device"]["value"];
-                    //     NS_LOG_INFO(" - Dispositivo: " << device_uri );
-                    // }
+                    NS_LOG_INFO("Dispositivo já registrado " << bindings.dump());
+                    return id;
                 }
             } catch (const nlohmann::json::parse_error& e) 
             {
@@ -698,11 +697,13 @@ CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
     payload = payload+idip;
     payload = prefix+payload;
 
-    //NS_LOG_INFO("Payload pós tratamento: " << payload);
-    // tratar rslashing ta indo com....
+    NS_LOG_INFO("Payload pós tratamento: " << payload);
 
     if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
+        if(res->status != 200){
+            NS_LOG_INFO("======\nDEU PAU AQUI\n======");
+        }
         NS_LOG_INFO("Inseriu dados no fuseki? " << res->status << "\n" 
                     << res->get_header_value("Content-Type") << "\n" 
                     << res->body);
