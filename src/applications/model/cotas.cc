@@ -90,19 +90,11 @@ CoTaS::StartApplication()
         // faz put dos dados iniciais
         SetupDatabase();
 
-        mongocxx::uri uri("mongodb://localhost:27017/");
-        m_client.emplace(uri);
-        std::string nome_banco = "cotas_db";
-
-        SetupDatabase_old(*m_client, nome_banco);
-
-        NS_LOG_INFO("Tentando pingar no servidor de dados:");
-        m_bancoMongo.run_command(bsoncxx::from_json(R"({ "ping": 1 })"));
         NS_LOG_INFO("Banco de dados criado e conectado com sucesso.");
     }
-    catch (const mongocxx::exception& e)
+    catch ( const std::exception& e )
     {
-        NS_LOG_ERROR("An exception occurred: " << e.what());
+        NS_LOG_ERROR("An exception occurred in setup database " << e.what() );
         return;
     }
 
@@ -270,7 +262,6 @@ CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
 {
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
-    data_json.erase("req");
     if (valida)
     {
         // ip já inscrito, manda o id novamente.
@@ -529,18 +520,67 @@ CoTaS::ValidateIP_Q(Address ip)
 {
     try
     {
-        auto collection = m_bancoMongo["object"];
-        uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-        nlohmann::json j_query = {{"ip", ip_num}};
-        std::string json_string = j_query.dump();
+        // fazer requisição de dados no fuseki
 
-        auto bson_query = bsoncxx::from_json(json_string);
-        auto result = collection.find_one(bson_query.view());
-        if (result)
+        uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
+
+        std::ostringstream sparql_stream;
+        sparql_stream << "BASE <http://nesped1.caf.ufv.br/od4cot> "
+                      << "PREFIX cot:  <#> "
+                      << "SELECT ?device WHERE { "
+                      << "  ?device cot:IpAddress \"" << ip_num << "\" . "
+                      << "}";
+        std::string sparql_query = sparql_stream.str();
+
+        httplib::Params params;
+        params.emplace("query", sparql_query);
+
+        httplib::Headers headers = {
+            { "Accept", "application/sparql-results+json" }
+        };
+
+        // envia a query para o fuseki
+        auto res = m_cli.Post("/dataset/query", headers, params);
+        
+        if (res && res->status == httplib::OK_200) 
         {
-            auto view = (*result).view();
-            int id_retornado = view["id"].get_int32().value;
-            return id_retornado;
+            try 
+            {
+                // Parse da string da resposta para um objeto JSON
+                nlohmann::json j = nlohmann::json::parse(res->body);
+                NS_LOG_INFO("json que chegou do fuseki: (IP)" << j.dump());
+
+                const auto& bindings = j["results"]["bindings"];
+
+                if (bindings.empty()) 
+                {
+                    NS_LOG_INFO("Nenhum resultado encontrado para o IP: " << ip_num );
+                    return 0;
+                } else 
+                {
+                    NS_LOG_INFO("Resultados encontrados: TODO: fazer esse passo IP");
+                    // Itera sobre cada "linha" de resultado
+                    // aqui é pra ter só um 
+                    // não há iteração
+                    NS_LOG_INFO("bindings " << bindings.dump());
+                    // for (const auto& item : bindings) {
+                    //     // Pega o valor da variável "?device"
+                    //     std::string device_uri = item["device"]["value"];
+                    //     NS_LOG_INFO(" - Dispositivo: " << device_uri );
+                    // }
+                }
+            } catch (const nlohmann::json::parse_error& e) 
+            {
+                NS_LOG_ERROR("Erro no parse da resposta JSON: " << e.what());
+                NS_LOG_ERROR("Resposta recebida: " << res->body);
+                return 0;
+            }
+        } else 
+        {
+            NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+                "\n cabeçalho:" << res->get_header_value("Content-Type") << 
+                "\n corpo:" << res->body);
+            NS_LOG_INFO("error code: " << res.error());
         }
     }
     catch (const std::exception& e)
@@ -557,18 +597,75 @@ CoTaS::ValidateIP_Q(Address ip)
 // se não, retorna 0
 int
 CoTaS::ValidateID_Q(int id)
-{
-    auto collection = m_bancoMongo["object"];
-    nlohmann::json j_query = {{"id", id}};
-
-    std::string json_string = j_query.dump();
-    auto bson_query = bsoncxx::from_json(json_string);
-    auto result = collection.find_one(bson_query.view());
-    if (result)
+{   
+    try
     {
-        auto view = (*result).view();
-        int id_retornado = view["id"].get_int32().value;
-        return id_retornado;
+        // fazer requisição de dados no fuseki
+
+        std::ostringstream sparql_stream;
+        sparql_stream << "BASE <http://nesped1.caf.ufv.br/od4cot> "
+                      << "PREFIX cot:  <#> "
+                      << "SELECT ?device WHERE { "
+                      << "  ?device cot:objectId \"" << id << "\" . "
+                      << "}";
+        std::string sparql_query = sparql_stream.str();
+
+        httplib::Params params;
+        params.emplace("query", sparql_query);
+
+        httplib::Headers headers = {
+            { "Accept", "application/sparql-results+json" }
+        };
+
+        // envia a query para o fuseki
+        auto res = m_cli.Post("/dataset/query", headers, params);
+        
+        if (res && res->status == httplib::OK_200) 
+        {
+            try 
+            {
+                // Parse da string da resposta para um objeto JSON
+                nlohmann::json j = nlohmann::json::parse(res->body);
+                NS_LOG_INFO("json que chegou do fuseki: (ID)" << j.dump());
+
+                const auto& bindings = j["results"]["bindings"];
+
+                if (bindings.empty()) 
+                {
+                    NS_LOG_INFO("Nenhum resultado encontrado para o ID: " << id );
+                    return 0;
+                } else 
+                {
+                    NS_LOG_INFO("Resultados encontrados: TODO: fazer esse passo ID");
+                    // Itera sobre cada "linha" de resultado
+                    // aqui é pra ter só um 
+                    // não há iteração
+                    NS_LOG_INFO("bindings " << bindings.dump());
+                    // for (const auto& item : bindings) {
+                    //     // Pega o valor da variável "?device"
+                    //     std::string device_uri = item["device"]["value"];
+                    //     NS_LOG_INFO(" - Dispositivo: " << device_uri );
+                    // }
+                }
+            } catch (const nlohmann::json::parse_error& e) 
+            {
+                NS_LOG_ERROR("Erro no parse da resposta JSON: " << e.what());
+                NS_LOG_ERROR("Resposta recebida: " << res->body);
+                return 0;
+            }
+        } else 
+        {
+            NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+                "\n cabeçalho:" << res->get_header_value("Content-Type") << 
+                "\n corpo:" << res->body);
+            NS_LOG_INFO("error code: " << res.error());
+        }
+    }
+    catch (const std::exception& e)
+    {
+        NS_LOG_INFO("Exceção: " << e.what());
+        abort();
+        return 0;
     }
     return 0;
 }
@@ -576,23 +673,58 @@ CoTaS::ValidateID_Q(int id)
 int
 CoTaS::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
 {
-    auto collection = m_bancoMongo["object"];
     uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
+    std::string payload = data_json.dump(); 
 
-    data_json["id"] = id;
-    data_json["ip"] = ip_num;
+    // trata payload adicionando id e ip
+    std::string idip = " cot:id " + std::to_string(id) + 
+                       "; cot:ip " + std::to_string(ip_num) + " ; .";
 
-    std::string json_string = data_json.dump();
-    try
+    std::string prefix = "BASE         <http://nesped1.caf.ufv.br/od4cot>\n"
+                         "PREFIX cot:  <#>\n"
+                         "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                         "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+                         "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+                         "PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\n"
+                         "PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\n"
+                         "PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\n"
+                         "PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\n";
+
+    payload.erase(payload.find_last_of("."));
+    payload.erase(0, 1); // tirando um " fdm
+    payload = payload+idip;
+    payload = prefix+payload;
+
+    NS_LOG_INFO("Payload pós tratamento: " << payload);
+    
+    if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
-        auto bson_documento = bsoncxx::from_json(json_string);
-        auto result = collection.insert_one(bson_documento.view());
-    }
-    catch (const std::exception& e)
+        NS_LOG_INFO("Inseriu dados no fuseki " << res->status << "\n" 
+                    << res->get_header_value("Content-Type") << "\n" 
+                    << res->body);
+    } else 
     {
-        NS_LOG_INFO("Exceção: " << e.what());
-        return 0;
+        NS_LOG_INFO("error code: " << res.error());
     }
+
+    // auto collection = m_bancoMongo["object"];
+    // uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
+
+    // data_json["id"] = id;
+    // data_json["ip"] = ip_num;
+
+    // std::string json_string = data_json.dump();
+    // try
+    // {
+    //     auto bson_documento = bsoncxx::from_json(json_string);
+    //     auto result = collection.insert_one(bson_documento.view());
+    // }
+    // catch (const std::exception& e)
+    // {
+    //     NS_LOG_INFO("Exceção: " << e.what());
+    //     return 0;
+    // }
 
     return 1;
 }

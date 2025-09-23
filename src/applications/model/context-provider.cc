@@ -95,7 +95,7 @@ ContextProvider::ContextProvider()
       m_sendEvent{},
       m_objectId{0}
 {
-    std::ifstream fm("all_data/messages2.json");
+    std::ifstream fm("all_data/messages3.json");
 
     if (fm.is_open())
     {
@@ -396,9 +396,9 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 void
 ContextProvider::SetDataMessage()
 {   
-
+    NS_LOG_INFO("tenta setar mensagem");
     m_firstData = m_messages["firstMessages"][m_objectType];
-    m_firstData["port"] = 19;
+    NS_LOG_INFO("seta mensagem" << m_firstData.dump());
     m_updateData = m_messages["updateMessages"][m_objectType];
     
 }

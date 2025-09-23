@@ -5778,6 +5778,15 @@ cot:DellXPSDesktop8960 a cot:Computer, owl:NamedIndividual ;
     cot:networkInterface [
         a cot:BluetoothInterface ;
     ] ;
+    cot:shape [
+        a cot:RectBox ;
+        cot:width  [ cot:value 17.30; qu:unit unit:centimetre ] ;
+        cot:height [ cot:value 37.29 ; qu:unit unit:centimetre ] ;
+        cot:length [ cot:value 42.69 ; qu:unit unit:centimetre ] ;
+    ] ;
+    cot:weight [ cot:value 13.34 ; qu:unit unit:kilogram ] ;
+    cot:warranty [ cot:value 4 ; qu:unit unit:year ] ;
+    cot:powerSupply [ a cot:ACPowerSupply ] ;
     .
 
 cot:DellEdgeGateway3000 a cot:Computer, owl:NamedIndividual ;
