@@ -32,7 +32,9 @@ typedef struct encoded_data{
 encoded_data EncodePduRequest( const char *uri_path, coap_pdu_code_t request_code, 
       std::string data);
 
-nlohmann::json GetPduPayload(coap_pdu_t* pdu);
+nlohmann::json GetPduPayloadJson(coap_pdu_t* pdu);
+
+std::string GetPduPayloadString(coap_pdu_t* pdu);
 
 std::string GetPduPath(coap_pdu_t* pdu);
 

@@ -79,17 +79,17 @@ class CoTaS : public SinkApplication
 
     nlohmann::json HandleSubscription( 
       Address from,
-      nlohmann::json data_json
+      std::string data_json
     );
 
     nlohmann::json HandleUpdate( 
       Address from,
-      nlohmann::json data_json
+      std::string data_json
     );
 
     nlohmann::json HandleRequest( 
       Address from,
-      nlohmann::json data_json
+      std::string data_json
     );
 
     int RandomInt(int min, int max);
@@ -106,7 +106,7 @@ class CoTaS : public SinkApplication
 
     int Simple_Q();
 
-    int InsertDataSub_Q(int id, Address ip, nlohmann::json data_json);
+    int InsertDataSub_Q(int id, Address ip, std::string payload);
 
     void StartHandlerDict();
 
@@ -115,7 +115,7 @@ class CoTaS : public SinkApplication
     std::optional<mongocxx::client> m_client;
     
     
-    using HandlersFunctions = std::function<nlohmann::json(Address, nlohmann::json)>;
+    using HandlersFunctions = std::function<nlohmann::json(Address, std::string)>;
     std::unordered_map<std::string, HandlersFunctions> m_handlerDict;
     
     uint8_t m_tos;         //!< The packets Type of Service

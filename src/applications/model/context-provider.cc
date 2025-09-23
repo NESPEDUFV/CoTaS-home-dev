@@ -282,6 +282,9 @@ ContextProvider::Send()
     {
     case 0:
         data = m_firstData.dump();
+        data.erase(0, 1);
+        data.erase(data.find_last_of("\""));
+        NS_LOG_INFO("dados que saem do provedor: " << data);
         uri_path = "/subscribe/object";
         request_code = COAP_REQUEST_CODE_POST;
 
@@ -348,7 +351,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 
         pdu_code = coap_pdu_get_code(pdu);
         
-        data_json = GetPduPayload(pdu);
+        data_json = GetPduPayloadJson(pdu);
 
         NS_LOG_INFO("Chegou resposta do servidor no provedor");
         switch (pdu_code)

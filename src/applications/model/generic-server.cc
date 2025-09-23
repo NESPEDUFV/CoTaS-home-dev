@@ -205,7 +205,7 @@ GenericServer::HandleRead(Ptr<Socket> socket)
                 abort();
             }
 
-            data = GetPduPayload(pdu);
+            data = GetPduPayloadJson(pdu);
             //* acaba aqui
 
             NS_LOG_INFO("Chegou requisição de dados no objeto inteligente");

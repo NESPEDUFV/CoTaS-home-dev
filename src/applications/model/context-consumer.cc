@@ -358,7 +358,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
 
         pdu_code = coap_pdu_get_code(pdu);
         
-        data_json = GetPduPayload(pdu);
+        data_json = GetPduPayloadJson(pdu);
 
         switch (pdu_code)
         {

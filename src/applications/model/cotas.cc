@@ -201,7 +201,7 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             std::string path;
             nlohmann::json response_data;
             TimestampTag timestampTag;
-            nlohmann::json data;
+            std::string data;
             encoded_data data_pdu;
             Ptr<Packet> response;
 
@@ -215,10 +215,10 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             }
             
             path = GetPduPath(pdu);
-            // NS_LOG_INFO("caminho que chegou no cotas:" << path);
+            NS_LOG_INFO("caminho que chegou no cotas:" << path);
 
-            data = GetPduPayload(pdu);
-            // NS_LOG_INFO("json resultante: " << data.dump());
+            data = GetPduPayloadString(pdu);
+            NS_LOG_INFO("dados no cotas: " << data);
             
             NS_LOG_INFO("Chegou requisição no servidor");
             if(m_handlerDict.count(path)){ // existe a operação que responde a requisição:
@@ -258,7 +258,7 @@ CoTaS::HandleRead(Ptr<Socket> socket)
 }
 
 nlohmann::json
-CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
+CoTaS::HandleSubscription(Address from, std::string data_json)
 {
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
@@ -295,103 +295,104 @@ CoTaS::HandleSubscription(Address from, nlohmann::json data_json)
 }
 
 nlohmann::json
-CoTaS::HandleUpdate(Address from, nlohmann::json data_json)
+CoTaS::HandleUpdate(Address from, std::string data_json)
 {
     auto collection = m_bancoMongo["object"];
     // verifica se id é válido
-    int id = data_json["id"];
-    data_json.erase("id");
-    data_json.erase("req");
-    data_json.erase("object");
-    if (!ValidateID_Q(id))
-    {
-        // id inválido
-        nlohmann::json res = {
-            {"status", COAP_RESPONSE_CODE_UNAUTHORIZED},
-        };
+    // int id = data_json["id"];
+    // data_json.erase("id");
+    // data_json.erase("req");
+    // data_json.erase("object");
+    // if (!ValidateID_Q(id))
+    // {
+    //     // id inválido
+    //     nlohmann::json res = {
+    //         {"status", COAP_RESPONSE_CODE_UNAUTHORIZED},
+    //     };
 
-        return res;
-    }
+    //     return res;
+    // }
 
-    auto query_filter = make_document(kvp("id", id));
-    std::string json_string = data_json.dump();
-    try
-    {
-        auto bson_documento = bsoncxx::from_json(json_string);
-        auto update_doc = make_document(kvp("$set", bson_documento));
+    // auto query_filter = make_document(kvp("id", id));
+    // // std::string json_string = data_json.dump();
+    // try
+    // {
+    //     auto bson_documento = bsoncxx::from_json(json_string);
+    //     auto update_doc = make_document(kvp("$set", bson_documento));
 
-        auto result = collection.update_one(query_filter.view(), update_doc.view());
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        abort();
-        nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
-                            {"msg", "Erro na consulta dso dados"}};
+    //     auto result = collection.update_one(query_filter.view(), update_doc.view());
+    // }
+    // catch (const std::exception& e)
+    // {
+    //     NS_LOG_INFO("Exceção: " << e.what());
+    //     abort();
+    //     nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
+    //                         {"msg", "Erro na consulta dso dados"}};
         
-        return res;
-    }
+    //     return res;
+    // }
 
     // retorna status ok ou error
-    nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CHANGED}, {"id", id}};
+    // nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CHANGED}, {"id", id}};
 
-    return res;
+    // return res;
 }
 
 nlohmann::json
-CoTaS::HandleRequest(Address from, nlohmann::json data_json)
+CoTaS::HandleRequest(Address from, std::string data_json)
 {
     auto collection = m_bancoMongo["object"];
-    nlohmann::json res = nlohmann::json::array();
-    nlohmann::json cap;
-    std::vector<bsoncxx::document::value> resultados;
+    // nlohmann::json res = nlohmann::json::array();
+    // nlohmann::json cap;
+    // std::vector<bsoncxx::document::value> resultados;
 
-    std::string json_string = data_json["query"].dump();
-    if (json_string.empty())
-    {
-        cap = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}, {"info", "bad request"}};
-        NS_LOG_INFO("Consumidor enviou cabeçalho errado");
+    // std::string json_string = data_json["query"].dump();
+    // if (json_string.empty())
+    // {
+    //     cap = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}, {"info", "bad request"}};
+    //     NS_LOG_INFO("Consumidor enviou cabeçalho errado");
 
-        return cap;
-    }
-    auto bson_query = bsoncxx::from_json(json_string);
+    //     return cap;
+    // }
+    // auto bson_query = bsoncxx::from_json(json_string);
 
-    mongocxx::options::find opts{};
-    auto projection_doc = make_document(kvp("ip", 1), kvp("port", 1));
-    opts.projection(projection_doc.view());
+    // mongocxx::options::find opts{};
+    // auto projection_doc = make_document(kvp("ip", 1), kvp("port", 1));
+    // opts.projection(projection_doc.view());
 
-    auto cursor = collection.find(bson_query.view(), opts);
+    // auto cursor = collection.find(bson_query.view(), opts);
 
-    // libera o cursor o quanto antes
-    try
-    {
-        for (auto&& doc : cursor)
-        {
-            resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
-        }
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        abort();
-        nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
-                                {"msg", "Erro na consulta dso dados"}};
+    // // libera o cursor o quanto antes
+    // try
+    // {
+    //     for (auto&& doc : cursor)
+    //     {
+    //         resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
+    //     }
+    // }
+    // catch (const std::exception& e)
+    // {
+    //     NS_LOG_INFO("Exceção: " << e.what());
+    //     abort();
+    //     nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
+    //                             {"msg", "Erro na consulta dso dados"}};
         
-        return res;
-    }
+    //     return res;
+    // }
 
-    // faz a lógica que precisa
-    for (const auto& doc_value : resultados)
-    {
-        std::string json_db = bsoncxx::to_json(doc_value.view());
-        res.push_back(nlohmann::json::parse(json_db));
-    }
-    // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
-    cap = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", res}};
+    // // faz a lógica que precisa
+    // for (const auto& doc_value : resultados)
+    // {
+    //     std::string json_db = bsoncxx::to_json(doc_value.view());
+    //     res.push_back(nlohmann::json::parse(json_db));
+    // }
+    // // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
+    // cap = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", res}};
 
-    return cap;
+    // return cap;
 
     // retorna dados
+    
 }
 
 void
@@ -671,15 +672,15 @@ CoTaS::ValidateID_Q(int id)
 }
 
 int
-CoTaS::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
+CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
 {
     uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-    std::string payload = data_json.dump(); 
 
     // trata payload adicionando id e ip
     std::string idip = " cot:id " + std::to_string(id) + 
                        "; cot:ip " + std::to_string(ip_num) + " ; .";
-
+    
+    // adiciona os prefixos necessários 
     std::string prefix = "BASE         <http://nesped1.caf.ufv.br/od4cot>\n"
                          "PREFIX cot:  <#>\n"
                          "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
@@ -691,40 +692,22 @@ CoTaS::InsertDataSub_Q(int id, Address ip, nlohmann::json data_json)
                          "PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\n"
                          "PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\n";
 
+    // junta tudo
     payload.erase(payload.find_last_of("."));
-    payload.erase(0, 1); // tirando um " fdm
     payload = payload+idip;
     payload = prefix+payload;
 
-    NS_LOG_INFO("Payload pós tratamento: " << payload);
-    
+    //NS_LOG_INFO("Payload pós tratamento: " << payload);
+
     if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
-        NS_LOG_INFO("Inseriu dados no fuseki " << res->status << "\n" 
+        NS_LOG_INFO("Inseriu dados no fuseki? " << res->status << "\n" 
                     << res->get_header_value("Content-Type") << "\n" 
                     << res->body);
     } else 
     {
         NS_LOG_INFO("error code: " << res.error());
     }
-
-    // auto collection = m_bancoMongo["object"];
-    // uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
-
-    // data_json["id"] = id;
-    // data_json["ip"] = ip_num;
-
-    // std::string json_string = data_json.dump();
-    // try
-    // {
-    //     auto bson_documento = bsoncxx::from_json(json_string);
-    //     auto result = collection.insert_one(bson_documento.view());
-    // }
-    // catch (const std::exception& e)
-    // {
-    //     NS_LOG_INFO("Exceção: " << e.what());
-    //     return 0;
-    // }
 
     return 1;
 }

@@ -1,4 +1,5 @@
 #include "encapsulated-coap.h"
+#include <iostream>
 
 encoded_data 
 EncodePduRequest(const char *uri_path, 
@@ -84,7 +85,7 @@ GetPduPath(coap_pdu_t* pdu)
 }
 
 nlohmann::json
-GetPduPayload(coap_pdu_t* pdu)
+GetPduPayloadJson(coap_pdu_t* pdu)
 {
     const uint8_t *pdu_data;
     size_t pdu_data_offset;
@@ -98,5 +99,26 @@ GetPduPayload(coap_pdu_t* pdu)
         printf("Ocorreu um erro ao pega o payload");
         abort();
     }
+    std::string payload (reinterpret_cast<const char*>(pdu_data), pdu_data_total_length);
+    std::clog << "testando payload: " << payload;
     return nlohmann::json::parse(pdu_data, pdu_data + pdu_data_total_length);
+}
+
+std::string
+GetPduPayloadString(coap_pdu_t* pdu)
+{
+    const uint8_t *pdu_data;
+    size_t pdu_data_offset;
+    size_t pdu_data_total_length;
+    size_t pdu_data_length;
+    uint8_t check;
+    check = coap_get_data_large(pdu, &pdu_data_length, &pdu_data,
+                            &pdu_data_offset, &pdu_data_total_length);
+
+    if(!check){
+        printf("Ocorreu um erro ao pega o payload");
+        abort();
+    }
+    std::string payload (reinterpret_cast<const char*>(pdu_data), pdu_data_total_length);
+    return payload;
 }
