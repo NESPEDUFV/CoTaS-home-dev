@@ -31,6 +31,7 @@
 #include <mongocxx/uri.hpp>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 #include <functional>
 #include <vector>
 
@@ -122,6 +123,7 @@ class CoTaS : public SinkApplication
     void UpdateElementHandler(std::ostringstream &sparql_delete,
                               std::ostringstream &sparql_insert,
                               std::ostringstream &sparql_where,
+                              std::unordered_set<std::string> &where_set,
                               std::string chave,
                               nlohmann::json valor);
 

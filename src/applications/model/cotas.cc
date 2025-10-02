@@ -299,6 +299,7 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 
     // TODO: tratar update
     nlohmann::json payload = GetPduPayloadJson(pdu);
+    nlohmann::json response;
     NS_LOG_INFO("payload em json que chegou: " << payload.dump() );
     
     // verifica se id é válido garante que o json tem id
@@ -316,20 +317,35 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
     // constroi mensagem
     std::string update_query = JsonToSparqlUpdateParser(payload);
     
-    NS_LOG_INFO("query obtida: \n" << update_query);
-    // abort();
+    // testar
+    NS_LOG_INFO("ultima query obtida: \n" << update_query);
 
     // envia consulta para o fuseki
-    // se deu erro
-    // nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
-    //                     {"msg", "Erro na consulta dso dados"}};
-     
-    // return res;
+
+    auto res = m_cli.Post("/dataset/update", update_query, "application/sparql-update");
+
+    // --- Verificar a resposta (código igual ao anterior) ---
+    if (res && (res->status == 200 || res->status == 204)) {
+        NS_LOG_INFO("DADOS ATUALIZADOS COM SUCESSO!");
+    } else {
+        NS_LOG_INFO("Erro na atualizacao");
+        if (res) {
+            NS_LOG_INFO("Status: " << res->status << " Body: " << res->body);
+        } else {
+            NS_LOG_INFO("Erro de conexao: " << httplib::to_string(res.error()));
+        }
+        
+        response = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}};
+        abort();
+        return response;
+    }
+
+
     
     // se não deu erro
-    nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CHANGED}};
-
-    return res;
+    response = {{"status", COAP_RESPONSE_CODE_CHANGED}};
+    abort();
+    return response;
 }
 
 nlohmann::json
@@ -786,6 +802,10 @@ CoTaS::JsonToSparqlUpdateParser(nlohmann::json payload){
     std::ostringstream sparql_delete;
     std::ostringstream sparql_insert;
     std::ostringstream sparql_where;
+
+    // Set usado para não criar linhas redundantes 
+    // na clausula where
+    std::unordered_set<std::string> where_set; 
     
     // inicia as clausulas
     sparql_delete << "DELETE { " ;
@@ -793,13 +813,13 @@ CoTaS::JsonToSparqlUpdateParser(nlohmann::json payload){
     sparql_where << "WHERE { ?device cot:objectId " << payload["objectId"] << " ." ;
 
     payload.erase("objectId");
-
     // preenche as clausulas
     for (auto& elemento : payload.items()) {
         std::string chave = elemento.key();
         nlohmann::json valor = elemento.value();
 
-        UpdateElementHandler(sparql_delete, sparql_insert, sparql_where, chave, valor);
+        UpdateElementHandler(sparql_delete, sparql_insert, sparql_where, 
+                             where_set, chave, valor);
     }
     
     // fecha as clausulas e junta elas
@@ -807,7 +827,8 @@ CoTaS::JsonToSparqlUpdateParser(nlohmann::json payload){
     sparql_insert << " }" ;
     sparql_where << " }" ;
     
-    std::string sparql_query =  sparql_delete.str() + "\n" +
+    std::string sparql_query =  SparqlPrefix() + "\n" +
+                                sparql_delete.str() + "\n" +
                                 sparql_insert.str() + "\n" +
                                 sparql_where.str();
     return sparql_query;
@@ -838,6 +859,7 @@ CoTaS::UpdateElementHandler(
     std::ostringstream &sparql_delete,
     std::ostringstream &sparql_insert,
     std::ostringstream &sparql_where,
+    std::unordered_set<std::string> &where_set,
     std::string chave,
     nlohmann::json valor
 ) {
@@ -848,6 +870,7 @@ CoTaS::UpdateElementHandler(
     int i_esq = 0;
     int i_dir = 0;
     std::vector<std::string> tokens;
+    
     for(auto& caractere : chave){
         // anda até encontrar um '.' ou um '/' e 
         // salva a palavra 
@@ -865,14 +888,17 @@ CoTaS::UpdateElementHandler(
     // variaveis iniciais 
     std::string node = "device";
     std::string oldValue = "oldValue";
-
+    std::string where_string;
     // se tiver apenas um token então é uma propriedade direta
     // constroi só o que precisa, bem simples e retorna
     if(tokens.size() == 1){
         oldValue+=tokens[0];
-        sparql_where << " ?" << node
-                << " cot:" << tokens[0] << " ?" << oldValue 
-                << " . ";
+        where_string = " ?" + node
+                + " cot:" + tokens[0] + " ?" + oldValue 
+                + " . ";
+        sparql_where << where_string ;
+
+        where_set.insert(where_string);
             
         sparql_delete << " ?" << node 
             << " cot:" << tokens[0] << " ?" 
@@ -892,18 +918,29 @@ CoTaS::UpdateElementHandler(
     SafeName(tokens, 1, safename);
 
     // Atribuição do nó inicial
-    sparql_where << " ?" << node
-        << " cot:" << tokens[0] << " ?" << node+tokens[0]+safename.back()
-        << " . ";
+    where_string = " ?" + node
+                    + " cot:" + tokens[0] + " ?" + node+tokens[0]+safename.back()
+                    + " . ";
+    
+    if(!where_set.count(where_string)){
+        sparql_where << where_string;
+        where_set.insert(where_string);
+    }
+
     node+=tokens[0]+safename.back();
     
     // percorre os nós emitindo variaveis de nome seguro
     // emite dados para '.' e '/' até o penultimo nó
-    for(size_t i = 0; i<tokens.size()-2;i++){
+    for(size_t i = 0; i<tokens.size()-3;i++){ // termina antes??
+        NS_LOG_INFO("Token[" << i << "] : " << tokens[i]);
         if(tokens[i+1] == "/")
         {
-            sparql_where << " ?" << node 
-                << " a cot:" << tokens[i+2] << " . ";
+            where_string = " ?" + node 
+                + " a cot:" + tokens[i+2] + " . ";
+            if(!where_set.count(where_string)){
+                sparql_where << where_string;
+                where_set.insert(where_string);
+            }
             if(safename.empty()) node += "a"+tokens[i+2];
             else safename.pop_back();
             i++;
@@ -911,9 +948,15 @@ CoTaS::UpdateElementHandler(
         else if (tokens[i+1] == ".")
         {
             SafeName(tokens, i+3, safename);
-            sparql_where << " ?" << node
-                << " cot:" << tokens[i+2] << " ?" 
-                << node+tokens[i+2]+safename.back() << " . "; 
+
+            where_string = " ?" + node
+                + " cot:" + tokens[i+2] + " ?" 
+                + node+tokens[i+2]+safename.back() + " . ";
+                
+            if(!where_set.count(where_string)){
+                sparql_where << where_string;
+                where_set.insert(where_string);
+            }
             node+=tokens[i+2]+safename.back();
             i++;
         }
@@ -926,9 +969,14 @@ CoTaS::UpdateElementHandler(
     
     oldValue += node;
 
-    sparql_where << " ?" << node
-        << " cot:" << tokens[ultimo] << " ?" << oldValue 
-        << " . ";
+    where_string = " ?" + node
+        + " cot:" + tokens[ultimo] + " ?" + oldValue 
+        + " . ";
+
+    if(!where_set.count(where_string)){
+        sparql_where << where_string;
+        where_set.insert(where_string);
+    }
     
     sparql_delete << " ?" << node 
         << " cot:" << tokens[ultimo] << " ?" 
@@ -937,7 +985,6 @@ CoTaS::UpdateElementHandler(
     sparql_insert << " ?" << node 
         << " cot:" << tokens[ultimo] << " " 
         << valor.dump() << " . ";
-            
 }
 
 // anda pelos tokens garantindo um bom nome
