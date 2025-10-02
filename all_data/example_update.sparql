@@ -1,0 +1,107 @@
+# UPDATE PARA COMPUTADOR    
+# {
+#     "objectId": null,
+#     "turnedOn": 1,
+#     "soundVolume": 100,
+#     "localization.latitude": 12,
+#     "localization.longitude": 13
+# }
+DELETE 
+    {   ?localizationNode cot:latitude ?oldLatitude .  
+        ?localizationNode cot:longitude ?oldLongitude .  
+        ?device cot:turnedOn ?oldTurnedOn .  
+        ?device cot:soundVolume ?oldsoundVolume . 
+    }
+INSERT 
+    {   ?device cot:turnedOn 1 .  
+        ?device cot:soundVolume 100 .  
+        ?localizationNode cot:latitude 11 .  
+        ?localizationNode cot:longitude 12 . 
+    }
+WHERE 
+    {   ?device cot:objectId <device_id> .  
+        ?device cot:localization ?localizationNode .  
+        ?localizationNode cot:latitude ?oldLatitude .  
+        ?localizationNode cot:longitude ?oldLongitude .  
+        ?device cot:turnedOn ?oldTurnedOn .  
+        ?device cot:soundVolume ?oldsoundVolume . 
+};
+
+DELETE 
+    {   ?localizationNode cot:latitude ?oldLatitude .
+        ?localizationNode cot:longitude ?oldLongitude .
+        ?device cot:turnedOn ?oldTurnedOn .
+        ?device cot:soundVolume ?oldsoundVolume .
+    }
+INSERT 
+    {   ?device cot:turnedOn 1 .
+        ?device cot:soundVolume 50 .
+        ?localizationNode cot:latitude 11 .
+        ?localizationNode cot:longitude 12 .
+    }
+WHERE 
+    {   ?device cot:objectId <device_id> .
+        ?device cot:localization ?localizationNode .
+        ?localizationNode cot:latitude ?oldLatitude .
+        ?localizationNode cot:longitude ?oldLongitude .
+        ?device cot:turnedOn ?oldTurnedOn .
+        ?device cot:soundVolume ?oldsoundVolume .
+    };
+
+DELETE 
+    {   ?localizationNode cot:latitude ?oldLatitude .
+        ?localizationNode cot:longitude ?oldLongitude .
+        ?device cot:turnedOn ?oldTurnedOn .
+        ?device cot:soundVolume ?oldsoundVolume .
+    }
+INSERT 
+    {   ?device cot:turnedOn 1 .
+        ?device cot:soundVolume 0 .
+        ?localizationNode cot:latitude 11 .
+        ?localizationNode cot:longitude 12 .
+    }
+WHERE 
+    {   ?device cot:objectId <device_id> .
+        ?device cot:localization ?localizationNode .
+        ?localizationNode cot:latitude ?oldLatitude .
+        ?localizationNode cot:longitude ?oldLongitude .
+        ?device cot:turnedOn ?oldTurnedOn .
+        ?device cot:soundVolume ?oldsoundVolume .
+    };
+
+DELETE 
+    {  ?device cot:turnedOn ?oldTurnedOn .
+    }
+INSERT 
+    {  ?device cot:turnedOn 0 .
+    }
+WHERE 
+    {   ?device cot:objectId <device_id> .
+        ?device cot:turnedOn ?oldTurnedOn .
+    };
+
+DELETE 
+    {   ?devicephysicalStorageaClothesDrawervalue cot:value ?oldValuedevicephysicalStorageaClothesDrawervalue . 
+        ?devicephysicalStorageaCoatHangervalue cot:value ?oldValuedevicephysicalStorageaCoatHangervalue . 
+        ?device cot:turnedOn ?oldValueturnedOn . 
+        ?deviceweightCapacityvalue cot:value ?oldValuedeviceweightCapacityvalue . 
+    }
+INSERT 
+    {   ?devicephysicalStorageaClothesDrawervalue cot:value 1 . 
+        ?devicephysicalStorageaCoatHangervalue cot:value 0 .  
+        ?device cot:turnedOn 1 .  
+        ?deviceweightCapacityvalue cot:value 0 .  }
+WHERE 
+    {   ?device cot:objectId 2885983 . 
+        ?device cot:physicalStorage ?devicephysicalStorageaClothesDrawer .  
+        ?devicephysicalStorageaClothesDrawer a cot:ClothesDrawer .  
+        ?devicephysicalStorageaClothesDrawer cot:value ?devicephysicalStorageaClothesDrawervalue .  
+        ?devicephysicalStorageaClothesDrawervalue cot:value ?oldValuedevicephysicalStorageaClothesDrawervalue .  
+        ?device cot:physicalStorage ?devicephysicalStorageaCoatHanger .  
+        ?devicephysicalStorageaCoatHanger a cot:CoatHanger .  
+        ?devicephysicalStorageaCoatHanger cot:value ?devicephysicalStorageaCoatHangervalue .  
+        ?devicephysicalStorageaCoatHangervalue cot:value ?oldValuedevicephysicalStorageaCoatHangervalue .  
+        ?device cot:turnedOn ?oldValueturnedOn .  
+        ?device cot:weightCapacity ?deviceweightCapacity .  
+        ?deviceweightCapacity cot:value ?deviceweightCapacityvalue .  
+        ?deviceweightCapacityvalue cot:value ?oldValuedeviceweightCapacityvalue .  }

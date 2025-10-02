@@ -32,6 +32,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <functional>
+#include <vector>
 
 namespace ns3
 {
@@ -79,17 +80,17 @@ class CoTaS : public SinkApplication
 
     nlohmann::json HandleSubscription( 
       Address from,
-      std::string data_json
+      coap_pdu_t* pdu
     );
 
     nlohmann::json HandleUpdate( 
       Address from,
-      std::string data_json
+      coap_pdu_t* pdu
     );
 
     nlohmann::json HandleRequest( 
       Address from,
-      std::string data_json
+      coap_pdu_t* pdu
     );
 
     int RandomInt(int min, int max);
@@ -110,12 +111,26 @@ class CoTaS : public SinkApplication
 
     void StartHandlerDict();
 
+    std::string JsonToSparqlUpdateParser(nlohmann::json payload);
+
+    std::string SparqlPrefix();
+
+     
+    void SafeName(std::vector<std::string> tokens, 
+        size_t start_index, std::vector<std::string> &safename);
+
+    void UpdateElementHandler(std::ostringstream &sparql_delete,
+                              std::ostringstream &sparql_insert,
+                              std::ostringstream &sparql_where,
+                              std::string chave,
+                              nlohmann::json valor);
+
     mongocxx::v_noabi::database m_bancoMongo;
     mongocxx::instance m_instance{};
     std::optional<mongocxx::client> m_client;
     
     
-    using HandlersFunctions = std::function<nlohmann::json(Address, std::string)>;
+    using HandlersFunctions = std::function<nlohmann::json(Address, coap_pdu_t*)>;
     std::unordered_map<std::string, HandlersFunctions> m_handlerDict;
     
     uint8_t m_tos;         //!< The packets Type of Service

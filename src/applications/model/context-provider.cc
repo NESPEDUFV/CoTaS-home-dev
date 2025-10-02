@@ -399,9 +399,9 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 void
 ContextProvider::SetDataMessage()
 {   
-    NS_LOG_INFO("tenta setar mensagem");
+    // NS_LOG_INFO("tenta setar mensagem");
     m_firstData = m_messages["firstMessages"][m_objectType];
-    NS_LOG_INFO("seta mensagem" << m_firstData.dump());
+    // NS_LOG_INFO("seta mensagem" << m_firstData.dump());
     m_updateData = m_messages["updateMessages"][m_objectType];
     
 }
@@ -410,8 +410,8 @@ std::string
 ContextProvider::RandomData()
 {   
     nlohmann::json data = m_updateData[RandomInt(0, 3)];
-    data["id"] = m_objectId;
-    // add dados que variam com ns3 (localização)
+    data["objectId"] = m_objectId;
+    // add dados que variam com ns3 (ex: localização)
     return data.dump();
 }
 

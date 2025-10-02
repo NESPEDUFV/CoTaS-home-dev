@@ -217,14 +217,11 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             path = GetPduPath(pdu);
             NS_LOG_INFO("caminho que chegou no cotas:" << path);
 
-            data = GetPduPayloadString(pdu);
-            NS_LOG_INFO("dados no cotas: " << data);
-            
             NS_LOG_INFO("Chegou requisição no servidor");
             if(m_handlerDict.count(path)){ // existe a operação que responde a requisição:
                 // usa o dicionário de funções
                 HandlersFunctions handler = m_handlerDict[path];
-                response_data = handler(from, data);
+                response_data = handler(from, pdu);
 
             }else{
                 // não existe a operação 
@@ -258,8 +255,10 @@ CoTaS::HandleRead(Ptr<Socket> socket)
 }
 
 nlohmann::json
-CoTaS::HandleSubscription(Address from, std::string data_json)
+CoTaS::HandleSubscription(Address from, coap_pdu_t* pdu)
 {
+    std::string payload = GetPduPayloadString(pdu);
+
     // verifica se já foi feita inscrição pelo endereço de ip
     int valida = ValidateIP_Q(from);
     if (valida)
@@ -286,7 +285,7 @@ CoTaS::HandleSubscription(Address from, std::string data_json)
     }
 
     // insere dados json
-    InsertDataSub_Q(id, from, data_json);
+    InsertDataSub_Q(id, from, payload);
 
     // retorna status ok com id ou error sem id
     nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CREATED}, {"id", id}};
@@ -295,53 +294,48 @@ CoTaS::HandleSubscription(Address from, std::string data_json)
 }
 
 nlohmann::json
-CoTaS::HandleUpdate(Address from, std::string data_json)
+CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 {   
+
     // TODO: tratar update
-    auto collection = m_bancoMongo["object"];
-    // verifica se id é válido
-    // int id = data_json["id"];
-    // data_json.erase("id");
-    // data_json.erase("req");
-    // data_json.erase("object");
-    // if (!ValidateID_Q(id))
-    // {
-    //     // id inválido
-    //     nlohmann::json res = {
-    //         {"status", COAP_RESPONSE_CODE_UNAUTHORIZED},
-    //     };
-
-    //     return res;
-    // }
-
-    // auto query_filter = make_document(kvp("id", id));
-    // // std::string json_string = data_json.dump();
-    // try
-    // {
-    //     auto bson_documento = bsoncxx::from_json(json_string);
-    //     auto update_doc = make_document(kvp("$set", bson_documento));
-
-    //     auto result = collection.update_one(query_filter.view(), update_doc.view());
-    // }
-    // catch (const std::exception& e)
-    // {
-    //     NS_LOG_INFO("Exceção: " << e.what());
-    //     abort();
-    //     nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
-    //                         {"msg", "Erro na consulta dso dados"}};
+    nlohmann::json payload = GetPduPayloadJson(pdu);
+    NS_LOG_INFO("payload em json que chegou: " << payload.dump() );
+    
+    // verifica se id é válido garante que o json tem id
+    if (payload.contains("objectId") && !ValidateID_Q(payload["objectId"]))
+    {
+        // id inválido
+        NS_LOG_INFO("ID inválido, enviando mensagem de não autorizado");
+        nlohmann::json res = {
+            {"status", COAP_RESPONSE_CODE_UNAUTHORIZED},
+        };
         
-    //     return res;
-    // }
+        return res;
+    }
+    
+    // constroi mensagem
+    std::string update_query = JsonToSparqlUpdateParser(payload);
+    
+    NS_LOG_INFO("query obtida: \n" << update_query);
+    // abort();
 
-    // retorna status ok ou error
-    // nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CHANGED}, {"id", id}};
-
+    // envia consulta para o fuseki
+    // se deu erro
+    // nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
+    //                     {"msg", "Erro na consulta dso dados"}};
+     
     // return res;
+    
+    // se não deu erro
+    nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CHANGED}};
+
+    return res;
 }
 
 nlohmann::json
-CoTaS::HandleRequest(Address from, std::string data_json)
+CoTaS::HandleRequest(Address from, coap_pdu_t* payload)
 {
+    NS_LOG_INFO("chegou uma requisição de uma aplicação ");
     auto collection = m_bancoMongo["object"];
     // nlohmann::json res = nlohmann::json::array();
     // nlohmann::json cap;
@@ -388,9 +382,9 @@ CoTaS::HandleRequest(Address from, std::string data_json)
     //     res.push_back(nlohmann::json::parse(json_db));
     // }
     // // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
-    // cap = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", res}};
+    nlohmann::json cap = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", "só pra parar de chorar"}};
 
-    // return cap;
+    return cap;
 
     // retorna dados
     
@@ -488,30 +482,70 @@ CoTaS::SetupDatabase_old(mongocxx::client& client, std::string nome_banco)
 int
 CoTaS::Simple_Q()
 {
-    auto collection = m_bancoMongo["object"];
-    std::vector<bsoncxx::document::value> resultados;
-    auto cursor = collection.find({});
-
-    // libera o cursor o quanto antes
     try
     {
-        for (auto&& doc : cursor)
+        std::ostringstream sparql_stream;
+        sparql_stream << SparqlPrefix()
+                      << "SELECT ?device WHERE { "
+                      << "  ?device a cot:SmartObjectCategory . "
+                      << "}";
+        std::string sparql_query = sparql_stream.str();
+
+        httplib::Params params;
+        params.emplace("query", sparql_query);
+
+        httplib::Headers headers = {
+            { "Accept", "application/sparql-results+json" }
+        };
+
+        // envia a query para o fuseki
+        auto res = m_cli.Post("/dataset/query", headers, params);
+        
+        if (res && res->status == httplib::OK_200) 
         {
-            resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
+            try 
+            {
+                // Parse da string da resposta para um objeto JSON
+                nlohmann::json j = nlohmann::json::parse(res->body);
+
+                const auto& bindings = j["results"]["bindings"];
+
+                if (bindings.empty()) 
+                {
+                    NS_LOG_INFO("Nenhum resultado encontrado na simple query");
+                    return 0;
+                } else 
+                {
+                    NS_LOG_INFO("Resultados encontrados: ");
+                    NS_LOG_INFO("bindings " << bindings.dump());
+                    for (const auto& item : bindings) 
+                    {
+                        // Pega o valor da variável "?device"
+                        std::string value = item["device"]["value"];
+
+                        NS_LOG_INFO("dispositivo: " << value);
+                    }
+                }
+            } catch (const nlohmann::json::parse_error& e) 
+            {
+                NS_LOG_ERROR("Erro no parse da resposta JSON: " << e.what());
+                NS_LOG_ERROR("Resposta recebida: " << res->body);
+                return 0;
+            }
+        } else 
+        {
+            NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+                "\n cabeçalho:" << res->get_header_value("Content-Type") << 
+                "\n corpo:" << res->body);
+            NS_LOG_INFO("error code: " << res.error());
         }
     }
     catch (const std::exception& e)
     {
         NS_LOG_INFO("Exceção: " << e.what());
+        abort();
         return 0;
     }
-
-    // faz a lógica que precisa
-    for (const auto& doc_value : resultados)
-    {
-        std::cout << bsoncxx::to_json(doc_value) << std::endl;
-    }
-
     return 0;
 }
 
@@ -527,10 +561,9 @@ CoTaS::ValidateIP_Q(Address ip)
         uint32_t ip_num = InetSocketAddress::ConvertFrom(ip).GetIpv4().Get();
 
         std::ostringstream sparql_stream;
-        sparql_stream << "BASE <http://nesped1.caf.ufv.br/od4cot> "
-                      << "PREFIX cot:  <#> "
+        sparql_stream << SparqlPrefix()
                       << "SELECT ?device ?id WHERE { "
-                      << "  ?device cot:IpAddress \"" << ip_num << "\" . "
+                      << "  ?device cot:ipAddress " << ip_num << " . "
                       << "  ?device cot:objectId ?id ."
                       << "}";
         std::string sparql_query = sparql_stream.str();
@@ -551,7 +584,6 @@ CoTaS::ValidateIP_Q(Address ip)
             {
                 // Parse da string da resposta para um objeto JSON
                 nlohmann::json j = nlohmann::json::parse(res->body);
-                NS_LOG_INFO("json que chegou do fuseki: (IP)" << j.dump());
 
                 const auto& bindings = j["results"]["bindings"];
 
@@ -612,10 +644,9 @@ CoTaS::ValidateID_Q(int id)
         // fazer requisição de dados no fuseki
 
         std::ostringstream sparql_stream;
-        sparql_stream << "BASE <http://nesped1.caf.ufv.br/od4cot> "
-                      << "PREFIX cot:  <#> "
+        sparql_stream << SparqlPrefix()
                       << "SELECT ?device WHERE { "
-                      << "  ?device cot:objectId \"" << id << "\" . "
+                      << "  ?device cot:objectId " << id << " . "
                       << "}";
         std::string sparql_query = sparql_stream.str();
 
@@ -635,17 +666,17 @@ CoTaS::ValidateID_Q(int id)
             {
                 // Parse da string da resposta para um objeto JSON
                 nlohmann::json j = nlohmann::json::parse(res->body);
-                NS_LOG_INFO("json que chegou do fuseki: (ID)" << j.dump());
+                // NS_LOG_INFO("json que chegou do fuseki: (ID)" << j.dump());
 
                 const auto& bindings = j["results"]["bindings"];
 
                 if (bindings.empty()) 
                 {
-                    NS_LOG_INFO("Nenhum resultado encontrado para o ID: " << id );
+                    // NS_LOG_INFO("Nenhum resultado encontrado para o ID: " << id );
                     return 0;
                 } else 
                 {
-                    NS_LOG_INFO("Dispositivo já registrado " << bindings.dump());
+                    // NS_LOG_INFO("Dispositivo já registrado " << bindings.dump());
                     return id;
                 }
             } catch (const nlohmann::json::parse_error& e) 
@@ -678,37 +709,28 @@ CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
 
     // trata payload adicionando id e ip
     std::string idip = " cot:objectId " + std::to_string(id) + 
-                       "; cot:IpAddress " + std::to_string(ip_num) + " ; .";
+                       "; cot:ipAddress " + std::to_string(ip_num) + " ; .";
     
     // adiciona os prefixos necessários 
-    std::string prefix = "BASE         <http://nesped1.caf.ufv.br/od4cot>\n"
-                         "PREFIX cot:  <#>\n"
-                         "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
-                         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
-                         "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
-                         "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
-                         "PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\n"
-                         "PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\n"
-                         "PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\n"
-                         "PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\n";
 
     // junta tudo
     payload.erase(payload.find_last_of("."));
     payload = payload+idip;
-    payload = prefix+payload;
+    payload = SparqlPrefix()+payload;
 
-    NS_LOG_INFO("Payload pós tratamento: " << payload);
+    // NS_LOG_INFO("Payload pós tratamento: " << payload);
 
     if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
         if(res->status != 200){
             NS_LOG_INFO("======\nDEU PAU AQUI\n======");
+            NS_LOG_INFO("Inseriu dados no fuseki? " << res->status << "\n" 
+                << res->get_header_value("Content-Type") << "\n" 
+                << res->body);
         }
-        NS_LOG_INFO("Inseriu dados no fuseki? " << res->status << "\n" 
-                    << res->get_header_value("Content-Type") << "\n" 
-                    << res->body);
     } else 
     {
+        NS_LOG_INFO("Erro na inserção de dados no fuseki");
         NS_LOG_INFO("error code: " << res.error());
     }
 
@@ -728,20 +750,217 @@ CoTaS::RandomInt(int min, int max)
 
 void
 CoTaS::StartHandlerDict(){
-    m_handlerDict["/subscribe/object"] = [this](Address from, nlohmann::json data_json) {
-        return this->HandleSubscription(from, data_json);
+    m_handlerDict["/subscribe/object"] = [this](Address from, coap_pdu_t* pdu) {
+        return this->HandleSubscription(from, pdu);
     };
 
-    m_handlerDict["/subscribe/application"] = [this](Address from, nlohmann::json data_json) {
-        return this->HandleSubscription(from, data_json);
+    m_handlerDict["/subscribe/application"] = [this](Address from, coap_pdu_t* pdu) {
+        return this->HandleSubscription(from, pdu);
     };
 
-    m_handlerDict["/update/object"] = [this](Address from, nlohmann::json data_json) {
-        return this->HandleUpdate(from, data_json);
+    m_handlerDict["/update/object"] = [this](Address from, coap_pdu_t* pdu) {
+        return this->HandleUpdate(from, pdu);
     };
 
-    m_handlerDict["/search"] = [this](Address from, nlohmann::json data_json) {
-        return this->HandleRequest(from, data_json);
+    m_handlerDict["/search"] = [this](Address from, coap_pdu_t* pdu) {
+        return this->HandleRequest(from, pdu);
     };
 }
+
+std::string 
+CoTaS::JsonToSparqlUpdateParser(nlohmann::json payload){
+    // consultas sparql update é composo por 3 clausulas:
+    // - delete: apaga somente a informação que irá mudar
+    // - insert: insere somente a informação que irá mudar
+    // - where: anda pelos nós do grafo
+    //
+    // para conseguir fazer o parse "/" significa que o nó
+    // anterior a ele "é um nó" do que está depois dele
+    // ex: physicalStorage/CoatHanger
+    // esse physicalStorage é um CoatHanger
+    // cot:physicalStorage a cot:CoatHanger
+    // 
+    // no parse "." significa que está acessando um nó 
+    // mais profundo do grafo, avançando nele
+    
+    std::ostringstream sparql_delete;
+    std::ostringstream sparql_insert;
+    std::ostringstream sparql_where;
+    
+    // inicia as clausulas
+    sparql_delete << "DELETE { " ;
+    sparql_insert << "INSERT { " ;
+    sparql_where << "WHERE { ?device cot:objectId " << payload["objectId"] << " ." ;
+
+    payload.erase("objectId");
+
+    // preenche as clausulas
+    for (auto& elemento : payload.items()) {
+        std::string chave = elemento.key();
+        nlohmann::json valor = elemento.value();
+
+        UpdateElementHandler(sparql_delete, sparql_insert, sparql_where, chave, valor);
+    }
+    
+    // fecha as clausulas e junta elas
+    sparql_delete << " }" ;
+    sparql_insert << " }" ;
+    sparql_where << " }" ;
+    
+    std::string sparql_query =  sparql_delete.str() + "\n" +
+                                sparql_insert.str() + "\n" +
+                                sparql_where.str();
+    return sparql_query;
+}
+
+// prefixos usados na ontologia
+std::string 
+CoTaS::SparqlPrefix(){
+    std::string prefix = "BASE         <http://nesped1.caf.ufv.br/od4cot>\n"
+                         "PREFIX cot:  <#>\n"
+                         "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                         "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+                         "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+                         "PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\n"
+                         "PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\n"
+                         "PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\n"
+                         "PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\n";
+
+    return prefix;
+}
+
+// Transpilador de json para sparql
+// - separa em tokens (palavras ou / ou .)
+// constrói consulta de acordo com cada token 
+void 
+CoTaS::UpdateElementHandler(
+    std::ostringstream &sparql_delete,
+    std::ostringstream &sparql_insert,
+    std::ostringstream &sparql_where,
+    std::string chave,
+    nlohmann::json valor
+) {
+
+    // ------------------ ANALISE LEXICA ------------------
+    // obtem os tokens da chave fazendo um "split" em . e /
+   
+    int i_esq = 0;
+    int i_dir = 0;
+    std::vector<std::string> tokens;
+    for(auto& caractere : chave){
+        // anda até encontrar um '.' ou um '/' e 
+        // salva a palavra 
+        if(caractere == '.' || caractere == '/'){
+            tokens.push_back(chave.substr(i_esq, i_dir-i_esq));
+            i_esq = i_dir+1;
+            std::string s(1, caractere);
+            tokens.push_back(s);
+        }
+        i_dir++;
+    }
+    tokens.push_back(chave.substr(i_esq, i_dir));
+    
+    // ----------------- CONSTROI SINTAXE -----------------
+    // variaveis iniciais 
+    std::string node = "device";
+    std::string oldValue = "oldValue";
+
+    // se tiver apenas um token então é uma propriedade direta
+    // constroi só o que precisa, bem simples e retorna
+    if(tokens.size() == 1){
+        oldValue+=tokens[0];
+        sparql_where << " ?" << node
+                << " cot:" << tokens[0] << " ?" << oldValue 
+                << " . ";
+            
+        sparql_delete << " ?" << node 
+            << " cot:" << tokens[0] << " ?" 
+            << oldValue << " .";
+        
+        sparql_insert << " ?" << node 
+            << " cot:" << tokens[0] << " " 
+            << valor.dump() << " . ";
+        return;
+    }
+
+    // se tiver aninhamento de qualquer tipo
+    // então é mais complexo => tratar
+
+    // garante que não haja nome igual
+    std::vector<std::string> safename;
+    SafeName(tokens, 1, safename);
+
+    // Atribuição do nó inicial
+    sparql_where << " ?" << node
+        << " cot:" << tokens[0] << " ?" << node+tokens[0]+safename.back()
+        << " . ";
+    node+=tokens[0]+safename.back();
+    
+    // percorre os nós emitindo variaveis de nome seguro
+    // emite dados para '.' e '/' até o penultimo nó
+    for(size_t i = 0; i<tokens.size()-2;i++){
+        if(tokens[i+1] == "/")
+        {
+            sparql_where << " ?" << node 
+                << " a cot:" << tokens[i+2] << " . ";
+            if(safename.empty()) node += "a"+tokens[i+2];
+            else safename.pop_back();
+            i++;
+        }
+        else if (tokens[i+1] == ".")
+        {
+            SafeName(tokens, i+3, safename);
+            sparql_where << " ?" << node
+                << " cot:" << tokens[i+2] << " ?" 
+                << node+tokens[i+2]+safename.back() << " . "; 
+            node+=tokens[i+2]+safename.back();
+            i++;
+        }
+    }
+
+    // no ultimo token terá percorrido todo o grafo
+    // então alcança o valor antigo e faz a 
+    // substituição pelo novo valor
+    size_t ultimo = tokens.size()-1;
+    
+    oldValue += node;
+
+    sparql_where << " ?" << node
+        << " cot:" << tokens[ultimo] << " ?" << oldValue 
+        << " . ";
+    
+    sparql_delete << " ?" << node 
+        << " cot:" << tokens[ultimo] << " ?" 
+        << oldValue << " .";
+    
+    sparql_insert << " ?" << node 
+        << " cot:" << tokens[ultimo] << " " 
+        << valor.dump() << " . ";
+            
+}
+
+// anda pelos tokens garantindo um bom nome
+void
+CoTaS::SafeName(std::vector<std::string> tokens, 
+                size_t start_index, 
+                std::vector<std::string> &safename){
+    
+    // caso base
+    std::string name = "";
+    safename.push_back(name);
+
+    // empilha atribuições "/" garantindo nome unico ao final
+    // porque usar pilha? para não concatenar nome redundante
+    // poderia usar um contador, mas achei pilha mais legível
+    for(size_t i=start_index; i+1 < tokens.size(); i=i+2){
+        if(tokens[i] == "/") {
+            name+="a"+tokens[i+1];
+            safename.push_back(name);
+        } 
+        else break;
+    }
+    return;
+}
+
 } // Namespace ns3
