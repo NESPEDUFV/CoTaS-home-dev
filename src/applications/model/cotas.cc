@@ -297,10 +297,9 @@ nlohmann::json
 CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 {   
 
-    // TODO: tratar update
     nlohmann::json payload = GetPduPayloadJson(pdu);
     nlohmann::json response;
-    NS_LOG_INFO("payload em json que chegou: " << payload.dump() );
+    // NS_LOG_INFO("payload em json que chegou: " << payload.dump() );
     
     // verifica se id é válido garante que o json tem id
     if (payload.contains("objectId") && !ValidateID_Q(payload["objectId"]))
@@ -317,34 +316,29 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
     // constroi mensagem
     std::string update_query = JsonToSparqlUpdateParser(payload);
     
-    // testar
-    NS_LOG_INFO("ultima query obtida: \n" << update_query);
+    // NS_LOG_INFO("ultima query obtida: \n" << update_query);
 
     // envia consulta para o fuseki
-
     auto res = m_cli.Post("/dataset/update", update_query, "application/sparql-update");
 
-    // --- Verificar a resposta (código igual ao anterior) ---
     if (res && (res->status == 200 || res->status == 204)) {
-        NS_LOG_INFO("DADOS ATUALIZADOS COM SUCESSO!");
+        // NS_LOG_INFO("DADOS ATUALIZADOS COM SUCESSO!");
     } else {
-        NS_LOG_INFO("Erro na atualizacao");
+        // se deu erro
+        // NS_LOG_INFO("Erro na atualizacao");
         if (res) {
             NS_LOG_INFO("Status: " << res->status << " Body: " << res->body);
+            
         } else {
             NS_LOG_INFO("Erro de conexao: " << httplib::to_string(res.error()));
         }
-        
         response = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}};
-        abort();
+        
         return response;
     }
 
-
-    
     // se não deu erro
     response = {{"status", COAP_RESPONSE_CODE_CHANGED}};
-    abort();
     return response;
 }
 
@@ -932,7 +926,6 @@ CoTaS::UpdateElementHandler(
     // percorre os nós emitindo variaveis de nome seguro
     // emite dados para '.' e '/' até o penultimo nó
     for(size_t i = 0; i<tokens.size()-3;i++){ // termina antes??
-        NS_LOG_INFO("Token[" << i << "] : " << tokens[i]);
         if(tokens[i+1] == "/")
         {
             where_string = " ?" + node 
