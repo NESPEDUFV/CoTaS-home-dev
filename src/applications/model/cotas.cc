@@ -312,7 +312,7 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
         
         return res;
     }
-    
+
     // constroi mensagem
     std::string update_query = JsonToSparqlUpdateParser(payload);
     
@@ -333,7 +333,6 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
             NS_LOG_INFO("Erro de conexao: " << httplib::to_string(res.error()));
         }
         response = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}};
-        
         return response;
     }
 
@@ -343,10 +342,22 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 }
 
 nlohmann::json
-CoTaS::HandleRequest(Address from, coap_pdu_t* payload)
+CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
 {
     NS_LOG_INFO("chegou uma requisição de uma aplicação ");
-    auto collection = m_bancoMongo["object"];
+
+    std::string payload = GetPduPayloadJson(pdu);
+    nlohmann::json response;
+
+    // Prepara a consulta
+
+    // envia consulta
+
+    // trata resposta
+
+    // devolve resposta
+    
+    // auto collection = m_bancoMongo["object"];
     // nlohmann::json res = nlohmann::json::array();
     // nlohmann::json cap;
     // std::vector<bsoncxx::document::value> resultados;
@@ -815,6 +826,10 @@ CoTaS::JsonToSparqlUpdateParser(nlohmann::json payload){
         UpdateElementHandler(sparql_delete, sparql_insert, sparql_where, 
                              where_set, chave, valor);
     }
+
+    for (auto& elemento : where_set){
+        sparql_where << elemento;
+    }
     
     // fecha as clausulas e junta elas
     sparql_delete << " }" ;
@@ -860,7 +875,9 @@ CoTaS::UpdateElementHandler(
 
     // ------------------ ANALISE LEXICA ------------------
     // obtem os tokens da chave fazendo um "split" em . e /
-   
+    // chave "essa/é.uma.chave"
+    // tokens == [ "essa", "/", "é", ".", "uma", ".", "chave"]
+
     int i_esq = 0;
     int i_dir = 0;
     std::vector<std::string> tokens;
@@ -879,6 +896,11 @@ CoTaS::UpdateElementHandler(
     tokens.push_back(chave.substr(i_esq, i_dir));
     
     // ----------------- CONSTROI SINTAXE -----------------
+    // tokens[x] == "/" => no_atual é um tokens[x+1]
+
+    // tokens[x] == "." => no_antigo tokens[x+1] no_atual 
+    // anda pelos nós
+
     // variaveis iniciais 
     std::string node = "device";
     std::string oldValue = "oldValue";
@@ -890,7 +912,6 @@ CoTaS::UpdateElementHandler(
         where_string = " ?" + node
                 + " cot:" + tokens[0] + " ?" + oldValue 
                 + " . ";
-        sparql_where << where_string ;
 
         where_set.insert(where_string);
             
@@ -915,11 +936,7 @@ CoTaS::UpdateElementHandler(
     where_string = " ?" + node
                     + " cot:" + tokens[0] + " ?" + node+tokens[0]+safename.back()
                     + " . ";
-    
-    if(!where_set.count(where_string)){
-        sparql_where << where_string;
-        where_set.insert(where_string);
-    }
+    where_set.insert(where_string);
 
     node+=tokens[0]+safename.back();
     
@@ -930,10 +947,8 @@ CoTaS::UpdateElementHandler(
         {
             where_string = " ?" + node 
                 + " a cot:" + tokens[i+2] + " . ";
-            if(!where_set.count(where_string)){
-                sparql_where << where_string;
-                where_set.insert(where_string);
-            }
+            where_set.insert(where_string);
+            
             if(safename.empty()) node += "a"+tokens[i+2];
             else safename.pop_back();
             i++;
@@ -945,11 +960,8 @@ CoTaS::UpdateElementHandler(
             where_string = " ?" + node
                 + " cot:" + tokens[i+2] + " ?" 
                 + node+tokens[i+2]+safename.back() + " . ";
+            where_set.insert(where_string);
                 
-            if(!where_set.count(where_string)){
-                sparql_where << where_string;
-                where_set.insert(where_string);
-            }
             node+=tokens[i+2]+safename.back();
             i++;
         }
@@ -965,12 +977,8 @@ CoTaS::UpdateElementHandler(
     where_string = " ?" + node
         + " cot:" + tokens[ultimo] + " ?" + oldValue 
         + " . ";
+    where_set.insert(where_string);
 
-    if(!where_set.count(where_string)){
-        sparql_where << where_string;
-        where_set.insert(where_string);
-    }
-    
     sparql_delete << " ?" << node 
         << " cot:" << tokens[ultimo] << " ?" 
         << oldValue << " .";

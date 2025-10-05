@@ -109,3 +109,31 @@ WHERE
         ?device cot:physicalStorage ?devicephysicalStorage .  
         ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage .  
         ?device cot:turnedOn ?oldValueturnedOn .  }
+
+DELETE 
+    {   ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency .
+        ?devicefeedingControlservingSize cot:value ?oldValuedevicefeedingControlservingSize .
+        ?devicefeedingControlservingsPerMeal cot:value ?oldValuedevicefeedingControlservingsPerMeal .
+        ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage .
+        ?device cot:turnedOn ?oldValueturnedOn .
+     }
+INSERT 
+    {   ?devicefeedingControlmealFrequency cot:value 4 .
+        ?devicefeedingControlservingSize cot:value 3 .
+        ?devicefeedingControlservingsPerMeal cot:value 20 .
+        ?devicephysicalStorage cot:value 5 .
+        ?device cot:turnedOn 1 .
+    }
+WHERE 
+    {   ?device cot:objectId 101010 .
+        ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage .
+        ?devicefeedingControlservingsPerMeal cot:value ?oldValuedevicefeedingControlservingsPerMeal .
+        ?devicefeedingControlservingSize cot:value ?oldValuedevicefeedingControlservingSize .
+        ?device cot:turnedOn ?oldValueturnedOn .
+        ?device cot:physicalStorage ?devicephysicalStorage .
+        ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency .
+        ?devicefeedingControl cot:servingsPerMeal ?devicefeedingControlservingsPerMeal .
+        ?devicefeedingControl cot:servingSize ?devicefeedingControlservingSize .
+        ?devicefeedingControl cot:mealFrequency ?devicefeedingControlmealFrequency .
+        ?device cot:feedingControl ?devicefeedingControl .
+    }
