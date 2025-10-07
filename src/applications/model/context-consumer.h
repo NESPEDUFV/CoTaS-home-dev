@@ -119,10 +119,12 @@ class ContextConsumer : public SourceApplication
     std::optional<uint16_t> m_peerPort; //!< Remote peer port (deprecated) // NS_DEPRECATED_3_44
     EventId m_sendEvent;                //!< Event to send the next packet
     uint32_t m_applicationType;
-    nlohmann::json m_reqData;
-    nlohmann::json m_messages;
     State m_state;                     //!< State of application (sending messages for cotas|objects)
     Address m_objectAdress;                //!< Address of the object of interest
+    uint32_t m_objectId;
+    nlohmann::json m_reqData;
+    nlohmann::json m_firstData;
+    nlohmann::json m_messages;
     
     /// Callbacks for tracing the packet Tx events
     TracedCallback<Ptr<const Packet>> m_txTrace;

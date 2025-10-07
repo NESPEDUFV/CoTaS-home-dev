@@ -1,5 +1,5 @@
 {
-  "firstMessages": [
+  "subscribeMessagesObjects": [
     "cot:DellXPSDesktop8960 a cot:Computer, owl:NamedIndividual ; rdfs:seeAlso <https://www.dell.com/pt-br/shop/computadores-all-in-ones-e-workstations/xps-desktop/spd/xps-8960-desktop/x8960w10w> ; cot:networkInterface [ a cot:WiFiInterface ; ] ; cot:networkInterface [ a cot:BluetoothInterface ; ] ; cot:shape [ a cot:RectBox ; cot:width  [ cot:value 17.30; qu:unit unit:centimetre ] ; cot:height [ cot:value 37.29 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 42.69 ; qu:unit unit:centimetre ] ; ] ; cot:weight [ cot:value 13.34 ; qu:unit unit:kilogram ] ; cot:warranty [ cot:value 4 ; qu:unit unit:year ] ; cot:powerSupply [ a cot:ACPowerSupply ] ; cot:port 19 ; cot:turnedOn 1 ; cot:soundVolume 100 ; cot:localization [ cot:latitude 11 ; cot:longitude 13 ; ] ; .",
     "cot:MirrorMiro a cot:SmartMirror, owl:NamedIndividual ; rdfs:seeAlso <https://en.paulmann.com/p/led-illuminated-mirror-miro-ip44-tunable-white-180lm-230v-11w-mirror-black-matt/71093> ; cot:controlInterface [ a cot:VoiceControlInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ] ; cot:ipRating [ cot:ipDigit cot:IPSolid4, cot:IPLiquid4 ] ; cot:shape [ a cot:RectBox ; cot:width [ cot:value 45.0 ; qu:unit unit:centimetre ] ; cot:height [ cot:value 62.0 ; qu:unit unit:centimetre ] ; cot:length [ cot:value 12.0 ; qu:unit unit:centimetre ] ; ] ; cot:contains [ cot:cardinality 3 ; cot:component [ a cot:LedLightSource ;  cot:colorTemperature [ a cot:DynamicContext ; cot:minInclusive 2700 ; cot:maxInclusive 6500 ; qu:unit unit:kelvin ; ] ; cot:brightness [ cot:value 180.0 ; qu:unit unit:lumen ] ; cot:energyConsumption [ cot:value 11 ; qu:unit unit:watt ] ; cot:colorRenderingIndex [ cot:minExclusive 90 ] ; ] ; ] ; cot:powerSupply [ a cot:AcPowerSupply ] ; cot:energyConsumption [ cot:value 15 ; qu:unit unit:watt ] ; cot:energyEfficiency cot:FEnergyLabel ; cot:durability [ cot:value 30000 ; qu:unit unit:hour ] ; cot:port 19 ; cot:turnedOn 1 ; cot:lightOn 0 ; .",
     "cot:TVSamsungNeoQLED4K a cot:SmartTelevision, owl:NamedIndividual ; rdfs:seeAlso <https://www.samsung.com/br/tvs/qled-tv/qn85d-55-inch-neo-qled-4k-tizen-os-smart-tv-qn55qn85dbgxzd/> ; cot:networkInterface [ a cot:WiFiInterface ] ; cot:networkInterface [ a cot:BluetoothInterface ] ; cot:controlInterface [ a cot:MobileAppInterface ; cot:name \"SmartThings\" ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ]; cot:port 19 ; cot:turnedOn 1 ; cot:soundVolume 100 ; cot:brightness 100 ; .",
@@ -32,6 +32,24 @@
     "cot:garden a cot:Computer, owl:NamedIndividual; cot:port 19 ; cot:turnedOn 1 ; cot:humidity 0 ; cot:temperature 0 ; . ",
     "cot:FirstAlertOnelink a cot:SmokeSensor, owl:NamedIndividual ; rdfs:seeAlso <https://www.firstalertstore.com/store/products/onelink-smoke-and-carbon-monoxide-alarm-with-amazon-alexa-1039102.htm> ; cot:powerSupply [ a cot:BatterySupply ; cot:batteryCell [ a cot:RechargeableBattery ] ; ] ; cot:feature [ cot:hasSpec [ a cot:SmokeAlarmFeat ] ; cot:hasSpec [ a cot:CarbonMonoxideAlarmFeat ] ; ] ; cot:noiseLevel [ ] ; cot:networkInterface [ a cot:WiFiInterface ; a cot:BluetoothInterface ;  ] ;  cot:controlInterface [  cot:MobileAppInterface [ cot:name \"Apple HomeKit\" ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ]  ] ; cot:shape [] ; cot:warranty [] ; cot:weight [] ; cot:port 19 ; cot:turnedOn 1 ; cot:activated 0 ; .",
     "cot:KasaSmartPlugue a cot:SmartPowerOutlet, owl:NamedIndividual ;  rdfs:seeAlso <https://www.kasasmart.com/us> ;  cot:networkInterface [ a cot:WiFiInterface ] ;  cot:powerSupply [  a cot:AcPowerSupply ;  cot:acInputVoltage  [ cot:value 120; qu:unit unit:volt ] ;  ] ;  cot:shape [ a cot:RectBox ; cot:width  [ cot:value 3.81 ; qu:unit unit:centimetre ] ;  cot:height [ cot:value 3.99 ; qu:unit unit:centimetre ] ;  cot:length [ cot:value 6.65 ; qu:unit unit:centimetre ] ;  ] ;  cot:weight [ cot:value 181.0 ; qu:unit unit:gram ] ;  cot:powerSupply [ a cot:AcPowerSupply ; cot:acInputAmpere [ cot:value 15; qu:unit unit:ampere ] ;  ] ;  cot:controlInterface [ a cot:MobileAppInterface ; cot:name \"Kasa Smart\" ; cot:osSupport [ cot:osFamily cot:Android ] ;  cot:osSupport [ cot:osFamily cot:iOS ] ;  ] ;  cot:feature [] ;  cot:contains [ cot:component [ a cot:FirstPlug ; cot:turnedOn 0 ; ] ; cot:component [ a cot:SecondPlug ; cot:turnedOn 0 ; ] ; cot:component [ a cot:ThirdPlug ; cot:turnedOn 0 ; ] ; ] ; cot:port 19 ; ."
+  ],
+  "subscribeMessagesApplications":[
+    "cot:Application0 a cot:FallDetection, owl:NamedIndividual ; . ",
+    "cot:Application1 a cot:VoiceControl, owl:NamedIndividual ; . ",
+    "cot:Application2 a cot:PetCare, owl:NamedIndividual ; . ",
+    "cot:Application3 a cot:EnergyManagement, owl:NamedIndividual ; . ",
+    "cot:Application4 a cot:WaterManagement, owl:NamedIndividual ; . ",
+    "cot:Application5 a cot:SmartSecurity, owl:NamedIndividual ; . ",
+    "cot:Application6 a cot:IndoorLocation, owl:NamedIndividual ; . ",
+    "cot:Application7 a cot:SmartGasDetection, owl:NamedIndividual ; . ",
+    "cot:Application8 a cot:PreventiveHealthMeasures, owl:NamedIndividual ; . ",
+    "cot:Application9 a cot:SmartLighting, owl:NamedIndividual ; . ",
+    "cot:Application10 a cot:SmartTemperatureHumidity, owl:NamedIndividual ; . ",
+    "cot:Application11 a cot:SmartCleaning, owl:NamedIndividual ; . ",
+    "cot:Application12 a cot:SmartGarden, owl:NamedIndividual ; . ",
+    "cot:Application13 a cot:SmartMobility, owl:NamedIndividual ; . ",
+    "cot:Application14 a cot:SmartCooking, owl:NamedIndividual ; . ",
+    "cot:Application15 a cot:InventoryManagement, owl:NamedIndividual ; . "
   ],
   "updateMessages": [
     [

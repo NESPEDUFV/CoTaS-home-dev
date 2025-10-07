@@ -346,68 +346,87 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
 {
     NS_LOG_INFO("chegou uma requisição de uma aplicação ");
 
-    std::string payload = GetPduPayloadJson(pdu);
+    std::string payload = GetPduPayloadString(pdu);
     nlohmann::json response;
+    std::ostringstream sparql_query;
 
+    // std::string consulta_teste = "?device a cot:Computer . ?device cot:turnedOn 1 .";
     // Prepara a consulta
+    sparql_query << SparqlPrefix()
+                 << "SELECT ?ip ?port "
+                 << "WHERE { "
+                 << "?device cot:ipAddress ?ip . "
+                 << "?device cot:port ?port . "
+                 << payload 
+                 << " }";
 
     // envia consulta
+    httplib::Params params;
+    params.emplace("query", sparql_query.str());
 
-    // trata resposta
+    httplib::Headers headers = {
+        { "Accept", "application/sparql-results+json" }
+    };
 
-    // devolve resposta
+    // envia a query para o fuseki
+    auto res = m_cli.Post("/dataset/query", headers, params);
     
-    // auto collection = m_bancoMongo["object"];
-    // nlohmann::json res = nlohmann::json::array();
-    // nlohmann::json cap;
-    // std::vector<bsoncxx::document::value> resultados;
+    // trata resposta
+    if (res && res->status == httplib::OK_200) 
+    {
+        try 
+        {
+            // Parse da string da resposta para um objeto JSON
+            nlohmann::json j = nlohmann::json::parse(res->body);
 
-    // std::string json_string = data_json["query"].dump();
-    // if (json_string.empty())
-    // {
-    //     cap = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}, {"info", "bad request"}};
-    //     NS_LOG_INFO("Consumidor enviou cabeçalho errado");
+            const auto& bindings = j["results"]["bindings"];
 
-    //     return cap;
-    // }
-    // auto bson_query = bsoncxx::from_json(json_string);
+            if (bindings.empty()) 
+            {
+                NS_LOG_INFO("Nenhum resultado encontrado");
+                response = {{"status", COAP_RESPONSE_CODE_NOT_FOUND}};
+            } else 
+            {
+                NS_LOG_INFO("Resultados de objetos encontrados: ");
+                NS_LOG_INFO("bindings " << bindings.dump());
+                // Itera sobre cada "linha" de resultado
+                // aqui é pra ter só um 
+                // não há iteração
+                for (const auto& item : bindings) 
+                {
+                    // Pega o valor da variável "?device"
+                    std::string raw_ip = item["ip"]["value"];
+                    uint32_t ip = std::stoi(raw_ip);
+                    
+                    std::string raw_port = item["port"]["value"];
+                    uint32_t port = std::stoi(raw_port);
+                    
+                    response = {{"status", COAP_RESPONSE_CODE_CONTENT}};
+                    response["ip"] = ip;
+                    response["port"] = port;
 
-    // mongocxx::options::find opts{};
-    // auto projection_doc = make_document(kvp("ip", 1), kvp("port", 1));
-    // opts.projection(projection_doc.view());
-
-    // auto cursor = collection.find(bson_query.view(), opts);
-
-    // // libera o cursor o quanto antes
-    // try
-    // {
-    //     for (auto&& doc : cursor)
-    //     {
-    //         resultados.emplace_back(bsoncxx::document::value(doc)); // Copia o documento
-    //     }
-    // }
-    // catch (const std::exception& e)
-    // {
-    //     NS_LOG_INFO("Exceção: " << e.what());
-    //     abort();
-    //     nlohmann::json res = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}, 
-    //                             {"msg", "Erro na consulta dso dados"}};
-        
-    //     return res;
-    // }
-
-    // // faz a lógica que precisa
-    // for (const auto& doc_value : resultados)
-    // {
-    //     std::string json_db = bsoncxx::to_json(doc_value.view());
-    //     res.push_back(nlohmann::json::parse(json_db));
-    // }
-    // // NS_LOG_INFO("Servidor respondendo " << data_json["info"].dump());
-    nlohmann::json cap = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", "só pra parar de chorar"}};
-
-    return cap;
-
-    // retorna dados
+                    NS_LOG_INFO("Dispositivo de IP: " << ip 
+                                << " e de porta " << port 
+                                << "sendo enviado para aplicação");
+                    break; // retorna só o primeiro por enquanto
+                }
+            }
+        } catch (const nlohmann::json::parse_error& e) 
+        {
+            NS_LOG_ERROR("Erro no parse da resposta JSON: " << e.what());
+            NS_LOG_ERROR("Resposta recebida: " << res->body);
+            response = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}};
+        }
+    } else 
+    {
+        NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+            "\n cabeçalho:" << res->get_header_value("Content-Type") << 
+            "\n corpo:" << res->body);
+        NS_LOG_INFO("error code: " << res.error());
+        response = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}};
+    }
+    abort();
+    return response;
     
 }
 

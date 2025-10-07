@@ -1,176 +1,106 @@
-/*
- * SPDX-License-Identifier: GPL-2.0-only
- */
+#include "../src/applications/model/json.hpp"
+#include "../src/applications/model/httplib.h"
+#include <sstream>
+#include <unordered_map>
+#include <unordered_set>
 
-#include "ns3/applications-module.h"
-#include "ns3/core-module.h"
-#include "ns3/csma-module.h"
-#include "ns3/internet-module.h"
-#include "ns3/mobility-module.h"
-#include "ns3/network-module.h"
-#include "ns3/point-to-point-module.h"
-#include "ns3/ssid.h"
-#include "ns3/yans-wifi-helper.h"
+std::string 
+SparqlPrefix(){
+    std::string prefix = "BASE         <http://nesped1.caf.ufv.br/od4cot>\n"
+                         "PREFIX cot:  <#>\n"
+                         "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                         "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+                         "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+                         "PREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\n"
+                         "PREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\n"
+                         "PREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\n"
+                         "PREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\n";
 
-// Default Network Topology
-//
-//   Wifi 10.1.3.0
-//                 AP
-//  *    *    *    *
-//  |    |    |    |    10.1.1.0
-// n5   n6   n7   n0 -------------- n1   n2   n3   n4
-//                   point-to-point  |    |    |    |
-//                                   ================
-//                                     LAN 10.1.2.0
+    return prefix;
+}
 
-using namespace ns3;
+int main(){
+    std::ostringstream sparql_query;
+    nlohmann::json response;
+    httplib::Client m_cli ("localhost", 3030);
 
-NS_LOG_COMPONENT_DEFINE("ThirdScriptExample");
+    std::string consulta_teste = " ?device a cot:Computer . ";
+    // Prepara a consulta
+    sparql_query << SparqlPrefix()
+                 << "SELECT ?ip ?port "
+                 << "WHERE { "
+                 << "?device cot:ipAddress ?ip . "
+                 << "?device cot:port ?port . "
+                 << consulta_teste
+                 << " }";
 
-int
-main(int argc, char* argv[])
-{
-    bool verbose = true;
-    uint32_t nCsma = 3;
-    uint32_t nWifi = 3;
-    bool tracing = false;
+    // envia consulta
+    httplib::Params params;
+    params.emplace("query", sparql_query.str());
 
-    CommandLine cmd(__FILE__);
-    cmd.AddValue("nCsma", "Number of \"extra\" CSMA nodes/devices", nCsma);
-    cmd.AddValue("nWifi", "Number of wifi STA devices", nWifi);
-    cmd.AddValue("verbose", "Tell echo applications to log if true", verbose);
-    cmd.AddValue("tracing", "Enable pcap tracing", tracing);
+    httplib::Headers headers = {
+        { "Accept", "application/sparql-results+json" }
+    };
 
-    cmd.Parse(argc, argv);
-
-    // The underlying restriction of 18 is due to the grid position
-    // allocator's configuration; the grid layout will exceed the
-    // bounding box if more than 18 nodes are provided.
-    if (nWifi > 18)
+    // envia a query para o fuseki
+    auto res = m_cli.Post("/dataset/query", headers, params);
+    
+    // trata resposta
+    if (res && res->status == httplib::OK_200) 
     {
-        std::cout << "nWifi should be 18 or less; otherwise grid layout exceeds the bounding box"
-                  << std::endl;
-        return 1;
-    }
+        try 
+        {
+            // Parse da string da resposta para um objeto JSON
+            nlohmann::json j = nlohmann::json::parse(res->body);
 
-    LogComponentEnable("CoDServiceApplication", LOG_LEVEL_INFO); 
-    //LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
-    LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
+            std::cout << "Json resposta" << j.dump() << std::endl ;
 
-    NodeContainer p2pNodes;
-    p2pNodes.Create(2);
+            const auto& bindings = j["results"]["bindings"];
 
-    PointToPointHelper pointToPoint;
-    pointToPoint.SetDeviceAttribute("DataRate", StringValue("5Mbps"));
-    pointToPoint.SetChannelAttribute("Delay", StringValue("2ms"));
+            if (bindings.empty()) 
+            {
+                std::cout  << "Nenhum resultado encontrado" << std::endl ;
+                response = {{"status", 1}};
+            } else 
+            {
+                std::cout << "Resultados de objetos encontrados: " << std::endl ;
+                std::cout << "bindings " << bindings.dump() << std::endl ;
+                // Itera sobre cada "linha" de resultado
+                // aqui é pra ter só um 
+                // não há iteração
+                for (const auto& item : bindings) 
+                {
+                    // Pega o valor da variável "?device"
+                    std::string raw_ip = item["ip"]["value"];
+                    uint32_t ip = std::stoi(raw_ip);
+                    
+                    std::string raw_port = item["port"]["value"];
+                    uint32_t port = std::stoi(raw_port);
+                    
+                    response = {{"status", 2}};
+                    response["ip"] = ip;
+                    response["port"] = port;
 
-    NetDeviceContainer p2pDevices;
-    p2pDevices = pointToPoint.Install(p2pNodes);
-
-    NodeContainer csmaNodes;
-    csmaNodes.Add(p2pNodes.Get(1));
-    csmaNodes.Create(nCsma);
-
-    CsmaHelper csma;
-    csma.SetChannelAttribute("DataRate", StringValue("100Mbps"));
-    csma.SetChannelAttribute("Delay", TimeValue(NanoSeconds(6560)));
-
-    NetDeviceContainer csmaDevices;
-    csmaDevices = csma.Install(csmaNodes);
-
-    NodeContainer wifiStaNodes;
-    wifiStaNodes.Create(nWifi);
-    NodeContainer wifiApNode = p2pNodes.Get(0);
-
-    YansWifiChannelHelper channel = YansWifiChannelHelper::Default();
-    YansWifiPhyHelper phy;
-    phy.SetChannel(channel.Create());
-
-    WifiMacHelper mac;
-    Ssid ssid = Ssid("ns-3-ssid");
-
-    WifiHelper wifi;
-
-    NetDeviceContainer staDevices;
-    mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), "ActiveProbing", BooleanValue(false));
-    staDevices = wifi.Install(phy, mac, wifiStaNodes);
-
-    NetDeviceContainer apDevices;
-    mac.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid));
-    apDevices = wifi.Install(phy, mac, wifiApNode);
-
-    MobilityHelper mobility;
-
-    mobility.SetPositionAllocator("ns3::GridPositionAllocator",
-                                  "MinX",
-                                  DoubleValue(0.0),
-                                  "MinY",
-                                  DoubleValue(0.0),
-                                  "DeltaX",
-                                  DoubleValue(5.0),
-                                  "DeltaY",
-                                  DoubleValue(10.0),
-                                  "GridWidth",
-                                  UintegerValue(3),
-                                  "LayoutType",
-                                  StringValue("RowFirst"));
-
-    mobility.SetMobilityModel("ns3::RandomWalk2dMobilityModel",
-                              "Bounds",
-                              RectangleValue(Rectangle(-50, 50, -50, 50)));
-    mobility.Install(wifiStaNodes);
-
-    mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-    mobility.Install(wifiApNode);
-
-    InternetStackHelper stack;
-    stack.Install(csmaNodes);
-    stack.Install(wifiApNode);
-    stack.Install(wifiStaNodes);
-
-    Ipv4AddressHelper address;
-
-    address.SetBase("10.1.1.0", "255.255.255.0");
-    Ipv4InterfaceContainer p2pInterfaces;
-    p2pInterfaces = address.Assign(p2pDevices);
-
-    address.SetBase("10.1.2.0", "255.255.255.0");
-    Ipv4InterfaceContainer csmaInterfaces;
-    csmaInterfaces = address.Assign(csmaDevices);
-
-    address.SetBase("10.1.3.0", "255.255.255.0");
-    address.Assign(staDevices);
-    address.Assign(apDevices);
-
-    CoTaSHelper echoServer(9);
-
-    ApplicationContainer serverApps = echoServer.Install(csmaNodes.Get(nCsma));
-    serverApps.Start(Seconds(1));
-    serverApps.Stop(Seconds(10));
-
-    ContextConsumerHelper echoClient(csmaInterfaces.GetAddress(nCsma), 9);
-    echoClient.SetAttribute("MaxPackets", UintegerValue(1));
-    echoClient.SetAttribute("Interval", TimeValue(Seconds(1)));
-    echoClient.SetAttribute("PacketSize", UintegerValue(1024));
-    echoClient.SetAttribute("ApplicationType", UintegerValue(0));
-
-    ApplicationContainer clientApps = echoClient.Install(wifiStaNodes.Get(nWifi - 1));
-    clientApps.Start(Seconds(2));
-    clientApps.Stop(Seconds(10));
-
-    Ipv4GlobalRoutingHelper::PopulateRoutingTables();
-
-    Simulator::Stop(Seconds(10));
-
-    if (tracing)
+                    std::cout << "Dispositivo de IP: " << ip
+                                << " e de porta " << port 
+                                << "sendo enviado para aplicação" << std::endl ;
+                    break; // retorna só o primeiro por enquanto
+                }
+            }
+        } catch (const nlohmann::json::parse_error& e) 
+        {
+            std::cout << "Erro no parse da resposta JSON: " << e.what() << std::endl ;
+            std::cout << "Resposta recebida: " << res->body << std::endl ;
+            response = {{"status", 3}};
+        }
+    } else 
     {
-        phy.SetPcapDataLinkType(WifiPhyHelper::DLT_IEEE802_11_RADIO);
-        pointToPoint.EnablePcapAll("third");
-        phy.EnablePcap("third", apDevices.Get(0));
-        csma.EnablePcap("third", csmaDevices.Get(0), true);
+        std::cout << "Erro na requisição, status:" << res->status <<   
+            "\n cabeçalho:" << res->get_header_value("Content-Type") << 
+            "\n corpo:" << res->body << std::endl;
+        std::cout << "error code: " << res.error() << std::endl ;
+        response = {{"status", 4}};
     }
-
-    Simulator::Run();
-    Simulator::Destroy();
     return 0;
 }

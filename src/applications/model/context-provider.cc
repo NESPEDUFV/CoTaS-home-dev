@@ -288,7 +288,7 @@ ContextProvider::Send()
         uri_path = "/subscribe/object";
         request_code = COAP_REQUEST_CODE_POST;
 
-        NS_LOG_INFO("Selecionou dados de inscrição");
+        NS_LOG_INFO("Selecionou dados de inscrição de objeto");
         break;
     
     default:
@@ -400,7 +400,7 @@ void
 ContextProvider::SetDataMessage()
 {   
     // NS_LOG_INFO("tenta setar mensagem");
-    m_firstData = m_messages["firstMessages"][m_objectType];
+    m_firstData = m_messages["subscribeMessagesObjects"][m_objectType];
     // NS_LOG_INFO("seta mensagem" << m_firstData.dump());
     m_updateData = m_messages["updateMessages"][m_objectType];
     

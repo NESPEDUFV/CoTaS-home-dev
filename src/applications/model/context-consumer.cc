@@ -95,9 +95,10 @@ ContextConsumer::ContextConsumer()
       m_peerPort{},
       m_sendEvent{},
       m_state{Searching},
-      m_objectAdress{}
+      m_objectAdress{},
+      m_objectId{0}
 {
-    std::ifstream fm("all_data/messages2.json");
+    std::ifstream fm("all_data/messages3.json");
 
     if (fm.is_open())
     {
@@ -281,12 +282,26 @@ ContextConsumer::Send()
     // O "como solicitar dados do objeto inteligente" 
     // foi abstraído
 
-    // TODO: inscrever aplicações, elas estão pedindo 
-    //       direto sem inscrever
+    switch (m_objectId)
+    {
+    case 0: // inscrição
+        data = m_firstData.dump();
+        data.erase(0, 1);
+        data.erase(data.find_last_of("\""));
+        data.erase(std::remove(data.begin(), data.end(), '\\'), data.end());
+        uri_path = "/subscribe/application";
+        request_code = COAP_REQUEST_CODE_POST;
 
-    data = m_reqData.dump();
-    uri_path = "/search";
-    request_code = COAP_REQUEST_CODE_GET;
+        NS_LOG_INFO("Selecionou dados de inscrição de aplicação");
+        break;
+    
+    default:
+        data = m_reqData.dump();
+        uri_path = "/search";
+        request_code = COAP_REQUEST_CODE_GET;
+
+        NS_LOG_INFO("Selecionou dados de requisição consumidor");
+    }
 
     data_pdu = EncodePduRequest(uri_path, request_code, data);
 
@@ -366,7 +381,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             HandleOK(data_json["response"]);
             break;
         case COAP_RESPONSE_CODE_BAD_REQUEST:
-            NS_LOG_INFO("Bad request " << data_json["info"]);
+            NS_LOG_INFO("Bad request ");
             break;
         case COAP_RESPONSE_CODE_UNAUTHORIZED: 
             // TODO ainda não implementado inscrição dos consumidores
@@ -375,6 +390,11 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         case COAP_RESPONSE_CODE_INTERNAL_ERROR:
             NS_LOG_INFO("Erro no servidor");
             break;
+        case COAP_RESPONSE_CODE_CREATED:
+            m_objectId = data_json["id"];
+            break;
+        case COAP_RESPONSE_CODE_NOT_FOUND:
+            NS_LOG_INFO(" não foi encontrado objeto pedido");
         default:
             NS_LOG_INFO("status não reconhecido");
         }
@@ -390,7 +410,6 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             NS_LOG_INFO ("RTT: " << delay.GetSeconds() << " segundos.");
         
         }
-
         
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
@@ -401,8 +420,9 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
 
 void
 ContextConsumer::SetDataMessage()
-{   
+{    
     m_reqData = m_messages["requestMessages"][m_applicationType];
+    m_firstData = m_messages["subscribeMessagesApplications"][m_applicationType];
 }
 
 void 
@@ -418,9 +438,9 @@ ContextConsumer::HandleOK(nlohmann::json response)
             else{ // não chegou vazio, existe objeto que corresponde a pesquisa
                 // se comunica com o objeto em si (abstraido pra pedir só para o
                 // primeiro objeto)
-                uint32_t ip_num = response[0]["ip"];
+                uint32_t ip_num = response["ip"];
                 Ipv4Address ip_object(ip_num);
-                uint16_t port = response[0]["port"];
+                uint16_t port = response["port"];
                 m_objectAdress = InetSocketAddress(ip_object, port);
                 
                 // atualiza o estado da aplicação
