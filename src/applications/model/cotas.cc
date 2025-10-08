@@ -25,10 +25,6 @@
 #include <iostream>
 #include <random>
 
-
-using bsoncxx::builder::basic::kvp;
-
-using bsoncxx::builder::basic::make_document;
 namespace ns3
 {
     
@@ -478,43 +474,6 @@ CoTaS::ReadFile(std::string filename){
     return buffer.str();
 }
 
-void
-CoTaS::SetupDatabase_old(mongocxx::client& client, std::string nome_banco)
-{
-    try
-    {
-        auto databases = client.list_database_names();
-        auto it = std::find(databases.begin(), databases.end(), nome_banco);
-        if (it != databases.end())
-        {
-            NS_LOG_INFO("Banco de dados encontrado. Resetando (drop)...");
-            client[nome_banco].drop();
-            NS_LOG_INFO("Banco de dados '" << nome_banco << "' foi dropado com sucesso.");
-        }
-        else
-        {
-            NS_LOG_INFO("Banco de dados '" << nome_banco << "' não existe.");
-        }
-        m_bancoMongo = client[nome_banco];
-        auto collection = m_bancoMongo["object"];
-
-        nlohmann::json j_documento = {{"nome", "Carlos"},
-                                      {"cidade", "Juatuba"},
-                                      {"ativo", true},
-                                      {"timestamp", "2025-07-04T10:15:38-03:00"},
-                                      {"id", 72},
-                                      {"ip", 27}};
-
-        std::string json_string = j_documento.dump();
-        auto bson_documento = bsoncxx::from_json(json_string);
-        auto result = collection.insert_one(bson_documento.view());
-    }
-    catch (const std::exception& e)
-    {
-        NS_LOG_INFO("Exceção: " << e.what());
-        return;
-    }
-}
 
 int
 CoTaS::Simple_Q()
@@ -839,7 +798,7 @@ CoTaS::JsonToSparqlUpdateParser(nlohmann::json payload){
         std::string chave = elemento.key();
         nlohmann::json valor = elemento.value();
 
-        UpdateElementHandler(sparql_delete, sparql_insert, sparql_where, 
+        UpdateElementHandler(sparql_delete, sparql_insert, 
                              where_set, chave, valor);
     }
 
@@ -883,7 +842,6 @@ void
 CoTaS::UpdateElementHandler(
     std::ostringstream &sparql_delete,
     std::ostringstream &sparql_insert,
-    std::ostringstream &sparql_where,
     std::unordered_set<std::string> &where_set,
     std::string chave,
     nlohmann::json valor

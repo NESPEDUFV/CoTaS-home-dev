@@ -24,11 +24,6 @@
 #include "encapsulated-coap.h"
 #include "httplib.h"
 
-#include <bsoncxx/json.hpp>
-#include <mongocxx/client.hpp>
-#include <mongocxx/exception/exception.hpp>
-#include <mongocxx/instance.hpp>
-#include <mongocxx/uri.hpp>
 #include <sstream>
 #include <unordered_map>
 #include <unordered_set>
@@ -100,8 +95,6 @@ class CoTaS : public SinkApplication
 
     int ValidateID_Q(int id);
     
-    void SetupDatabase_old(mongocxx::client &client, std::string nome_banco);
-    
     void SetupDatabase();
 
     std::string ReadFile(std::string filename);
@@ -122,15 +115,9 @@ class CoTaS : public SinkApplication
 
     void UpdateElementHandler(std::ostringstream &sparql_delete,
                               std::ostringstream &sparql_insert,
-                              std::ostringstream &sparql_where,
                               std::unordered_set<std::string> &where_set,
                               std::string chave,
-                              nlohmann::json valor);
-
-    mongocxx::v_noabi::database m_bancoMongo;
-    mongocxx::instance m_instance{};
-    std::optional<mongocxx::client> m_client;
-    
+                              nlohmann::json valor);    
     
     using HandlersFunctions = std::function<nlohmann::json(Address, coap_pdu_t*)>;
     std::unordered_map<std::string, HandlersFunctions> m_handlerDict;

@@ -1,10 +1,5 @@
 set(CMAKE_REQUIRED_INCLUDES "/usr/local/include /usr/include")
 find_package(PkgConfig REQUIRED)
-pkg_search_module(LIBMONGOCXX REQUIRED libmongocxx)
-
-include_directories(
-    ${LIBMONGOCXX_INCLUDE_DIRS}
-)
 
 build_lib(
   LIBNAME applications
@@ -80,8 +75,6 @@ build_lib(
     model/udp-trace-client.h
   LIBRARIES_TO_LINK 
     coap-3
-    ${libinternet}
-    ${LIBMONGOCXX_LIBRARIES}
   TEST_SOURCES
     test/three-gpp-http-client-server-test.cc
     test/bulk-send-application-test-suite.cc
