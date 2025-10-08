@@ -297,6 +297,9 @@ ContextConsumer::Send()
     
     default:
         data = m_reqData.dump();
+        data.erase(0, 1);
+        data.erase(data.find_last_of("\""));
+        data.erase(std::remove(data.begin(), data.end(), '\\'), data.end());
         uri_path = "/search";
         request_code = COAP_REQUEST_CODE_GET;
 
@@ -347,6 +350,7 @@ ContextConsumer::Send()
 void
 ContextConsumer::HandleRead(Ptr<Socket> socket)
 {
+    NS_LOG_INFO("Chegou mensagem no consumidor de contexto");
     NS_LOG_FUNCTION(this << socket);
     Address from;
     while (auto packet = socket->RecvFrom(from))
@@ -375,6 +379,8 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         
         data_json = GetPduPayloadJson(pdu);
 
+        NS_LOG_INFO("json que chegou no cliente aplicação " << data_json.dump());
+
         switch (pdu_code)
         {
         case COAP_RESPONSE_CODE_CONTENT:
@@ -395,8 +401,9 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             break;
         case COAP_RESPONSE_CODE_NOT_FOUND:
             NS_LOG_INFO(" não foi encontrado objeto pedido");
+            break;
         default:
-            NS_LOG_INFO("status não reconhecido");
+            NS_LOG_INFO("status não reconhecido: " << pdu_code);
         }
 
         if (packet->PeekPacketTag(timestampTag))

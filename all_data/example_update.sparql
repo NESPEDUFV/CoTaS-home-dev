@@ -1,114 +1,12 @@
-# UPDATE PARA COMPUTADOR    
+# EXEMPLO DE SMART FEEDER
 # {
 #     "objectId": null,
 #     "turnedOn": 1,
-#     "soundVolume": 100,
-#     "localization.latitude": 12,
-#     "localization.longitude": 13
+#     "physicalStorage.value": 5,
+#     "feedingControl.mealFrequency.value": 4,
+#     "feedingControl.servingSize.value": 3,
+#     "feedingControl.servingsPerMeal.value": 20
 # }
-DELETE 
-    {   ?localizationNode cot:latitude ?oldLatitude .  
-        ?localizationNode cot:longitude ?oldLongitude .  
-        ?device cot:turnedOn ?oldTurnedOn .  
-        ?device cot:soundVolume ?oldsoundVolume . 
-    }
-INSERT 
-    {   ?device cot:turnedOn 1 .  
-        ?device cot:soundVolume 100 .  
-        ?localizationNode cot:latitude 11 .  
-        ?localizationNode cot:longitude 12 . 
-    }
-WHERE 
-    {   ?device cot:objectId <device_id> .  
-        ?device cot:localization ?localizationNode .  
-        ?localizationNode cot:latitude ?oldLatitude .  
-        ?localizationNode cot:longitude ?oldLongitude .  
-        ?device cot:turnedOn ?oldTurnedOn .  
-        ?device cot:soundVolume ?oldsoundVolume . 
-};
-
-DELETE 
-    {   ?localizationNode cot:latitude ?oldLatitude .
-        ?localizationNode cot:longitude ?oldLongitude .
-        ?device cot:turnedOn ?oldTurnedOn .
-        ?device cot:soundVolume ?oldsoundVolume .
-    }
-INSERT 
-    {   ?device cot:turnedOn 1 .
-        ?device cot:soundVolume 50 .
-        ?localizationNode cot:latitude 11 .
-        ?localizationNode cot:longitude 12 .
-    }
-WHERE 
-    {   ?device cot:objectId <device_id> .
-        ?device cot:localization ?localizationNode .
-        ?localizationNode cot:latitude ?oldLatitude .
-        ?localizationNode cot:longitude ?oldLongitude .
-        ?device cot:turnedOn ?oldTurnedOn .
-        ?device cot:soundVolume ?oldsoundVolume .
-    };
-
-DELETE 
-    {   ?localizationNode cot:latitude ?oldLatitude .
-        ?localizationNode cot:longitude ?oldLongitude .
-        ?device cot:turnedOn ?oldTurnedOn .
-        ?device cot:soundVolume ?oldsoundVolume .
-    }
-INSERT 
-    {   ?device cot:turnedOn 1 .
-        ?device cot:soundVolume 0 .
-        ?localizationNode cot:latitude 11 .
-        ?localizationNode cot:longitude 12 .
-    }
-WHERE 
-    {   ?device cot:objectId <device_id> .
-        ?device cot:localization ?localizationNode .
-        ?localizationNode cot:latitude ?oldLatitude .
-        ?localizationNode cot:longitude ?oldLongitude .
-        ?device cot:turnedOn ?oldTurnedOn .
-        ?device cot:soundVolume ?oldsoundVolume .
-    };
-
-DELETE 
-    {  ?device cot:turnedOn ?oldTurnedOn .
-    }
-INSERT 
-    {  ?device cot:turnedOn 0 .
-    }
-WHERE 
-    {   ?device cot:objectId <device_id> .
-        ?device cot:turnedOn ?oldTurnedOn .
-    };
-
-DELETE 
-    {   ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency . 
-        ?devicefeedingControlservingSize cot:value ?oldValuedevicefeedingControlservingSize . 
-        ?devicefeedingControlservingsPerMeal cot:value ?oldValuedevicefeedingControlservingsPerMeal . 
-        ?device cot:objectId ?oldValueobjectId . 
-        ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage . 
-        ?device cot:turnedOn ?oldValueturnedOn . 
-    }
-INSERT 
-    {   ?devicefeedingControlmealFrequency cot:value 4 .  
-        ?devicefeedingControlservingSize cot:value 3 .  
-        ?devicefeedingControlservingsPerMeal cot:value 20 .  
-        ?device cot:objectId 87676 .  
-        ?devicephysicalStorage cot:value 5 .  
-        ?device cot:turnedOn 1 .  
-    }
-WHERE 
-    {   ?device cot:objectId 4270256 . 
-        ?device cot:feedingControl ?devicefeedingControl .  
-        ?devicefeedingControl cot:mealFrequency ?devicefeedingControlmealFrequency .  
-        ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency .  
-        ?devicefeedingControl cot:servingSize ?devicefeedingControlservingSize .  
-        ?devicefeedingControlservingSize cot:value ?oldValuedevicefeedingControlservingSize .  
-        ?devicefeedingControl cot:servingsPerMeal ?devicefeedingControlservingsPerMeal .  
-        ?devicefeedingControlservingsPerMeal cot:value ?oldValuedevicefeedingControlservingsPerMeal .  
-        ?device cot:objectId ?oldValueobjectId .  
-        ?device cot:physicalStorage ?devicephysicalStorage .  
-        ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage .  
-        ?device cot:turnedOn ?oldValueturnedOn .  }
 
 DELETE 
     {   ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency .

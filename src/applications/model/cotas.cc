@@ -350,13 +350,13 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
     nlohmann::json response;
     std::ostringstream sparql_query;
 
-    // std::string consulta_teste = "?device a cot:Computer . ?device cot:turnedOn 1 .";
     // Prepara a consulta
     sparql_query << SparqlPrefix()
                  << "SELECT ?ip ?port "
                  << "WHERE { "
                  << "?device cot:ipAddress ?ip . "
                  << "?device cot:port ?port . "
+                 << "?device cot:turnedOn 1 . "
                  << payload 
                  << " }";
 
@@ -402,12 +402,11 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
                     uint32_t port = std::stoi(raw_port);
                     
                     response = {{"status", COAP_RESPONSE_CODE_CONTENT}};
-                    response["ip"] = ip;
-                    response["port"] = port;
+                    response["response"] = {{"ip", ip}, {"port", port}};
 
                     NS_LOG_INFO("Dispositivo de IP: " << ip 
                                 << " e de porta " << port 
-                                << "sendo enviado para aplicação");
+                                << " sendo enviado para aplicação");
                     break; // retorna só o primeiro por enquanto
                 }
             }
@@ -425,9 +424,7 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
         NS_LOG_INFO("error code: " << res.error());
         response = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}};
     }
-    abort();
     return response;
-    
 }
 
 void

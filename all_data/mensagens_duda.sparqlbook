@@ -1,0 +1,110 @@
+[
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl]\r\n# [endpoint=./data_ttl/context.ttl]\r\n# [endpoint=./data_ttl/definition.ttl]\r\n# [endpoint=./data_ttl/index.ttl]\r\n# [endpoint=./data_ttl/object.ttl]\r\n# [endpoint=./data_ttl/unit.ttl]\r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot> \r\nPREFIX cot:  <#>\r\nPREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:  <http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\nSELECT ?devices\r\nWHERE {\r\n    ?devices a cot:SmartFeeder.\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl]\r\n# [endpoint=./data_ttl/context.ttl]\r\n# [endpoint=./data_ttl/definition.ttl]\r\n# [endpoint=./data_ttl/index.ttl]\r\n# [endpoint=./data_ttl/object.ttl]\r\n# [endpoint=./data_ttl/unit.ttl]\r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot> \r\nPREFIX cot:  <#>\r\nPREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:  <http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n#Detecção de Quedas\r\nSELECT ?devices # ?ip ?port\r\nWHERE {\r\n    { ?devices a cot:SmartWatch. }\r\n    UNION\r\n    { ?devices a cot:SmartCamera. }\r\n    UNION\r\n    { ?devices a cot:SmartNecklace. }\r\n    UNION\r\n    { ?devices a cot:SmartRing. }\r\n    \r\n  # ?devices cot:IpAddress ?ip.\r\n  # ?devices cot:port ?port.\r\n  # ?devices cot:turnedOn 1.\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl]\r\n# [endpoint=./data_ttl/context.ttl]\r\n# [endpoint=./data_ttl/definition.ttl]\r\n# [endpoint=./data_ttl/index.ttl]\r\n# [endpoint=./data_ttl/object.ttl]\r\n# [endpoint=./data_ttl/unit.ttl]\r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot> \r\nPREFIX cot:  <#>\r\nPREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:  <http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:   <http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:  <http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit: <http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang: <https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Controle de Microprocessadores\r\nSELECT ?devices\r\nWHERE {\r\n    { ?devices cot:contains [ cot:component ?cpu ].\r\n      ?cpu a cot:Cpu. }\r\n    UNION\r\n    { ?devices cot:contains [ cot:component ?microprocessor ].\r\n      ?microprocessor a cot:Microprocessor. }\r\n    UNION\r\n    { ?devices a cot:SmartWatch. } # Exemplos de dispositivos que sempre têm CPU\r\n    UNION\r\n    { ?devices a cot:SmartMirror. }\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Cuidados com Animais de Estimação (cot:PetCare)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:PetCare .\r\n    FILTER (!isBlank(?devices)) \r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Gerenciamento de Gasto de Energia (cot:EnergyManagement)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:EnergyManagement .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Gerenciamento de Gasto de Água (cot:WaterManagement)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:WaterManagement .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Sistema de Segurança (cot:SmartSecurity)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:SmartSecurity .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Sistemas de Cuidado com a Saúde (Vários Contextos)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor ?context .\r\n    FILTER (?context IN (cot:MonitoringVitalSigns, cot:PreventiveHealthMeasures, cot:MedicationAdherence, cot:AgedCareMonitoring))\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Sistemas de Controle de Luz (cot:SmartLighting)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:SmartLighting .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Controladores de Temperatura e Umidade (Vários Contextos)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor ?context .\r\n    FILTER (?context IN (cot:SmartTemperature, cot:SmartHumidity, cot:SmartTemperatureHumidity))\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Serviço de Limpeza Inteligente (cot:SmartCleaning)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:SmartCleaning .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Jardim Inteligente (cot:SmartGarden e cot:SmartIrrigation)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor ?context .\r\n    FILTER (?context IN (cot:SmartGarden, cot:SmartIrrigation))\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Locomoção Inteligente (cot:SmartMobility)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:SmartMobility .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Cocção Inteligente (cot:SmartCooking)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:SmartCooking .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Gerenciamento de Inventário (cot:InventoryManagement)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:InventoryManagement .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Sistema Detector de Gases Perigosos (Sensores de Gás Específicos)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:EnvironmentalMonitoringControl .\r\n    FILTER (?class IN (cot:CarbonMonoxideSensor, cot:OzoneSensor, cot:SulfurDioxideSensor, cot:NitrousOxideSensor, cot:InfraredGasSensor, cot:ElectrochemicalGasSensor, cot:SemiconductorGasSensor, cot:CatalyticGasSensor, cot:GasLeakSensor, cot:SmokeSensor))\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Controle de Microprocessadores (Dispositivos Genéricos de Processamento)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    FILTER (?class IN (cot:Computer, cot:SmartTelevision, cot:SmartWatch, cot:SmartMirror))\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "# [endpoint=./data_ttl/application.ttl] \r\n# [endpoint=./data_ttl/context.ttl] \r\n# [endpoint=./data_ttl/definition.ttl] \r\n# [endpoint=./data_ttl/index.ttl] \r\n# [endpoint=./data_ttl/object.ttl] \r\n# [endpoint=./data_ttl/unit.ttl] \r\n\r\nBASE <http://nesped1.caf.ufv.br/od4cot>\r\nPREFIX cot:<#>\r\nPREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\r\nPREFIX owl:<http://www.w3.org/2002/07/owl#>\r\nPREFIX qu:<http://purl.oclc.org/NET/ssnx/qu/qu#>\r\nPREFIX dim:<http://purl.oclc.org/NET/ssnx/qu/dim#>\r\nPREFIX unit:<http://purl.oclc.org/NET/ssnx/qu/unit#>\r\nPREFIX lang:<https://id.loc.gov/vocabulary/iso639-1/>\r\n\r\n# Sistema de Localização Interno (cot:IndoorLocation)\r\nSELECT DISTINCT ?devices\r\nWHERE {\r\n    ?devices a ?class .\r\n    ?class cot:usedFor cot:IndoorLocation .\r\n    FILTER (!isBlank(?devices))\r\n}",
+    "metadata": {}
+  }
+]
