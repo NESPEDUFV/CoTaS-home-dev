@@ -1,6 +1,6 @@
 # CoTaS@Home: Context of Things as a Service at Home
 
-Um serviço de disponibilização objetos inteligentes a partir de seus perfis contextuais para casas inteligentes
+Um serviço de distribuição de objetos inteligentes a partir de seus perfis contextuais para casas inteligentes
 
 ## Table of contents
 
