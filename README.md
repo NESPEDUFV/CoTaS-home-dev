@@ -40,9 +40,19 @@ A versão utilizada para o desenvolvimento do projeto é <5.5.0, atualmente esta
 
 Neste repositório também existe os arquivos docker usados para o desenvolvimento, todos eles se encontram no diretório [jena-fuseki](/jena-fuseki/).
 
+> recomendo a instalação do [docker rootless](https://docs.docker.com/engine/security/rootless/) para usos gerais
+
 ### CoAP
 
-TODO: escrever como instalar o coap
+Para instalar o CoAP que usamos no projeto basta clonar [este fork](https://github.com/piface314/libcoap/tree/develop-4.3.5) do repositório original do libcoap, e, na branch develop-4.3.5 executar os seguintes comandos:
+
+```./autogen.sh```
+
+```./configure --prefix="${NS3_HOME}/build"  --disable-doxygen --disable-manpages```
+
+```make```
+
+```make install```
 
 ### json e httplib
 
@@ -54,11 +64,22 @@ Para colocar os dados do CoTaS@Home em seu simulador, foi feito um script que co
 
 Para que tudo de certo, crie a variável de ambiente na forma.
 
-```NS3_HOME = "/home/username/diretorio/ate/ns-3.46"```
+```NS3_HOME = "/home/username/diretorio/até/ns-3.46"```
+
+e execute o script <nome_script>.sh
 
 ## Como executar
 
-Feita todas devidas instalações das dependencias basta executar em seu terminal
+Feita todas devidas instalações das dependencias basta executar o conteiner do jena fuseki com as configurações usadas em desenvolvimento:
+
+```docker compose build --build-arg JENA_VERSION=5.5.0```
+
+depois executar o conteiner com:
+
+```sudo docker compose up```
+
+> obs: execute esse comando dentro do diretório do docker-compose.yml
+
+entrar no diretório do ns3 e executar em seu terminal:
 
 ```./ns3 run casaInteligente_20.cc```
-

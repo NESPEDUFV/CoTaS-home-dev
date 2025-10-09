@@ -73,8 +73,7 @@ build_lib(
     model/udp-echo-server.h
     model/udp-server.h
     model/udp-trace-client.h
-  LIBRARIES_TO_LINK 
-    coap-3
+  LIBRARIES_TO_LINK ${libinternet} coap-3 
   TEST_SOURCES
     test/three-gpp-http-client-server-test.cc
     test/bulk-send-application-test-suite.cc
