@@ -71,7 +71,7 @@ GetPduPath(coap_pdu_t* pdu)
         path_stream.write(reinterpret_cast<const char*>(coap_opt_value(opt)), 
             coap_opt_length(opt));
     }else{
-        printf("deu pal de novo no path");
+        printf("Erro na interpretação do path");
         abort();
     }
     
@@ -92,14 +92,28 @@ GetPduPayloadJson(coap_pdu_t* pdu)
     size_t pdu_data_total_length;
     size_t pdu_data_length;
     uint8_t check;
+    nlohmann::json payload;
+
     check = coap_get_data_large(pdu, &pdu_data_length, &pdu_data,
                             &pdu_data_offset, &pdu_data_total_length);
 
     if(!check){
-        printf("Ocorreu um erro ao pega o payload");
+        printf("Ocorreu um erro ao pegar o payload da pdu");
         abort();
     }
-    return nlohmann::json::parse(pdu_data, pdu_data + pdu_data_total_length);
+
+
+    try
+    {
+        payload = nlohmann::json::parse(pdu_data, pdu_data + pdu_data_total_length);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Erro no parse do Json GetPduPayloadJson" << '\n';
+        std::cerr << e.what() << '\n';
+    }
+
+    return payload;
 }
 
 std::string
@@ -110,13 +124,25 @@ GetPduPayloadString(coap_pdu_t* pdu)
     size_t pdu_data_total_length;
     size_t pdu_data_length;
     uint8_t check;
+    std::string payload;
+
     check = coap_get_data_large(pdu, &pdu_data_length, &pdu_data,
                             &pdu_data_offset, &pdu_data_total_length);
 
     if(!check){
-        printf("Ocorreu um erro ao pega o payload");
+        printf("Ocorreu um erro ao pegar o payload do pdu");
         abort();
     }
-    std::string payload (reinterpret_cast<const char*>(pdu_data), pdu_data_total_length);
+    try
+    {
+        std::string s (reinterpret_cast<const char*>(pdu_data), pdu_data_total_length);
+        payload = s;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Ocorreu um erro no parse String GetPduPayloadString" << '\n';
+        std::cerr << e.what() << '\n';
+    }
+    
     return payload;
 }

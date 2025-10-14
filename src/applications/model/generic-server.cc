@@ -86,6 +86,8 @@ GenericServer::StartApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    NS_LOG_INFO("[S.O.Srv] Inicia aplicação de tipo: " << m_objectType);
+
     SetDataMessage();
 
     if (!m_socket)
@@ -168,6 +170,8 @@ GenericServer::StopApplication()
 void
 GenericServer::HandleRead(Ptr<Socket> socket)
 {
+    NS_LOG_INFO("[S.O.Srv] Chegou requisição no objeto inteligente " << m_objectType);
+
     NS_LOG_FUNCTION(this << socket);
 
     Address from;
@@ -200,7 +204,7 @@ GenericServer::HandleRead(Ptr<Socket> socket)
             
             check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
             if (!check){
-                NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+                NS_LOG_INFO("[S.O.Srv] Falha ao decodificar a pdu" <<  check);
                 delete[] raw_data;
                 abort();
             }
@@ -208,8 +212,6 @@ GenericServer::HandleRead(Ptr<Socket> socket)
             data = GetPduPayloadString(pdu);
             //* acaba aqui
 
-            NS_LOG_INFO("Chegou requisição de dados no objeto inteligente");
-            
             response_data = RandomData();
             res = {{"status", COAP_RESPONSE_CODE_CONTENT}, {"response", response_data}};
 
@@ -223,7 +225,7 @@ GenericServer::HandleRead(Ptr<Socket> socket)
                 response->AddPacketTag(timestampTag);
             }
             
-            NS_LOG_INFO("Enviando resposta do objeto inteligente");
+            NS_LOG_INFO("[S.O.Srv] Enviando resposta do objeto inteligente");
             socket->SendTo(response, 0, from);
             
             delete[] raw_data;
@@ -231,7 +233,7 @@ GenericServer::HandleRead(Ptr<Socket> socket)
         // trata no ipv6
         else if (Inet6SocketAddress::IsMatchingType(from))
         {
-            NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received "
+            NS_LOG_INFO("[S.O.Srv] At time " << Simulator::Now().As(Time::S) << " server received "
                                    << packet->GetSize() << " bytes from "
                                    << Inet6SocketAddress::ConvertFrom(from).GetIpv6() << " port "
                                    << Inet6SocketAddress::ConvertFrom(from).GetPort());

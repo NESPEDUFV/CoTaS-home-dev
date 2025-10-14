@@ -78,6 +78,7 @@ CoTaS::~CoTaS()
 void
 CoTaS::StartApplication()
 {
+    NS_LOG_INFO("[CoTaS] Inicia CoTaS");
     NS_LOG_FUNCTION(this);
 
     // inicia a conexão com o banco
@@ -86,7 +87,7 @@ CoTaS::StartApplication()
         // faz put dos dados iniciais
         SetupDatabase();
 
-        NS_LOG_INFO("Banco de dados criado e conectado com sucesso.");
+        NS_LOG_INFO("[CoTaS] Banco de dados criado e conectado com sucesso.");
     }
     catch ( const std::exception& e )
     {
@@ -175,6 +176,7 @@ CoTaS::StopApplication()
 void
 CoTaS::HandleRead(Ptr<Socket> socket)
 {
+    NS_LOG_INFO("[CoTaS] Chegou requisição no servidor CoTaS");
     NS_LOG_FUNCTION(this << socket);
 
     Address from;
@@ -205,27 +207,25 @@ CoTaS::HandleRead(Ptr<Socket> socket)
 
             check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
             if (!check){
-                NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+                NS_LOG_INFO("[CoTaS] Falha ao decodificar a pdu" <<  check);
                 delete[] raw_data;
                 abort();
             }
             
             path = GetPduPath(pdu);
-            NS_LOG_INFO("caminho que chegou no cotas:" << path);
+            NS_LOG_INFO("[CoTaS] caminho que chegou no cotas:" << path);
 
-            NS_LOG_INFO("Chegou requisição no servidor");
-            if(m_handlerDict.count(path)){ // existe a operação que responde a requisição:
+            if(m_handlerDict.count(path))
+            {   // existe a operação que responde a requisição:
                 // usa o dicionário de funções
                 HandlersFunctions handler = m_handlerDict[path];
                 response_data = handler(from, pdu);
 
-            }else{
-                // não existe a operação 
-                // TODO: tratar
-                // respose_data = HandleBadRequest();
+            }else
+            {   
+                response_data = HandleBadRequest();
             }
 
-            // TODO: encapsular pdu com coap
             data_pdu = EncodePduResponse(response_data["status"], response_data.dump());
 
             response = Create<Packet>(data_pdu.buffer, data_pdu.size);
@@ -235,14 +235,14 @@ CoTaS::HandleRead(Ptr<Socket> socket)
                 response->AddPacketTag(timestampTag);
             }
             
-            NS_LOG_INFO("Enviando resposta do servidor");
+            NS_LOG_INFO("[CoTaS] Enviando resposta do servidor");
             socket->SendTo(response, 0, from);
             delete[] raw_data;
         }
         // trata no ipv6
         else if (Inet6SocketAddress::IsMatchingType(from))
         {
-            NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received "
+            NS_LOG_INFO("[CoTaS] At time " << Simulator::Now().As(Time::S) << " server received "
                                    << packet->GetSize() << " bytes from "
                                    << Inet6SocketAddress::ConvertFrom(from).GetIpv6() << " port "
                                    << Inet6SocketAddress::ConvertFrom(from).GetPort());
@@ -260,8 +260,8 @@ CoTaS::HandleSubscription(Address from, coap_pdu_t* pdu)
     if (valida)
     {
         // ip já inscrito, manda o id novamente.
-        // NS_LOG_INFO("IP já inscrito");
-        // NS_LOG_INFO("Id do ip inscrito: " << valida);
+        // NS_LOG_INFO("[CoTaS] IP já inscrito");
+        // NS_LOG_INFO("[CoTaS] Id do ip inscrito: " << valida);
         nlohmann::json res = {{"status", COAP_RESPONSE_CODE_CREATED}, {"id", valida}};
         
         return res;
@@ -295,13 +295,13 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 
     nlohmann::json payload = GetPduPayloadJson(pdu);
     nlohmann::json response;
-    // NS_LOG_INFO("payload em json que chegou: " << payload.dump() );
+    // NS_LOG_INFO("[CoTaS] payload em json que chegou: " << payload.dump() );
     
     // verifica se id é válido garante que o json tem id
     if (payload.contains("objectId") && !ValidateID_Q(payload["objectId"]))
     {
         // id inválido
-        NS_LOG_INFO("ID inválido, enviando mensagem de não autorizado");
+        NS_LOG_INFO("[CoTaS] ID inválido, enviando mensagem de não autorizado");
         nlohmann::json res = {
             {"status", COAP_RESPONSE_CODE_UNAUTHORIZED},
         };
@@ -312,21 +312,21 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
     // constroi mensagem
     std::string update_query = JsonToSparqlUpdateParser(payload);
     
-    // NS_LOG_INFO("ultima query obtida: \n" << update_query);
+    // NS_LOG_INFO("[CoTaS] ultima query obtida: \n" << update_query);
 
     // envia consulta para o fuseki
     auto res = m_cli.Post("/dataset/update", update_query, "application/sparql-update");
 
     if (res && (res->status == 200 || res->status == 204)) {
-        // NS_LOG_INFO("DADOS ATUALIZADOS COM SUCESSO!");
+        // NS_LOG_INFO("[CoTaS] DADOS ATUALIZADOS COM SUCESSO!");
     } else {
         // se deu erro
-        // NS_LOG_INFO("Erro na atualizacao");
+        NS_LOG_INFO("[CoTaS] Erro na atualizacao");
         if (res) {
-            NS_LOG_INFO("Status: " << res->status << " Body: " << res->body);
+            NS_LOG_INFO("[CoTaS] Status: " << res->status << " Body: " << res->body);
             
         } else {
-            NS_LOG_INFO("Erro de conexao: " << httplib::to_string(res.error()));
+            NS_LOG_INFO("[CoTaS] Erro de conexao: " << httplib::to_string(res.error()));
         }
         response = {{"status", COAP_RESPONSE_CODE_INTERNAL_ERROR}};
         return response;
@@ -340,7 +340,7 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 nlohmann::json
 CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
 {
-    NS_LOG_INFO("chegou uma requisição de uma aplicação ");
+    NS_LOG_INFO("[CoTaS] chegou uma requisição de uma aplicação ");
 
     std::string payload = GetPduPayloadString(pdu);
     nlohmann::json response;
@@ -379,12 +379,14 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
 
             if (bindings.empty()) 
             {
-                NS_LOG_INFO("Nenhum resultado encontrado");
+                NS_LOG_INFO("[CoTaS] Nenhum objeto encontrado");
                 response = {{"status", COAP_RESPONSE_CODE_NOT_FOUND}};
             } else 
             {
-                NS_LOG_INFO("Resultados de objetos encontrados: ");
-                NS_LOG_INFO("bindings " << bindings.dump());
+                NS_LOG_INFO("[CoTaS] Foram encontrados objetos");
+                // NS_LOG_INFO("[CoTaS] Resultados de objetos encontrados: ");
+                // NS_LOG_INFO("[CoTaS] bindings " << bindings.dump());
+
                 // Itera sobre cada "linha" de resultado
                 // aqui é pra ter só um 
                 // não há iteração
@@ -400,7 +402,7 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
                     response = {{"status", COAP_RESPONSE_CODE_CONTENT}};
                     response["response"] = {{"ip", ip}, {"port", port}};
 
-                    NS_LOG_INFO("Dispositivo de IP: " << ip 
+                    NS_LOG_INFO("[CoTaS] Dispositivo de IP: " << ip 
                                 << " e de porta " << port 
                                 << " sendo enviado para aplicação");
                     break; // retorna só o primeiro por enquanto
@@ -414,12 +416,20 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
         }
     } else 
     {
-        NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+        NS_LOG_INFO("[CoTaS] Erro na requisição, status:" << res->status << 
             "\n cabeçalho:" << res->get_header_value("Content-Type") << 
             "\n corpo:" << res->body);
-        NS_LOG_INFO("error code: " << res.error());
+        NS_LOG_INFO("[CoTaS] error code: " << res.error());
         response = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}};
     }
+    return response;
+}
+
+nlohmann::json
+CoTaS::HandleBadRequest()
+{
+    nlohmann::json response;
+    response = {{"status", COAP_RESPONSE_CODE_BAD_REQUEST}};
     return response;
 }
 
@@ -435,12 +445,12 @@ CoTaS::SetupDatabase(){
     // primeiro arquivo
     if (auto res = m_cli.Put("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
-        NS_LOG_INFO("Arquivo definition.ttl" << res->status << "\n" 
+        NS_LOG_INFO("[CoTaS] Arquivo definition.ttl" << res->status << "\n" 
                     << res->get_header_value("Content-Type") << "\n" 
                     << res->body);
     } else 
     {
-        NS_LOG_INFO("error code: " << res.error());
+        NS_LOG_INFO("[CoTaS] error code: " << res.error());
     }
 
     // restante dos arquivos
@@ -451,12 +461,12 @@ CoTaS::SetupDatabase(){
         payload = ReadFile(nome_arquivo);
         if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
         {
-            NS_LOG_INFO("Arquivo" << nome_arquivo << res->status << "\n" 
+            NS_LOG_INFO("[CoTaS] Arquivo" << nome_arquivo << res->status << "\n" 
                         << res->get_header_value("Content-Type") << "\n" 
                         << res->body);
         } else 
         {
-            NS_LOG_INFO("error code: " << res.error());
+            NS_LOG_INFO("[CoTaS] error code: " << res.error());
         }
     }
 }
@@ -466,7 +476,7 @@ CoTaS::ReadFile(std::string filename){
     filename = "all_data/data_ttl/"+filename;
     std::ifstream arquivo(filename);
     if (!arquivo.is_open()) {
-        NS_LOG_INFO("Erro: Nao foi possivel abrir o arquivo: " << filename);
+        NS_LOG_INFO("[CoTaS] Erro: Nao foi possivel abrir o arquivo: " << filename);
         return "";
     }
     std::stringstream buffer;
@@ -474,7 +484,7 @@ CoTaS::ReadFile(std::string filename){
     return buffer.str();
 }
 
-
+// Teste do jena fuseki
 int
 CoTaS::Simple_Q()
 {
@@ -508,18 +518,18 @@ CoTaS::Simple_Q()
 
                 if (bindings.empty()) 
                 {
-                    NS_LOG_INFO("Nenhum resultado encontrado na simple query");
+                    NS_LOG_INFO("[CoTaS] Nenhum resultado encontrado na simple query");
                     return 0;
                 } else 
                 {
-                    NS_LOG_INFO("Resultados encontrados: ");
-                    NS_LOG_INFO("bindings " << bindings.dump());
+                    NS_LOG_INFO("[CoTaS] Resultados encontrados: ");
+                    NS_LOG_INFO("[CoTaS] bindings " << bindings.dump());
                     for (const auto& item : bindings) 
                     {
                         // Pega o valor da variável "?device"
                         std::string value = item["device"]["value"];
 
-                        NS_LOG_INFO("dispositivo: " << value);
+                        NS_LOG_INFO("[CoTaS] dispositivo: " << value);
                     }
                 }
             } catch (const nlohmann::json::parse_error& e) 
@@ -530,15 +540,15 @@ CoTaS::Simple_Q()
             }
         } else 
         {
-            NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+            NS_LOG_INFO("[CoTaS] Erro na requisição, status:" << res->status << 
                 "\n cabeçalho:" << res->get_header_value("Content-Type") << 
                 "\n corpo:" << res->body);
-            NS_LOG_INFO("error code: " << res.error());
+            NS_LOG_INFO("[CoTaS] error code: " << res.error());
         }
     }
     catch (const std::exception& e)
     {
-        NS_LOG_INFO("Exceção: " << e.what());
+        NS_LOG_INFO("[CoTaS] Exceção: " << e.what());
         abort();
         return 0;
     }
@@ -585,12 +595,12 @@ CoTaS::ValidateIP_Q(Address ip)
 
                 if (bindings.empty()) 
                 {
-                    NS_LOG_INFO("Nenhum resultado encontrado para o IP: " << ip_num );
+                    NS_LOG_INFO("[CoTaS] Nenhum resultado encontrado para o IP: " << ip_num );
                     return 0;
                 } else 
                 {
-                    NS_LOG_INFO("Resultados encontrados: ");
-                    NS_LOG_INFO("bindings " << bindings.dump());
+                    NS_LOG_INFO("[CoTaS] Resultados encontrados: ");
+                    NS_LOG_INFO("[CoTaS] bindings " << bindings.dump());
                     // Itera sobre cada "linha" de resultado
                     // aqui é pra ter só um 
                     // não há iteração
@@ -600,7 +610,7 @@ CoTaS::ValidateIP_Q(Address ip)
                         std::string raw_id = item["id"]["value"];
                         int id = std::stoi(raw_id);
 
-                        NS_LOG_INFO("Dispositivo de IP: " << ip_num 
+                        NS_LOG_INFO("[CoTaS] Dispositivo de IP: " << ip_num 
                                     << "já cadastrado com id" << id 
                                     << ", reenviando");
                         return id;
@@ -614,15 +624,15 @@ CoTaS::ValidateIP_Q(Address ip)
             }
         } else 
         {
-            NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+            NS_LOG_INFO("[CoTaS] Erro na requisição, status:" << res->status << 
                 "\n cabeçalho:" << res->get_header_value("Content-Type") << 
                 "\n corpo:" << res->body);
-            NS_LOG_INFO("error code: " << res.error());
+            NS_LOG_INFO("[CoTaS] error code: " << res.error());
         }
     }
     catch (const std::exception& e)
     {
-        NS_LOG_INFO("Exceção: " << e.what());
+        NS_LOG_INFO("[CoTaS] Exceção: " << e.what());
         abort();
         return 0;
     }
@@ -662,17 +672,17 @@ CoTaS::ValidateID_Q(int id)
             {
                 // Parse da string da resposta para um objeto JSON
                 nlohmann::json j = nlohmann::json::parse(res->body);
-                // NS_LOG_INFO("json que chegou do fuseki: (ID)" << j.dump());
+                // NS_LOG_INFO("[CoTaS] json que chegou do fuseki: (ID)" << j.dump());
 
                 const auto& bindings = j["results"]["bindings"];
 
                 if (bindings.empty()) 
                 {
-                    // NS_LOG_INFO("Nenhum resultado encontrado para o ID: " << id );
+                    // NS_LOG_INFO("[CoTaS] Nenhum resultado encontrado para o ID: " << id );
                     return 0;
                 } else 
                 {
-                    // NS_LOG_INFO("Dispositivo já registrado " << bindings.dump());
+                    // NS_LOG_INFO("[CoTaS] Dispositivo já registrado " << bindings.dump());
                     return id;
                 }
             } catch (const nlohmann::json::parse_error& e) 
@@ -683,15 +693,15 @@ CoTaS::ValidateID_Q(int id)
             }
         } else 
         {
-            NS_LOG_INFO("Erro na requisição, status:" << res->status << 
+            NS_LOG_INFO("[CoTaS] Erro na requisição, status:" << res->status << 
                 "\n cabeçalho:" << res->get_header_value("Content-Type") << 
                 "\n corpo:" << res->body);
-            NS_LOG_INFO("error code: " << res.error());
+            NS_LOG_INFO("[CoTaS] error code: " << res.error());
         }
     }
     catch (const std::exception& e)
     {
-        NS_LOG_INFO("Exceção: " << e.what());
+        NS_LOG_INFO("[CoTaS] Exceção: " << e.what());
         abort();
         return 0;
     }
@@ -714,23 +724,24 @@ CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
     payload = payload+idip;
     payload = SparqlPrefix()+payload;
 
-    // NS_LOG_INFO("Payload pós tratamento: " << payload);
+    // NS_LOG_INFO("[CoTaS] Payload pós tratamento: " << payload);
 
     if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
         if(res->status != 200){
-            NS_LOG_INFO("======\nDEU PAU AQUI\n======");
-            NS_LOG_INFO("Inseriu dados no fuseki? " << res->status << "\n" 
+            NS_LOG_INFO("[CoTaS] ======\nDEU PAU AQUI\n======");
+            NS_LOG_INFO("[CoTaS] Inseriu dados no fuseki? " << res->status << "\n" 
                 << res->get_header_value("Content-Type") << "\n" 
                 << res->body);
         }
     } else 
     {
-        NS_LOG_INFO("Erro na inserção de dados no fuseki");
-        NS_LOG_INFO("error code: " << res.error());
+        NS_LOG_INFO("[CoTaS] ======\nDEU PAU AQUI\n======");
+        NS_LOG_INFO("[CoTaS] Erro na inserção de dados no fuseki");
+        NS_LOG_INFO("[CoTaS] error code: " << res.error());
     }
 
-    return 1;
+    return 0;
 }
 
 int
@@ -916,7 +927,7 @@ CoTaS::UpdateElementHandler(
     
     // percorre os nós emitindo variaveis de nome seguro
     // emite dados para '.' e '/' até o penultimo nó
-    for(size_t i = 0; i<tokens.size()-3;i++){ // termina antes??
+    for(size_t i = 0; i<tokens.size()-3;i++){ 
         if(tokens[i+1] == "/")
         {
             where_string = " ?" + node 

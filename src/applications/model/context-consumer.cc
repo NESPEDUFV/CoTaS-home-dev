@@ -106,7 +106,7 @@ ContextConsumer::ContextConsumer()
     }
     else
     {
-        std::cerr << "Erro ao abrir messages.json\n";
+        NS_LOG_INFO("[App.Cli] Erro ao abrir messages.json");
     }
 
     NS_LOG_FUNCTION(this);
@@ -186,6 +186,7 @@ ContextConsumer::GetPort() const
 void
 ContextConsumer::StartApplication()
 {
+    NS_LOG_INFO("[App.Cli] Inicia Aplicação tipo: " << m_applicationType);
     NS_LOG_FUNCTION(this);
 
     // set the messages that the object will send
@@ -265,6 +266,8 @@ ContextConsumer::ScheduleTransmit(Time dt)
 void
 ContextConsumer::Send()
 {
+    NS_LOG_INFO("[App.Cli] Prepara para enviar dados");
+    //[App.Cli]
     // ns3
     Ptr<Packet> p;
     std::string data;
@@ -292,7 +295,7 @@ ContextConsumer::Send()
         uri_path = "/subscribe/application";
         request_code = COAP_REQUEST_CODE_POST;
 
-        NS_LOG_INFO("Selecionou dados de inscrição de aplicação");
+        NS_LOG_INFO("[App.Cli] Selecionou dados de inscrição de aplicação");
         break;
     
     default:
@@ -303,7 +306,7 @@ ContextConsumer::Send()
         uri_path = "/search";
         request_code = COAP_REQUEST_CODE_GET;
 
-        NS_LOG_INFO("Selecionou dados de requisição consumidor");
+        NS_LOG_INFO("[App.Cli] Selecionou dados de requisição consumidor");
     }
 
     data_pdu = EncodePduRequest(uri_path, request_code, data);
@@ -313,7 +316,7 @@ ContextConsumer::Send()
     timestampTag.SetTimestamp(Simulator::Now());
     p->AddPacketTag(timestampTag);
 
-    NS_LOG_INFO("Enviando dados de requisição consumidor");
+    NS_LOG_INFO("[App.Cli] Enviando dados de requisição");
     
     m_socket->GetSockName(localAddress);
     
@@ -335,7 +338,7 @@ ContextConsumer::Send()
         m_socket->SendTo(p, 0, m_objectAdress);
         break;
     default:
-        NS_LOG_INFO("Consumer in an undefined state");
+        NS_LOG_INFO("[App.Cli] Consumidor em estado infefinido");
         break;
     }
     
@@ -350,7 +353,7 @@ ContextConsumer::Send()
 void
 ContextConsumer::HandleRead(Ptr<Socket> socket)
 {
-    NS_LOG_INFO("Chegou mensagem no consumidor de contexto");
+    NS_LOG_INFO("[App.Cli] Chegou mensagem no consumidor de contexto");
     NS_LOG_FUNCTION(this << socket);
     Address from;
     while (auto packet = socket->RecvFrom(from))
@@ -370,7 +373,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         
         check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
         if (!check){
-            NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+            NS_LOG_INFO("[App.Cli] Falha ao decodificar a pdu" <<  check);
             delete[] raw_data;
             abort();
         }
@@ -379,7 +382,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
         
         data_json = GetPduPayloadJson(pdu);
 
-        NS_LOG_INFO("json que chegou no cliente aplicação " << data_json.dump());
+        // NS_LOG_INFO("[App.Cli] json que chegou no cliente aplicação " << data_json.dump());
 
         switch (pdu_code)
         {
@@ -387,23 +390,23 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             HandleOK(data_json["response"]);
             break;
         case COAP_RESPONSE_CODE_BAD_REQUEST:
-            NS_LOG_INFO("Bad request ");
+            NS_LOG_INFO("[App.Cli] Bad request ");
             break;
         case COAP_RESPONSE_CODE_UNAUTHORIZED: 
             // TODO ainda não implementado inscrição dos consumidores
-            NS_LOG_INFO("Tentou enviar request sem inscrição");
+            NS_LOG_INFO("[App.Cli] Tentou enviar request sem inscrição");
             break;
         case COAP_RESPONSE_CODE_INTERNAL_ERROR:
-            NS_LOG_INFO("Erro no servidor");
+            NS_LOG_INFO("[App.Cli] Erro no servidor");
             break;
         case COAP_RESPONSE_CODE_CREATED:
             m_objectId = data_json["id"];
             break;
         case COAP_RESPONSE_CODE_NOT_FOUND:
-            NS_LOG_INFO(" não foi encontrado objeto pedido");
+            NS_LOG_INFO("[App.Cli]  não foi encontrado objeto pedido");
             break;
         default:
-            NS_LOG_INFO("status não reconhecido: " << pdu_code);
+            NS_LOG_INFO("[App.Cli] status não reconhecido: " << pdu_code);
         }
 
         if (packet->PeekPacketTag(timestampTag))
@@ -414,7 +417,7 @@ ContextConsumer::HandleRead(Ptr<Socket> socket)
             
             Time delay = now - txTime;
 
-            NS_LOG_INFO ("RTT: " << delay.GetSeconds() << " segundos.");
+            NS_LOG_INFO ("[App.Cli] RTT: " << delay.GetSeconds() << " segundos.");
         
         }
         
@@ -439,7 +442,7 @@ ContextConsumer::HandleOK(nlohmann::json response)
     {
         case Searching:
             if(response.empty()){
-                NS_LOG_INFO("Chegou resposta do cotas vazio,"
+                NS_LOG_INFO("[App.Cli] Chegou resposta do cotas vazio,"
                             << "não há objetos que correspondem a pesquisa");
             }
             else{ // não chegou vazio, existe objeto que corresponde a pesquisa
@@ -452,11 +455,11 @@ ContextConsumer::HandleOK(nlohmann::json response)
                 
                 // atualiza o estado da aplicação
                 m_state = Find;
-                NS_LOG_INFO("Chegou resposta do cotas com objeto");
+                NS_LOG_INFO("[App.Cli] Chegou resposta do cotas com objeto");
             }
             break;
         case Find:
-            NS_LOG_INFO("Chegou resposta do objeto int. no consumidor");
+            NS_LOG_INFO("[App.Cli] Chegou resposta do objeto inteligente no consumidor");
             // data_json["response"]
             break;
         default:

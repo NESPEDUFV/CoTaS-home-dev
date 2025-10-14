@@ -182,6 +182,7 @@ ContextProvider::GetPort() const
 void
 ContextProvider::StartApplication()
 {
+    NS_LOG_INFO("[S.O.Cli] Inicia cliente do objeto inteligente");
     NS_LOG_FUNCTION(this);
 
     if (!m_socket)
@@ -262,6 +263,7 @@ ContextProvider::ScheduleTransmit(Time dt)
 void
 ContextProvider::Send()
 {
+    NS_LOG_INFO("[S.O.Cli] Prepara para enviar dados");
     NS_LOG_FUNCTION(this);
 
     NS_ASSERT(m_sendEvent.IsExpired());
@@ -288,7 +290,7 @@ ContextProvider::Send()
         uri_path = "/subscribe/object";
         request_code = COAP_REQUEST_CODE_POST;
 
-        NS_LOG_INFO("Selecionou dados de inscrição de objeto");
+        NS_LOG_INFO("[S.O.Cli] Selecionou dados de inscrição de objeto");
         break;
     
     default:
@@ -296,7 +298,7 @@ ContextProvider::Send()
         uri_path = "/update/object";
         request_code = COAP_REQUEST_CODE_PUT;
 
-        NS_LOG_INFO("Selecionou dados de atualização");
+        NS_LOG_INFO("[S.O.Cli] Selecionou dados de atualização de objeto");
     }
 
     // configura mensagens a serem trafegadas
@@ -314,7 +316,7 @@ ContextProvider::Send()
     m_txTrace(p);
     m_txTraceWithAddresses(p, localAddress, m_peer);
     m_socket->Send(p);
-    NS_LOG_INFO("Enviou dados do provedor para cotas");
+    NS_LOG_INFO("[S.O.Cli] Enviou dados do objeto inteligente cliente para cotas");
     ++m_sent;
 
     if (m_sent < m_count || m_count == 0)
@@ -326,6 +328,7 @@ ContextProvider::Send()
 void
 ContextProvider::HandleRead(Ptr<Socket> socket)
 {
+    NS_LOG_INFO("[S.O.Cli] Chegou resposta no objeto inteligente cliente");
     NS_LOG_FUNCTION(this << socket);
     Address from;
     while (auto packet = socket->RecvFrom(from))
@@ -344,7 +347,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
         
         check = coap_pdu_parse(COAP_PROTO_UDP, raw_data, packet->GetSize(), pdu);
         if (!check){
-            NS_LOG_INFO("Falha ao decodificar a pdu" <<  check);
+            NS_LOG_INFO("[S.O.Cli] Falha ao decodificar a pdu" <<  check);
             delete[] raw_data;
             abort();
         }
@@ -353,7 +356,6 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
         
         data_json = GetPduPayloadJson(pdu);
 
-        NS_LOG_INFO("Chegou resposta do servidor no provedor");
         switch (pdu_code)
         {
         case COAP_RESPONSE_CODE_CREATED:
@@ -361,17 +363,18 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
             break;
         case COAP_RESPONSE_CODE_CHANGED:
             // resposta do update, não faz nada
+            NS_LOG_INFO("[S.O.Cli] Atualizou dados com sucesso!");
             break;
         case COAP_RESPONSE_CODE_UNAUTHORIZED:
-            NS_LOG_INFO("Tentou enviar update sem inscrição");
+            NS_LOG_INFO("[S.O.Cli] Tentou enviar update sem inscrição");
             break;
         case COAP_RESPONSE_CODE_INTERNAL_ERROR:
-            NS_LOG_INFO("Erro no servidor");
+            NS_LOG_INFO("[S.O.Cli] Erro no servidor");
             break;
         case COAP_RESPONSE_CODE_CONTENT:
             break;
         default:
-            NS_LOG_INFO("status não reconhecido");
+            NS_LOG_INFO("[S.O.Cli] status não reconhecido");
         }
 
 
@@ -384,7 +387,7 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
             
             Time delay = now - txTime;
 
-            NS_LOG_INFO ("RTT: " << delay.GetSeconds() << " segundos.");
+            NS_LOG_INFO ("[S.O.Cli] RTT: " << delay.GetSeconds() << " segundos.");
         
         }
 
@@ -399,9 +402,9 @@ ContextProvider::HandleRead(Ptr<Socket> socket)
 void
 ContextProvider::SetDataMessage()
 {   
-    // NS_LOG_INFO("tenta setar mensagem");
+    // NS_LOG_INFO("[S.O.Cli] tenta setar mensagem");
     m_firstData = m_messages["subscribeMessagesObjects"][m_objectType];
-    // NS_LOG_INFO("seta mensagem" << m_firstData.dump());
+    // NS_LOG_INFO("[S.O.Cli] seta mensagem" << m_firstData.dump());
     m_updateData = m_messages["updateMessages"][m_objectType];
     
 }

@@ -89,6 +89,8 @@ class CoTaS : public SinkApplication
       coap_pdu_t* pdu
     );
 
+    nlohmann::json HandleBadRequest();
+
     int RandomInt(int min, int max);
 
     int ValidateIP_Q(Address ip);
