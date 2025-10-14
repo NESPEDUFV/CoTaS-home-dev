@@ -18,13 +18,16 @@ int main(int argc, char* argv[])
 {
 // ----------------- Configura logs do terminal -------------------------
 
+    LogComponentEnable("smartHouse_40", LOG_LEVEL_INFO); 
     LogComponentEnable("CoTaSApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("GenericServerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
 // 97 instancias
 // 16 aplicações + CoTaS
+    NS_LOG_INFO("Configurando nós");
 
     NodeContainer computadorNode;
     computadorNode.Create(1);
@@ -175,7 +178,7 @@ int main(int argc, char* argv[])
     // (considerando y de baixo para cima)
     
 // ------------------------- Objetos inteligentes ----------------------
-
+    NS_LOG_INFO("Posicionando nós");
     Ptr<MobilityModel> position;
     position = computadorNode.Get(0)->GetObject<MobilityModel>(); // 1
     position->SetPosition(Vector(6, 4, 0.1)); // Computador
@@ -283,21 +286,6 @@ int main(int argc, char* argv[])
     position = coleiraNode.Get(0)->GetObject<MobilityModel>(); //28
     position->SetPosition(Vector(2.3, 6.3, 0.0)); // Coleira
 
-    // position = comedouroNode.Get(0)->GetObject<MobilityModel>(); //29
-    // position->SetPosition(Vector(14, 4, 1.1)); // Comedouro
-
-    // position = escovaNode.Get(0)->GetObject<MobilityModel>(); //30
-    // position->SetPosition(Vector(8, 2.1, 1.2)); // Escova
-    
-    // position = fogaoNode.Get(0)->GetObject<MobilityModel>(); //31
-    // position->SetPosition(Vector(18, 1, 1.3)); // Fogão
-    
-    // position = geladeiraNode.Get(0)->GetObject<MobilityModel>(); //32
-    // position->SetPosition(Vector(13, 1, 1.4)); // Geladeira
-
-    // position = gotejadorNode.Get(0)->GetObject<MobilityModel>(); //33
-    // position->SetPosition(Vector(5, 12, 1.5)); // Gotejador
-
     position = janelaCortinaNodes.Get(0)->GetObject<MobilityModel>(); //34
     position->SetPosition(Vector(2, 12, 1.6)); // JanelaCortina sala 1 1
 
@@ -327,176 +315,6 @@ int main(int argc, char* argv[])
     
     position = janelaCortinaNodes.Get(9)->GetObject<MobilityModel>(); //43
     position->SetPosition(Vector(10, 14, 1.6)); // JanelaCortina garagem 10
-    
-    // position = lampadaNodes.Get(0)->GetObject<MobilityModel>(); //44
-    // position->SetPosition(Vector(5, 9, 1.7)); // lampada sala 1
-    
-    // position = lampadaNodes.Get(1)->GetObject<MobilityModel>(); //45
-    // position->SetPosition(Vector(8, 5.1, 1.7)); // lampada corredor 2
-    
-    // position = lampadaNodes.Get(2)->GetObject<MobilityModel>(); //46
-    // position->SetPosition(Vector(4, 2, 1.7)); // lampada quarto 3
-    
-    // position = lampadaNodes.Get(3)->GetObject<MobilityModel>(); //47
-    // position->SetPosition(Vector(9, 2, 1.7)); // lampada banheiro 4
-    
-    // position = lampadaNodes.Get(4)->GetObject<MobilityModel>(); //48
-    // position->SetPosition(Vector(14, 3, 1.7)); // lampada cozinha 5
-    
-    // position = lampadaNodes.Get(5)->GetObject<MobilityModel>(); //49
-    // position->SetPosition(Vector(15, 8, 1.7)); // lampada dispensa 6
-    
-    // position = lampadaNodes.Get(6)->GetObject<MobilityModel>(); //50
-    // position->SetPosition(Vector(14, 14, 1.7)); // lampada garagem 7
-
-    // position = interruptorNodes.Get(0)->GetObject<MobilityModel>(); //51
-    // position->SetPosition(Vector(4, 12, 1.8)); // interruptor sala 1
-    
-    // position = interruptorNodes.Get(1)->GetObject<MobilityModel>(); //52
-    // position->SetPosition(Vector(4, 7, 1.8)); // interruptor corredor 2
-    
-    // position = interruptorNodes.Get(2)->GetObject<MobilityModel>(); //53
-    // position->SetPosition(Vector(11, 8, 1.8)); // interruptor quarto 3
-    
-    // position = interruptorNodes.Get(3)->GetObject<MobilityModel>(); //54
-    // position->SetPosition(Vector(2.1, 4, 1.8)); // interruptor banheiro 4
-    
-    // position = interruptorNodes.Get(4)->GetObject<MobilityModel>(); //55
-    // position->SetPosition(Vector(9, 4, 1.8)); // interruptor cozinha 5
-    
-    // position = interruptorNodes.Get(5)->GetObject<MobilityModel>(); //56
-    // position->SetPosition(Vector(15, 4, 1.8)); // interruptor dispensa 6
-    
-    // position = interruptorNodes.Get(6)->GetObject<MobilityModel>(); //57
-    // position->SetPosition(Vector(14.8, 5.8, 1.8)); // interruptor garagem 7
-
-    // position = lavaLouçasNode.Get(0)->GetObject<MobilityModel>(); //58
-    // position->SetPosition(Vector(17, 1, 1.9)); // lavaLouças
-
-    // position = panelaNode.Get(0)->GetObject<MobilityModel>(); //59
-    // position->SetPosition(Vector(17, 4.1, 2.0)); // Panela 1
-
-    // // position = PisoNodes.Get(0)->GetObject<MobilityModel>(); //60
-    // // position->SetPosition(Vector(2, 6, 0.0)); // PisoN
-
-    // position = portaNodes.Get(0)->GetObject<MobilityModel>(); //61
-    // position->SetPosition(Vector(4, 12.1, 2.1)); // Porta sala ▽ 1
-    
-    // position = portaNodes.Get(1)->GetObject<MobilityModel>(); //62
-    // position->SetPosition(Vector(4, 7.1, 2.1)); // Porta sala ▲ 2
-    
-    // position = portaNodes.Get(2)->GetObject<MobilityModel>(); //63
-    // position->SetPosition(Vector(11, 8.1, 2.1)); // Porta sala ▻ 3
-    
-    // position = portaNodes.Get(3)->GetObject<MobilityModel>(); //64
-    // position->SetPosition(Vector(2, 4.1, 2.1)); // Porta quarto  4
-    
-    // position = portaNodes.Get(4)->GetObject<MobilityModel>(); //65
-    // position->SetPosition(Vector(9, 4.1, 2.1)); // Porta banheiro 5
-
-    // position = portaNodes.Get(5)->GetObject<MobilityModel>(); //66
-    // position->SetPosition(Vector(15, 4.1, 2.1)); // Porta cozinha 6
-    
-    // position = portaNodes.Get(6)->GetObject<MobilityModel>(); //67
-    // position->SetPosition(Vector(15, 6.1, 2.1)); // Porta dispensa corredor 7
-    
-    // position = portaNodes.Get(7)->GetObject<MobilityModel>(); //68
-    // position->SetPosition(Vector(16, 10, 2.1)); // Porta garagem 8
-
-    // mobility.Install(relogioNode);
-    // position = relogioNode.Get(0)->GetObject<MobilityModel>(); //69
-    // position->SetPosition(Vector(3, 7, 0.0)); // Relogio
-
-    // position = relogioNode.Get(1)->GetObject<MobilityModel>(); //69
-    // position->SetPosition(Vector(3, 8, 0.0)); // Relogio
-
-    // mobility.Install(RAPNode);
-    // position = RAPNode.Get(0)->GetObject<MobilityModel>(); //70
-    // position->SetPosition(Vector(8, 6, 0.0)); // RAP
-
-    // position = jardimNode.Get(0)->GetObject<MobilityModel>(); //71
-    // position->SetPosition(Vector(4, 16, 2.2)); // Jardim <<<<<<<<<<
-
-    // position = SFumaca.Get(0)->GetObject<MobilityModel>(); //72
-    // position->SetPosition(Vector(5, 9.1, 2.3)); // Sensor Fumaca sala 1
-    
-    // position = SFumaca.Get(1)->GetObject<MobilityModel>(); //73
-    // position->SetPosition(Vector(8, 5.2, 2.3)); // Sensor Fumaca corredor 2
-    
-    // position = SFumaca.Get(2)->GetObject<MobilityModel>(); //74
-    // position->SetPosition(Vector(4, 2.1, 2.3)); // Sensor Fumaca quarto 3
-    
-    // position = SFumaca.Get(3)->GetObject<MobilityModel>(); //75
-    // position->SetPosition(Vector(9, 2.1, 2.3)); // Sensor Fumaca banheiro 4
-    
-    // position = SFumaca.Get(4)->GetObject<MobilityModel>(); //76
-    // position->SetPosition(Vector(14, 3.1, 2.3)); // Sensor Fumaca cozinha 5
-    
-    // position = SFumaca.Get(5)->GetObject<MobilityModel>(); //77
-    // position->SetPosition(Vector(15, 8.1, 2.3)); // Sensor Fumaca dispensa 6
-    
-    // position = SFumaca.Get(6)->GetObject<MobilityModel>(); //78
-    // position->SetPosition(Vector(14, 14.1, 2.3)); // Sensor Fumaca garagem 7
-    
-    // position = tomadaNodes.Get(0)->GetObject<MobilityModel>(); //79
-    // position->SetPosition(Vector(8, 11.1, 2.4)); // Tomada 1
-    
-    // position = tomadaNodes.Get(1)->GetObject<MobilityModel>(); //80
-    // position->SetPosition(Vector(8, 11.2, 2.4)); // Tomada 2
-    
-    // position = tomadaNodes.Get(2)->GetObject<MobilityModel>(); //81
-    // position->SetPosition(Vector(8, 11.3, 2.4)); // Tomada 3
-    
-    // position = tomadaNodes.Get(3)->GetObject<MobilityModel>(); //82
-    // position->SetPosition(Vector(7, 7.2, 2.4)); // Tomada 4
-    
-    // position = tomadaNodes.Get(4)->GetObject<MobilityModel>(); //83
-    // position->SetPosition(Vector(7, 7.3, 2.4)); // Tomada 5
-    
-    // position = tomadaNodes.Get(5)->GetObject<MobilityModel>(); //84
-    // position->SetPosition(Vector(7, 7.4, 2.4)); // Tomada 6
-    
-    // position = tomadaNodes.Get(6)->GetObject<MobilityModel>(); //85
-    // position->SetPosition(Vector(6, 4.1, 2.4)); // Tomada 7
-    
-    // position = tomadaNodes.Get(7)->GetObject<MobilityModel>(); //86
-    // position->SetPosition(Vector(6, 4.2, 2.4)); // Tomada 8
-    
-    // position = tomadaNodes.Get(8)->GetObject<MobilityModel>(); //87
-    // position->SetPosition(Vector(6, 4.3, 2.4)); // Tomada 9
-    
-    // position = tomadaNodes.Get(9)->GetObject<MobilityModel>(); //88
-    // position->SetPosition(Vector(6, 4.4, 2.4)); // Tomada 10
-    
-    // position = tomadaNodes.Get(10)->GetObject<MobilityModel>(); //89
-    // position->SetPosition(Vector(8, 2.2, 2.4)); // Tomada 11
-    
-    // position = tomadaNodes.Get(11)->GetObject<MobilityModel>(); //90
-    // position->SetPosition(Vector(8, 2.3, 2.4)); // Tomada 12
-    
-    // position = tomadaNodes.Get(12)->GetObject<MobilityModel>(); //91
-    // position->SetPosition(Vector(18, 1.1, 2.4)); // Tomada 13
-    
-    // position = tomadaNodes.Get(13)->GetObject<MobilityModel>(); //92
-    // position->SetPosition(Vector(18, 1.2, 2.4)); // Tomada 14
-    
-    // position = tomadaNodes.Get(14)->GetObject<MobilityModel>(); //93
-    // position->SetPosition(Vector(13, 1.1, 2.4)); // Tomada 15
-    
-    // position = tomadaNodes.Get(15)->GetObject<MobilityModel>(); //94
-    // position->SetPosition(Vector(13, 1.2, 2.4)); // Tomada 16
-
-    // position = tomadaNodes.Get(16)->GetObject<MobilityModel>(); //95
-    // position->SetPosition(Vector(18, 4.2, 2.4)); // Tomada 17
-    
-    // position = tomadaNodes.Get(17)->GetObject<MobilityModel>(); //96
-    // position->SetPosition(Vector(18, 4.3, 2.4)); // Tomada 18
-
-    // position = tomadaNodes.Get(18)->GetObject<MobilityModel>(); //97
-    // position->SetPosition(Vector(18, 14.1, 2.4)); // Tomada 19
-    
-    // position = tomadaNodes.Get(19)->GetObject<MobilityModel>(); //98
-    // position->SetPosition(Vector(18, 14.2, 0)); // Tomada 20
     
 //  -------------------------- Roteadores ---------------------------
 
@@ -596,18 +414,96 @@ int main(int argc, char* argv[])
     }
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
-    // gera arquivo para o wireshark
-    // phy.EnablePcapAll("casaInteligente");
-
     // -------------------------- CoTaS APP ---------------------------------
-    CoTaSHelper Service(9);
+    NS_LOG_INFO("Configurando CoTaS");
 
+    CoTaSHelper Service(9);
+    ApplicationContainer serverApplications;
     ApplicationContainer serverApp = Service.Install(CoTaSNode.Get(0));
-    serverApp.Start(Seconds(1));
-    serverApp.Stop(Seconds(20));
+    serverApplications.Add(serverApp);
+
+    // ------------------------- Serviço dos objetos inteligentes-----------
+    NS_LOG_INFO("Configurando serviço dos objetos");
+    GenericServerHelper ObjectService(19);
+    
+    ApplicationContainer computadorServerApp, espelhoServerApp, 
+        televisaoServerApp, echoDotServerApp, cameraServerApp, 
+        guardaRoupaServerApp, armarioCozinhaServerApp, 
+        armarioBanheiroServerApp, aCServerApp, anelServerApp, 
+        cafeteiraServerApp, chuveiroServerApp, carroServerApp, 
+        colarServerApp, coleiraServerApp, janelaCortinaServerApp;
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(0));
+    computadorServerApp = ObjectService.Install(computadorNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(1));
+    espelhoServerApp = ObjectService.Install(espelhoNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(2));
+    televisaoServerApp = ObjectService.Install(televisaoNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(3));
+    echoDotServerApp = ObjectService.Install(echoDotNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(4));
+    cameraServerApp = ObjectService.Install(cameraNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(5));
+    guardaRoupaServerApp  = ObjectService.Install(guardaRoupaNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(6));
+    armarioCozinhaServerApp = ObjectService.Install(armarioCozinhaNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(7));
+    armarioBanheiroServerApp = ObjectService.Install(armarioBanheiroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(8));
+    aCServerApp = ObjectService.Install(aCNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(9));
+    anelServerApp = ObjectService.Install(anelNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(10));
+    cafeteiraServerApp = ObjectService.Install(cafeteiraNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(11));
+    chuveiroServerApp = ObjectService.Install(chuveiroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(12));
+    carroServerApp = ObjectService.Install(carroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(13));
+    colarServerApp = ObjectService.Install(colarNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(14));
+    coleiraServerApp = ObjectService.Install(coleiraNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(20));
+    janelaCortinaServerApp = ObjectService.Install(janelaCortinaNodes);
+    
+    serverApplications.Add(computadorServerApp);
+    serverApplications.Add(espelhoServerApp);
+    serverApplications.Add(televisaoServerApp);
+    serverApplications.Add(echoDotServerApp);
+    serverApplications.Add(cameraServerApp);
+    serverApplications.Add(guardaRoupaServerApp );
+    serverApplications.Add(armarioCozinhaServerApp);
+    serverApplications.Add(armarioBanheiroServerApp);
+    serverApplications.Add(aCServerApp);
+    serverApplications.Add(anelServerApp);
+    serverApplications.Add(cafeteiraServerApp);
+    serverApplications.Add(chuveiroServerApp);
+    serverApplications.Add(carroServerApp);
+    serverApplications.Add(colarServerApp);
+    serverApplications.Add(coleiraServerApp);
+    serverApplications.Add(janelaCortinaServerApp);
+
+    serverApplications.Start(Seconds(1));
+    serverApplications.Stop(Seconds(20));
 
     // ------------------------- Clientes provedores -----------------------
-
+    NS_LOG_INFO("Configurando aplicação cliente dos objetos");
+    ApplicationContainer providerApplications;
     ContextProviderHelper ClientProvider(CoTaSInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
     ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
@@ -657,60 +553,32 @@ int main(int argc, char* argv[])
     ClientProvider.SetAttribute("ObjectType", UintegerValue(14));
     ApplicationContainer coleiraApp = ClientProvider.Install(coleiraNode);
     
-    // todo: juntar itens no json 20 e 21
     ClientProvider.SetAttribute("ObjectType", UintegerValue(20));
     ApplicationContainer janelaCortinaApp = ClientProvider.Install(janelaCortinaNodes);
 
-    computadorApp.Start(Seconds(10));
-    computadorApp.Stop(Seconds(20));
+    providerApplications.Add(computadorApp);
+    providerApplications.Add(espelhoApp);
+    providerApplications.Add(televisaoApp);
+    providerApplications.Add(echoDotApp);
+    providerApplications.Add(cameraApp);
+    providerApplications.Add(guardaRoupaApp );
+    providerApplications.Add(armarioCozinhaApp);
+    providerApplications.Add(armarioBanheiroApp);
+    providerApplications.Add(aCApp);
+    providerApplications.Add(anelApp);
+    providerApplications.Add(cafeteiraApp);
+    providerApplications.Add(chuveiroApp);
+    providerApplications.Add(carroApp);
+    providerApplications.Add(colarApp);
+    providerApplications.Add(coleiraApp);
+    providerApplications.Add(janelaCortinaApp);
 
-    espelhoApp.Start(Seconds(10));
-    espelhoApp.Stop(Seconds(20));
-
-    televisaoApp.Start(Seconds(10));
-    televisaoApp.Stop(Seconds(20));
-
-    echoDotApp.Start(Seconds(10));
-    echoDotApp.Stop(Seconds(20));
-
-    cameraApp.Start(Seconds(10));
-    cameraApp.Stop(Seconds(20));
-
-    guardaRoupaApp.Start(Seconds(10));
-    guardaRoupaApp.Stop(Seconds(20));
-
-    armarioCozinhaApp.Start(Seconds(10));
-    armarioCozinhaApp.Stop(Seconds(20));
-
-    armarioBanheiroApp.Start(Seconds(10));
-    armarioBanheiroApp.Stop(Seconds(20));
-
-    aCApp.Start(Seconds(10));
-    aCApp.Stop(Seconds(20));
-
-    anelApp.Start(Seconds(10));
-    anelApp.Stop(Seconds(20));
-
-    cafeteiraApp.Start(Seconds(10));
-    cafeteiraApp.Stop(Seconds(20));
-
-    chuveiroApp.Start(Seconds(10));
-    chuveiroApp.Stop(Seconds(20));
-
-    carroApp.Start(Seconds(10));
-    carroApp.Stop(Seconds(20));
-
-    colarApp.Start(Seconds(10));
-    colarApp.Stop(Seconds(20));
-
-    coleiraApp.Start(Seconds(10));
-    coleiraApp.Stop(Seconds(20));
-
-    janelaCortinaApp.Start(Seconds(10));
-    janelaCortinaApp.Stop(Seconds(20));
+    providerApplications.Start(Seconds(10));
+    providerApplications.Stop(Seconds(20));
 
     // -------------------------- Clientes consumidores ----------------
-    
+    NS_LOG_INFO("Configurando aplicação cliente dos consumidores");
+    ApplicationContainer consumerApplications;
     ContextConsumerHelper ClientConsumer(CoTaSInterface.GetAddress(0), 9);
     ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
     ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(100)));
@@ -763,55 +631,27 @@ int main(int argc, char* argv[])
     ClientConsumer.SetAttribute("ApplicationType", UintegerValue(15));
     ApplicationContainer InventoryManagement = ClientConsumer.Install(ApplicationsNodes.Get(15));
 
-    FallDetection.Start(Seconds(12));
-    FallDetection.Stop(Seconds(20));
+    consumerApplications.Add(FallDetection);
+    consumerApplications.Add(MicroControl);
+    consumerApplications.Add(PetCare);
+    consumerApplications.Add(EnergyManegement);
+    consumerApplications.Add(WaterManegement);
+    consumerApplications.Add(Security);
+    consumerApplications.Add(Localization);
+    consumerApplications.Add(GasSec);
+    consumerApplications.Add(HealthCare);
+    consumerApplications.Add(LightControl);
+    consumerApplications.Add(TempControl);
+    consumerApplications.Add(SmartCleaning);
+    consumerApplications.Add(Garden);
+    consumerApplications.Add(SmartMobility);
+    consumerApplications.Add(SmartCooking);
+    consumerApplications.Add(InventoryManagement);
 
-    MicroControl.Start(Seconds(12));
-    MicroControl.Stop(Seconds(20));
+    consumerApplications.Start(Seconds(12));
+    consumerApplications.Stop(Seconds(20));
 
-    PetCare.Start(Seconds(12));
-    PetCare.Stop(Seconds(20));
-
-    EnergyManegement.Start(Seconds(12));
-    EnergyManegement.Stop(Seconds(20));
-
-    WaterManegement.Start(Seconds(12));
-    WaterManegement.Stop(Seconds(20));
-
-    Security.Start(Seconds(12));
-    Security.Stop(Seconds(20));
-
-    Localization.Start(Seconds(12));
-    Localization.Stop(Seconds(20));
-
-    GasSec.Start(Seconds(12));
-    GasSec.Stop(Seconds(20));
-
-    HealthCare.Start(Seconds(12));
-    HealthCare.Stop(Seconds(20));
-
-    LightControl.Start(Seconds(12));
-    LightControl.Stop(Seconds(20));
-
-    TempControl.Start(Seconds(12));
-    TempControl.Stop(Seconds(20));
-
-    SmartCleaning.Start(Seconds(12));
-    SmartCleaning.Stop(Seconds(20));
-
-    Garden.Start(Seconds(12));
-    Garden.Stop(Seconds(20));
-
-    SmartMobility.Start(Seconds(12));
-    SmartMobility.Stop(Seconds(20));
-
-    SmartCooking.Start(Seconds(12));
-    SmartCooking.Stop(Seconds(20));
-
-    InventoryManagement.Start(Seconds(12));
-    InventoryManagement.Stop(Seconds(20));
-
-    
+    NS_LOG_INFO("Executando simulação...");    
     Simulator::Stop(Seconds(21.0));
     Simulator::Run();
     Simulator::Destroy();

@@ -9,6 +9,8 @@ EncodePduRequest(const char *uri_path,
     encoded_data dados;
     uint8_t check;
 
+    // printf("A codificar %s \n Tamanho : %d\n\n", (const uint8_t*)data.c_str(), data.size());
+
     pdu = coap_pdu_init(COAP_MESSAGE_CON, request_code, 0, BUFSIZE);
     if (!pdu)
     {
