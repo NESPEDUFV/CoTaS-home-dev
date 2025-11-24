@@ -18,13 +18,16 @@ int main(int argc, char* argv[])
 {
 // ----------------- Configura logs do terminal -------------------------
 
+    LogComponentEnable("smartHouse_100", LOG_LEVEL_INFO); 
     LogComponentEnable("CoTaSApplication", LOG_LEVEL_INFO); 
     LogComponentEnable("ContextProviderApplication", LOG_LEVEL_INFO);
     LogComponentEnable("ContextConsumerApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("GenericServerApplication", LOG_LEVEL_INFO);
 
 // ----------------- Cria grupos dos nós de cada objeto -----------------
 // 100 instancias
 // 16 aplicações + CoTaS
+    NS_LOG_INFO("Configurando nós");
 
     NodeContainer computadorNode;
     computadorNode.Create(1);
@@ -127,8 +130,8 @@ int main(int argc, char* argv[])
     NodeContainer roteadorNodes;
     roteadorNodes.Create(3);
 
-    NodeContainer CoTDisNode;
-    CoTDisNode.Create(1);
+    NodeContainer CoTaSNode;
+    CoTaSNode.Create(1);
 
     NodeContainer ApplicationsNodes;
     ApplicationsNodes.Create(16);
@@ -145,7 +148,7 @@ int main(int argc, char* argv[])
         lavaLouçasNode, panelaNode, portaNodes, relogioNode, RAPNode, 
         jardimNode, SFumaca, tomadaNodes, interruptorNodes, aCNodes, 
         anelNode, cafeteiraNode, janelaCortinaNodes, lampadaNodes, 
-        roteadorNodes, CoTDisNode, ApplicationsNodes
+        roteadorNodes, CoTaSNode, ApplicationsNodes
     ); //PisoNodes,
 
 // -------------- Configura pilha de protocolos da internet -------------
@@ -185,7 +188,7 @@ int main(int argc, char* argv[])
     gotejadorDev, janelaCortinaDev, lampadaDev, 
     lavaLouçasDev, panelaDev, portaDev, relogioDev, 
     RAPDev, jardimDev, SFumacaDev, tomadaDev, interruptorDev,
-    CoTDisDev, ApplicationsDev;
+    CoTaSDev, ApplicationsDev;
 
     mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), 
                 "ActiveProbing", BooleanValue(false));
@@ -221,7 +224,7 @@ int main(int argc, char* argv[])
     SFumacaDev = wifi.Install(phy, mac, SFumaca);
     tomadaDev = wifi.Install(phy, mac, tomadaNodes);
     interruptorDev = wifi.Install(phy, mac, interruptorNodes);
-    CoTDisDev = wifi.Install(phy, mac, CoTDisNode);
+    CoTaSDev = wifi.Install(phy, mac, CoTaSNode);
     ApplicationsDev = wifi.Install(phy, mac, ApplicationsNodes);
 
     NetDeviceContainer apDevices;
@@ -236,7 +239,7 @@ int main(int argc, char* argv[])
     apDevices.Add(wifi.Install(phy, mac, roteadorNodes.Get(2)));
     
 // ----------------------- Posicionando os nós --------------------------
-
+    
     MobilityHelper mobility;
     mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
     mobility.Install(allNodes);
@@ -245,6 +248,7 @@ int main(int argc, char* argv[])
     // (considerando y de baixo para cima)
     
 // ------------------------- Objetos inteligentes ----------------------
+    NS_LOG_INFO("Posicionando nós");
 
     Ptr<MobilityModel> position;
     position = computadorNode.Get(0)->GetObject<MobilityModel>(); // 1
@@ -581,7 +585,7 @@ int main(int argc, char* argv[])
     
 // --------------------------- Aplicações ---------------------------
 
-    position = CoTDisNode.Get(0)->GetObject<MobilityModel>(); // 99
+    position = CoTaSNode.Get(0)->GetObject<MobilityModel>(); // 99
     position->SetPosition(Vector(8, 5.5, 0.0)); // aplicação
 
     position = ApplicationsNodes.Get(0)->GetObject<MobilityModel>(); // 103 ?????????
@@ -667,7 +671,7 @@ int main(int argc, char* argv[])
     Ipv4InterfaceContainer jardimInterface = ipv4.Assign(jardimDev);
     Ipv4InterfaceContainer SFuInterface = ipv4.Assign(SFumacaDev);
     Ipv4InterfaceContainer tomadaInterface = ipv4.Assign(tomadaDev);
-    Ipv4InterfaceContainer CoTDisInterface = ipv4.Assign(CoTDisDev);
+    Ipv4InterfaceContainer CoTaSInterface = ipv4.Assign(CoTaSDev);
     Ipv4InterfaceContainer apInterfaces = ipv4.Assign(apDevices);
     Ipv4InterfaceContainer csmaInterfaces = ipv4.Assign(csmaDevices);
     Ipv4InterfaceContainer AppInterfaces = ipv4.Assign(ApplicationsDev);
@@ -685,15 +689,166 @@ int main(int argc, char* argv[])
     // phy.EnablePcapAll("casaInteligente");
 
     // -------------------------- CoTaS APP ---------------------------------
-    CoTaSHelper Service(9);
+    NS_LOG_INFO("Configurando CoTaS");
 
-    ApplicationContainer serverApp = Service.Install(CoTDisNode.Get(0));
-    serverApp.Start(Seconds(1));
-    serverApp.Stop(Seconds(20));
+    CoTaSHelper Service(9);
+    ApplicationContainer serverApplications;
+    ApplicationContainer serverApp = Service.Install(CoTaSNode.Get(0));
+    serverApplications.Add(serverApp);
+
+    // ------------------------- Serviço dos objetos inteligentes-----------
+    NS_LOG_INFO("Configurando serviço dos objetos");
+    GenericServerHelper ObjectService(19);
+
+    ApplicationContainer computadorServerApp, espelhoServerApp, 
+        televisaoServerApp, echoDotServerApp, cameraServerApp, 
+        guardaRoupaServerApp , armarioCozinhaServerApp, 
+        armarioBanheiroServerApp, aCServerApp, anelServerApp, 
+        cafeteiraServerApp, chuveiroServerApp, carroServerApp, 
+        colarServerApp, coleiraServerApp, comedouroServerApp, 
+        escovaServerApp, fogaoServerApp, geladeiraServerApp, 
+        gotejadorServerApp, janelaCortinaServerApp, lampadaServerApp, 
+        interruptorServerApp, lavaLouçasServerApp, panelaServerApp, 
+        portaServerApp, relogioServerApp, RAPServerApp, jardimServerApp, 
+        SFuServerApp, tomadaServerApp;
+
+
+    ObjectService.SetAttribute("ObjectType", UintegerValue(0));
+    computadorServerApp = ObjectService.Install(computadorNode);
+
+    ObjectService.SetAttribute("ObjectType", UintegerValue(1));
+    espelhoServerApp = ObjectService.Install(espelhoNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(2));
+    televisaoServerApp = ObjectService.Install(televisaoNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(3));
+    echoDotServerApp = ObjectService.Install(echoDotNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(4));
+    cameraServerApp = ObjectService.Install(cameraNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(5));
+    guardaRoupaServerApp = ObjectService.Install(guardaRoupaNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(6));
+    armarioCozinhaServerApp = ObjectService.Install(armarioCozinhaNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(7));
+    armarioBanheiroServerApp = ObjectService.Install(armarioBanheiroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(8));
+    aCServerApp = ObjectService.Install(aCNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(9));
+    anelServerApp = ObjectService.Install(anelNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(10));
+    cafeteiraServerApp = ObjectService.Install(cafeteiraNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(11));
+    chuveiroServerApp = ObjectService.Install(chuveiroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(12));
+    carroServerApp = ObjectService.Install(carroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(13));
+    colarServerApp = ObjectService.Install(colarNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(14));
+    coleiraServerApp = ObjectService.Install(coleiraNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(15));
+    comedouroServerApp = ObjectService.Install(comedouroNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(16));
+    escovaServerApp = ObjectService.Install(escovaNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(17));
+    fogaoServerApp = ObjectService.Install(fogaoNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(18));
+    geladeiraServerApp = ObjectService.Install(geladeiraNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(19));
+    gotejadorServerApp = ObjectService.Install(gotejadorNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(20));
+    janelaCortinaServerApp = ObjectService.Install(janelaCortinaNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(21));
+    lampadaServerApp = ObjectService.Install(lampadaNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(22));
+    interruptorServerApp = ObjectService.Install(interruptorNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(23));
+    lavaLouçasServerApp = ObjectService.Install(lavaLouçasNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(24));
+    panelaServerApp = ObjectService.Install(panelaNode);
+    
+    // piso
+    // ObjectService.SetAttribute("ObjectType", UintegerValue(25));
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(26));
+    portaServerApp = ObjectService.Install(portaNodes);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(27));
+    relogioServerApp = ObjectService.Install(relogioNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(28));
+    RAPServerApp = ObjectService.Install(RAPNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(29));
+    jardimServerApp = ObjectService.Install(jardimNode);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(30));
+    SFuServerApp = ObjectService.Install(SFumaca);
+    
+    ObjectService.SetAttribute("ObjectType", UintegerValue(31));
+    tomadaServerApp = ObjectService.Install(tomadaNodes);
+
+    serverApplications.Add(computadorServerApp);
+    serverApplications.Add(espelhoServerApp);
+    serverApplications.Add(televisaoServerApp);
+    serverApplications.Add(echoDotServerApp);
+    serverApplications.Add(cameraServerApp);
+    serverApplications.Add(guardaRoupaServerApp);
+    serverApplications.Add(armarioCozinhaServerApp);
+    serverApplications.Add(armarioBanheiroServerApp);
+    serverApplications.Add(aCServerApp);
+    serverApplications.Add(anelServerApp);
+    serverApplications.Add(cafeteiraServerApp);
+    serverApplications.Add(chuveiroServerApp);
+    serverApplications.Add(carroServerApp);
+    serverApplications.Add(colarServerApp);
+    serverApplications.Add(coleiraServerApp);
+    serverApplications.Add(comedouroServerApp);
+    serverApplications.Add(escovaServerApp);
+    serverApplications.Add(fogaoServerApp);
+    serverApplications.Add(geladeiraServerApp);
+    serverApplications.Add(gotejadorServerApp);
+    serverApplications.Add(janelaCortinaServerApp);
+    serverApplications.Add(lampadaServerApp);
+    serverApplications.Add(interruptorServerApp);
+    serverApplications.Add(lavaLouçasServerApp);
+    serverApplications.Add(panelaServerApp);
+    serverApplications.Add(portaServerApp);
+    serverApplications.Add(relogioServerApp);
+    serverApplications.Add(RAPServerApp);
+    serverApplications.Add(jardimServerApp);
+    serverApplications.Add(SFuServerApp);
+    serverApplications.Add(tomadaServerApp);
+
+    serverApplications.Start(Seconds(1));
+    serverApplications.Stop(Seconds(20));
 
     // ------------------------- Clientes provedores -----------------------
+    NS_LOG_INFO("Configurando aplicação cliente dos objetos");
+    ApplicationContainer providerApplications;
 
-    ContextProviderHelper ClientProvider(CoTDisInterface.GetAddress(0), 9);
+    ContextProviderHelper ClientProvider(CoTaSInterface.GetAddress(0), 9);
     ClientProvider.SetAttribute("MaxPackets", UintegerValue(200));
     ClientProvider.SetAttribute("Interval", TimeValue(MilliSeconds(50)));
     
@@ -794,102 +949,46 @@ int main(int argc, char* argv[])
     ClientProvider.SetAttribute("ObjectType", UintegerValue(31));
     ApplicationContainer tomadaApp = ClientProvider.Install(tomadaNodes);
 
-    computadorApp.Start(Seconds(10));
-    computadorApp.Stop(Seconds(20));
-
-    espelhoApp.Start(Seconds(10));
-    espelhoApp.Stop(Seconds(20));
-
-    televisaoApp.Start(Seconds(10));
-    televisaoApp.Stop(Seconds(20));
-
-    echoDotApp.Start(Seconds(10));
-    echoDotApp.Stop(Seconds(20));
-
-    cameraApp.Start(Seconds(10));
-    cameraApp.Stop(Seconds(20));
-
-    guardaRoupaApp.Start(Seconds(10));
-    guardaRoupaApp.Stop(Seconds(20));
-
-    armarioCozinhaApp.Start(Seconds(10));
-    armarioCozinhaApp.Stop(Seconds(20));
-
-    armarioBanheiroApp.Start(Seconds(10));
-    armarioBanheiroApp.Stop(Seconds(20));
-
-    aCApp.Start(Seconds(10));
-    aCApp.Stop(Seconds(20));
-
-    anelApp.Start(Seconds(10));
-    anelApp.Stop(Seconds(20));
-
-    cafeteiraApp.Start(Seconds(10));
-    cafeteiraApp.Stop(Seconds(20));
-
-    chuveiroApp.Start(Seconds(10));
-    chuveiroApp.Stop(Seconds(20));
-
-    carroApp.Start(Seconds(10));
-    carroApp.Stop(Seconds(20));
-
-    colarApp.Start(Seconds(10));
-    colarApp.Stop(Seconds(20));
-
-    coleiraApp.Start(Seconds(10));
-    coleiraApp.Stop(Seconds(20));
-
-    comedouroApp.Start(Seconds(10));
-    comedouroApp.Stop(Seconds(20));
-
-    escovaApp.Start(Seconds(10));
-    escovaApp.Stop(Seconds(20));
-
-    fogaoApp.Start(Seconds(10));
-    fogaoApp.Stop(Seconds(20));
-
-    geladeiraApp.Start(Seconds(10));
-    geladeiraApp.Stop(Seconds(20));
-
-    gotejadorApp.Start(Seconds(10));
-    gotejadorApp.Stop(Seconds(20));
-
-    janelaCortinaApp.Start(Seconds(10));
-    janelaCortinaApp.Stop(Seconds(20));
-
-    lampadaApp.Start(Seconds(10));
-    lampadaApp.Stop(Seconds(20));
-
-    interruptorApp.Start(Seconds(10));
-    interruptorApp.Stop(Seconds(20));
-
-    lavaLouçasApp.Start(Seconds(10));
-    lavaLouçasApp.Stop(Seconds(20));
-
-    panelaApp.Start(Seconds(10));
-    panelaApp.Stop(Seconds(20));
-
-    portaApp.Start(Seconds(10));
-    portaApp.Stop(Seconds(20));
-
-    relogioApp.Start(Seconds(10));
-    relogioApp.Stop(Seconds(20));
-
-    RAPApp.Start(Seconds(10));
-    RAPApp.Stop(Seconds(20));
-
-    jardimApp.Start(Seconds(10));
-    jardimApp.Stop(Seconds(20));
-
-    SFuApp.Start(Seconds(10));
-    SFuApp.Stop(Seconds(20));
-
-    tomadaApp.Start(Seconds(10));
-    tomadaApp.Stop(Seconds(20));
+    providerApplications.Add(computadorApp);
+    providerApplications.Add(espelhoApp);
+    providerApplications.Add(televisaoApp);
+    providerApplications.Add(echoDotApp);
+    providerApplications.Add(cameraApp);
+    providerApplications.Add(guardaRoupaApp );
+    providerApplications.Add(armarioCozinhaApp);
+    providerApplications.Add(armarioBanheiroApp);
+    providerApplications.Add(aCApp);
+    providerApplications.Add(anelApp);
+    providerApplications.Add(cafeteiraApp);
+    providerApplications.Add(chuveiroApp);
+    providerApplications.Add(carroApp);
+    providerApplications.Add(colarApp);
+    providerApplications.Add(coleiraApp);
+    providerApplications.Add(comedouroApp);
+    providerApplications.Add(escovaApp);
+    providerApplications.Add(fogaoApp);
+    providerApplications.Add(geladeiraApp);
+    providerApplications.Add(gotejadorApp);
+    providerApplications.Add(janelaCortinaApp);
+    providerApplications.Add(lampadaApp);
+    providerApplications.Add(interruptorApp);
+    providerApplications.Add(lavaLouçasApp);
+    providerApplications.Add(panelaApp);
+    providerApplications.Add(portaApp);
+    providerApplications.Add(relogioApp);
+    providerApplications.Add(RAPApp);
+    providerApplications.Add(jardimApp);
+    providerApplications.Add(SFuApp);
+    providerApplications.Add(tomadaApp);
+    
+    providerApplications.Start(Seconds(10));
+    providerApplications.Stop(Seconds(20));
 
     // -------------------------- Clientes consumidores ----------------
     
-    ContextConsumerHelper ClientConsumer(CoTDisInterface.GetAddress(0), 9);
+    NS_LOG_INFO("Configurando aplicação cliente dos consumidores");
+    ApplicationContainer consumerApplications;
+    ContextConsumerHelper ClientConsumer(CoTaSInterface.GetAddress(0), 9);
     ClientConsumer.SetAttribute("MaxPackets", UintegerValue(80));
     ClientConsumer.SetAttribute("Interval", TimeValue(MilliSeconds(100)));
     
@@ -941,53 +1040,25 @@ int main(int argc, char* argv[])
     ClientConsumer.SetAttribute("ApplicationType", UintegerValue(15));
     ApplicationContainer InventoryManagement = ClientConsumer.Install(ApplicationsNodes.Get(15));
 
-    FallDetection.Start(Seconds(12));
-    FallDetection.Stop(Seconds(20));
-
-    MicroControl.Start(Seconds(12));
-    MicroControl.Stop(Seconds(20));
-
-    PetCare.Start(Seconds(12));
-    PetCare.Stop(Seconds(20));
-
-    EnergyManegement.Start(Seconds(12));
-    EnergyManegement.Stop(Seconds(20));
-
-    WaterManegement.Start(Seconds(12));
-    WaterManegement.Stop(Seconds(20));
-
-    Security.Start(Seconds(12));
-    Security.Stop(Seconds(20));
-
-    Localization.Start(Seconds(12));
-    Localization.Stop(Seconds(20));
-
-    GasSec.Start(Seconds(12));
-    GasSec.Stop(Seconds(20));
-
-    HealthCare.Start(Seconds(12));
-    HealthCare.Stop(Seconds(20));
-
-    LightControl.Start(Seconds(12));
-    LightControl.Stop(Seconds(20));
-
-    TempControl.Start(Seconds(12));
-    TempControl.Stop(Seconds(20));
-
-    SmartCleaning.Start(Seconds(12));
-    SmartCleaning.Stop(Seconds(20));
-
-    Garden.Start(Seconds(12));
-    Garden.Stop(Seconds(20));
-
-    SmartMobility.Start(Seconds(12));
-    SmartMobility.Stop(Seconds(20));
-
-    SmartCooking.Start(Seconds(12));
-    SmartCooking.Stop(Seconds(20));
-
-    InventoryManagement.Start(Seconds(12));
-    InventoryManagement.Stop(Seconds(20));
+    consumerApplications.Add(FallDetection);
+    consumerApplications.Add(MicroControl);
+    consumerApplications.Add(PetCare);
+    consumerApplications.Add(EnergyManegement);
+    consumerApplications.Add(WaterManegement);
+    consumerApplications.Add(Security);
+    consumerApplications.Add(Localization);
+    consumerApplications.Add(GasSec);
+    consumerApplications.Add(HealthCare);
+    consumerApplications.Add(LightControl);
+    consumerApplications.Add(TempControl);
+    consumerApplications.Add(SmartCleaning);
+    consumerApplications.Add(Garden);
+    consumerApplications.Add(SmartMobility);
+    consumerApplications.Add(SmartCooking);
+    consumerApplications.Add(InventoryManagement);
+    
+    consumerApplications.Start(Seconds(12));
+    consumerApplications.Stop(Seconds(20));
 
     
     Simulator::Stop(Seconds(21.0));

@@ -729,6 +729,7 @@ CoTaS::InsertDataSub_Q(int id, Address ip, std::string payload)
     if (auto res = m_cli.Post("/dataset/data?default", payload, "text/turtle;charset=utf-8")) 
     {
         if(res->status != 200){
+            NS_LOG_INFO("\n" << payload << "\n");
             NS_LOG_INFO("[CoTaS] ======\nDEU PAU AQUI\n======");
             NS_LOG_INFO("[CoTaS] Inseriu dados no fuseki? " << res->status << "\n" 
                 << res->get_header_value("Content-Type") << "\n" 
