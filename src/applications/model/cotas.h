@@ -30,6 +30,8 @@
 #include <functional>
 #include <vector>
 
+#include <chrono>
+
 namespace ns3
 {
 
@@ -92,6 +94,8 @@ class CoTaS : public SinkApplication
     nlohmann::json HandleBadRequest();
 
     int RandomInt(int min, int max);
+
+    void SendReply(Ptr<Socket> socket, Ptr<Packet> response, Address from);
 
     int ValidateIP_Q(Address ip);
 

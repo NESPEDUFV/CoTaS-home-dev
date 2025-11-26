@@ -178,12 +178,15 @@ CoTaS::HandleRead(Ptr<Socket> socket)
 {
     NS_LOG_INFO("[CoTaS] Chegou requisição no servidor CoTaS");
     NS_LOG_FUNCTION(this << socket);
-
+    
     Address from;
     while (auto packet = socket->RecvFrom(from))
     {
         Address localAddress;
-        
+        auto start_clock = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed;
+        double seconds_taken;
+
         socket->GetSockName(localAddress);
         m_rxTrace(packet);
         m_rxTraceWithAddresses(packet, from, localAddress);
@@ -234,9 +237,14 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             {
                 response->AddPacketTag(timestampTag);
             }
+
+            auto end_clock = std::chrono::high_resolution_clock::now();
+
+            elapsed = end_clock - start_clock;
+            seconds_taken = elapsed.count();
             
             NS_LOG_INFO("[CoTaS] Enviando resposta do servidor");
-            socket->SendTo(response, 0, from);
+            Simulator::Schedule(Seconds(seconds_taken), &CoTaS::SendReply, this, socket, response, from);
             delete[] raw_data;
         }
         // trata no ipv6
@@ -995,6 +1003,13 @@ CoTaS::SafeName(std::vector<std::string> tokens,
         else break;
     }
     return;
+}
+
+void 
+CoTaS::SendReply(Ptr<Socket> socket, Ptr<Packet> response, Address from)
+{
+    NS_LOG_INFO("[CoTaS] Enviando resposta agendada no tempo: " << Simulator::Now().GetSeconds());
+    socket->SendTo(response, 0, from);
 }
 
 } // Namespace ns3

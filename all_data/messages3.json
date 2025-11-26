@@ -31,7 +31,8 @@
     "cot:smartvacuum a cot:Computer, owl:NamedIndividual; cot:port 19 ; cot:turnedOn 1 ; .",
     "cot:garden a cot:Computer, owl:NamedIndividual; cot:port 19 ; cot:turnedOn 1 ; cot:humidity 0 ; cot:temperature 0 ; . ",
     "cot:FirstAlertOnelink a cot:SmokeSensor, owl:NamedIndividual ; rdfs:seeAlso <https://www.firstalertstore.com/store/products/onelink-smoke-and-carbon-monoxide-alarm-with-amazon-alexa-1039102.htm> ; cot:powerSupply [ a cot:BatterySupply ; cot:batteryCell [ a cot:RechargeableBattery ] ; ] ; cot:feature [ cot:hasSpec [ a cot:SmokeAlarmFeat ] ; cot:hasSpec [ a cot:CarbonMonoxideAlarmFeat ] ; ] ; cot:noiseLevel [ ] ; cot:networkInterface [ a cot:WiFiInterface ; a cot:BluetoothInterface ;  ] ;  cot:controlInterface [  cot:MobileAppInterface [ cot:name \"Apple HomeKit\" ; cot:osSupport [ cot:osFamily cot:Android ] ; cot:osSupport [ cot:osFamily cot:iOS ] ; ]  ] ; cot:shape [] ; cot:warranty [] ; cot:weight [] ; cot:port 19 ; cot:turnedOn 1 ; cot:activated 0 ; .",
-    "cot:KasaSmartPlugue a cot:SmartPowerOutlet, owl:NamedIndividual ;  rdfs:seeAlso <https://www.kasasmart.com/us> ;  cot:networkInterface [ a cot:WiFiInterface ] ;  cot:powerSupply [  a cot:AcPowerSupply ;  cot:acInputVoltage  [ cot:value 120; qu:unit unit:volt ] ;  ] ;  cot:shape [ a cot:RectBox ; cot:width  [ cot:value 3.81 ; qu:unit unit:centimetre ] ;  cot:height [ cot:value 3.99 ; qu:unit unit:centimetre ] ;  cot:length [ cot:value 6.65 ; qu:unit unit:centimetre ] ;  ] ;  cot:weight [ cot:value 181.0 ; qu:unit unit:gram ] ;  cot:powerSupply [ a cot:AcPowerSupply ; cot:acInputAmpere [ cot:value 15; qu:unit unit:ampere ] ;  ] ;  cot:controlInterface [ a cot:MobileAppInterface ; cot:name \"Kasa Smart\" ; cot:osSupport [ cot:osFamily cot:Android ] ;  cot:osSupport [ cot:osFamily cot:iOS ] ;  ] ;  cot:feature [] ;  cot:contains [ cot:component [ a cot:FirstPlug ; cot:turnedOn 0 ; ] ; cot:component [ a cot:SecondPlug ; cot:turnedOn 0 ; ] ; cot:component [ a cot:ThirdPlug ; cot:turnedOn 0 ; ] ; ] ; cot:port 19 ; ."
+    "cot:KasaSmartPlugue a cot:SmartPowerOutlet, owl:NamedIndividual ;  rdfs:seeAlso <https://www.kasasmart.com/us> ;  cot:networkInterface [ a cot:WiFiInterface ] ;  cot:powerSupply [  a cot:AcPowerSupply ;  cot:acInputVoltage  [ cot:value 120; qu:unit unit:volt ] ;  ] ;  cot:shape [ a cot:RectBox ; cot:width  [ cot:value 3.81 ; qu:unit unit:centimetre ] ;  cot:height [ cot:value 3.99 ; qu:unit unit:centimetre ] ;  cot:length [ cot:value 6.65 ; qu:unit unit:centimetre ] ;  ] ;  cot:weight [ cot:value 181.0 ; qu:unit unit:gram ] ;  cot:powerSupply [ a cot:AcPowerSupply ; cot:acInputAmpere [ cot:value 15; qu:unit unit:ampere ] ;  ] ;  cot:controlInterface [ a cot:MobileAppInterface ; cot:name \"Kasa Smart\" ; cot:osSupport [ cot:osFamily cot:Android ] ;  cot:osSupport [ cot:osFamily cot:iOS ] ;  ] ;  cot:feature [] ;  cot:contains [ cot:component [ a cot:FirstPlug ; cot:turnedOn 0 ; ] ; cot:component [ a cot:SecondPlug ; cot:turnedOn 0 ; ] ; cot:component [ a cot:ThirdPlug ; cot:turnedOn 0 ; ] ; ] ; cot:port 19 ; .",
+    "cot:celular a cot:Smartphone, owl:NamedIndividual; cot:port 19 ; cot:turnedOn 1 ; ."
   ],
   "subscribeMessagesApplications":[
     "cot:Application0 a cot:FallDetection, owl:NamedIndividual ; . ",
@@ -793,6 +794,24 @@
         "contains.component/FirstPlug.turnedOn": 1,
         "contains.component/SecondPlug.turnedOn": 1,
         "contains.component/ThirdPlug.turnedOn": 1
+      }
+    ],
+    [
+      {
+        "objectId": null,
+        "turnedOn": 0
+      },
+      {
+        "objectId": null,
+        "turnedOn": 1
+      },
+      {
+        "objectId": null,
+        "turnedOn": 1
+      },
+      {
+        "objectId": null,
+        "turnedOn": 1
       }
     ]
   ],
