@@ -1,0 +1,2 @@
+enviadas: 10471
+recebidas: 10436

@@ -62,7 +62,9 @@ CoTaS::CoTaS()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
       m_socket6{nullptr},
-      m_cli{"localhost", 3030}
+      m_cli{"localhost", 3030},
+      m_recived_messages{0},
+      m_send_messages{0}
 {
     NS_LOG_FUNCTION(this);
 }
@@ -161,6 +163,9 @@ CoTaS::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    NS_LOG_INFO("Durante a simulação chegou " << m_recived_messages << " no cotas");
+    NS_LOG_INFO("Durante a simulação foram enviadas " << m_send_messages << " do cotas");
+
     if (m_socket)
     {
         m_socket->Close();
@@ -176,8 +181,11 @@ CoTaS::StopApplication()
 void
 CoTaS::HandleRead(Ptr<Socket> socket)
 {
-    NS_LOG_INFO("[CoTaS] Chegou requisição no servidor CoTaS");
+    // NS_LOG_INFO("[CoTaS] Chegou requisição no servidor CoTaS");
     NS_LOG_FUNCTION(this << socket);
+
+    // coletando dados para analise
+    m_recived_messages++;
     
     Address from;
     while (auto packet = socket->RecvFrom(from))
@@ -216,7 +224,7 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             }
             
             path = GetPduPath(pdu);
-            NS_LOG_INFO("[CoTaS] caminho que chegou no cotas:" << path);
+            // NS_LOG_INFO("[CoTaS] caminho que chegou no cotas:" << path);
 
             if(m_handlerDict.count(path))
             {   // existe a operação que responde a requisição:
@@ -243,7 +251,6 @@ CoTaS::HandleRead(Ptr<Socket> socket)
             elapsed = end_clock - start_clock;
             seconds_taken = elapsed.count();
             
-            NS_LOG_INFO("[CoTaS] Enviando resposta do servidor");
             Simulator::Schedule(Seconds(seconds_taken), &CoTaS::SendReply, this, socket, response, from);
             delete[] raw_data;
         }
@@ -348,7 +355,7 @@ CoTaS::HandleUpdate(Address from, coap_pdu_t* pdu)
 nlohmann::json
 CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
 {
-    NS_LOG_INFO("[CoTaS] chegou uma requisição de uma aplicação ");
+    // NS_LOG_INFO("[CoTaS] chegou uma requisição de uma aplicação ");
 
     std::string payload = GetPduPayloadString(pdu);
     nlohmann::json response;
@@ -387,11 +394,11 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
 
             if (bindings.empty()) 
             {
-                NS_LOG_INFO("[CoTaS] Nenhum objeto encontrado");
+                // NS_LOG_INFO("[CoTaS] Nenhum objeto encontrado");
                 response = {{"status", COAP_RESPONSE_CODE_NOT_FOUND}};
             } else 
             {
-                NS_LOG_INFO("[CoTaS] Foram encontrados objetos");
+                // NS_LOG_INFO("[CoTaS] Foram encontrados objetos");
                 // NS_LOG_INFO("[CoTaS] Resultados de objetos encontrados: ");
                 // NS_LOG_INFO("[CoTaS] bindings " << bindings.dump());
 
@@ -410,9 +417,9 @@ CoTaS::HandleRequest(Address from, coap_pdu_t* pdu)
                     response = {{"status", COAP_RESPONSE_CODE_CONTENT}};
                     response["response"] = {{"ip", ip}, {"port", port}};
 
-                    NS_LOG_INFO("[CoTaS] Dispositivo de IP: " << ip 
-                                << " e de porta " << port 
-                                << " sendo enviado para aplicação");
+                    // NS_LOG_INFO("[CoTaS] Dispositivo de IP: " << ip 
+                    //             << " e de porta " << port 
+                    //             << " sendo enviado para aplicação");
                     break; // retorna só o primeiro por enquanto
                 }
             }
@@ -603,12 +610,12 @@ CoTaS::ValidateIP_Q(Address ip)
 
                 if (bindings.empty()) 
                 {
-                    NS_LOG_INFO("[CoTaS] Nenhum resultado encontrado para o IP: " << ip_num );
+                    // NS_LOG_INFO("[CoTaS] Nenhum resultado encontrado para o IP: " << ip_num );
                     return 0;
                 } else 
                 {
-                    NS_LOG_INFO("[CoTaS] Resultados encontrados: ");
-                    NS_LOG_INFO("[CoTaS] bindings " << bindings.dump());
+                    // NS_LOG_INFO("[CoTaS] Resultados encontrados: ");
+                    // NS_LOG_INFO("[CoTaS] bindings " << bindings.dump());
                     // Itera sobre cada "linha" de resultado
                     // aqui é pra ter só um 
                     // não há iteração
@@ -618,9 +625,9 @@ CoTaS::ValidateIP_Q(Address ip)
                         std::string raw_id = item["id"]["value"];
                         int id = std::stoi(raw_id);
 
-                        NS_LOG_INFO("[CoTaS] Dispositivo de IP: " << ip_num 
-                                    << "já cadastrado com id" << id 
-                                    << ", reenviando");
+                        // NS_LOG_INFO("[CoTaS] Dispositivo de IP: " << ip_num 
+                        //             << "já cadastrado com id" << id 
+                        //             << ", reenviando");
                         return id;
                     }
                 }
@@ -1008,7 +1015,10 @@ CoTaS::SafeName(std::vector<std::string> tokens,
 void 
 CoTaS::SendReply(Ptr<Socket> socket, Ptr<Packet> response, Address from)
 {
-    NS_LOG_INFO("[CoTaS] Enviando resposta agendada no tempo: " << Simulator::Now().GetSeconds());
+    // coletando dados para analise
+    m_send_messages++;
+
+    // NS_LOG_INFO("[CoTaS] Enviando resposta agendada no tempo: " << Simulator::Now().GetSeconds());
     socket->SendTo(response, 0, from);
 }
 

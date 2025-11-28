@@ -8,30 +8,57 @@
 #     "feedingControl.servingsPerMeal.value": 20
 # }
 
-DELETE 
-    {   ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency .
-        ?devicefeedingControlservingSize cot:value ?oldValuedevicefeedingControlservingSize .
-        ?devicefeedingControlservingsPerMeal cot:value ?oldValuedevicefeedingControlservingsPerMeal .
-        ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage .
-        ?device cot:turnedOn ?oldValueturnedOn .
-     }
+DELETE
+{   
+    ?1 cot:value ?2 .
+    ?3 cot:value ?4 .
+    ?5 cot:value ?6 .
+    ?7 cot:value ?8 .
+    ?0 cot:turnedOn ?9 .
+}
 INSERT 
-    {   ?devicefeedingControlmealFrequency cot:value 4 .
-        ?devicefeedingControlservingSize cot:value 3 .
-        ?devicefeedingControlservingsPerMeal cot:value 20 .
-        ?devicephysicalStorage cot:value 5 .
-        ?device cot:turnedOn 1 .
-    }
-WHERE 
-    {   ?device cot:objectId 101010 .
-        ?devicephysicalStorage cot:value ?oldValuedevicephysicalStorage .
-        ?devicefeedingControlservingsPerMeal cot:value ?oldValuedevicefeedingControlservingsPerMeal .
-        ?devicefeedingControlservingSize cot:value ?oldValuedevicefeedingControlservingSize .
-        ?device cot:turnedOn ?oldValueturnedOn .
-        ?device cot:physicalStorage ?devicephysicalStorage .
-        ?devicefeedingControlmealFrequency cot:value ?oldValuedevicefeedingControlmealFrequency .
-        ?devicefeedingControl cot:servingsPerMeal ?devicefeedingControlservingsPerMeal .
-        ?devicefeedingControl cot:servingSize ?devicefeedingControlservingSize .
-        ?devicefeedingControl cot:mealFrequency ?devicefeedingControlmealFrequency .
-        ?device cot:feedingControl ?devicefeedingControl .
-    }
+{   
+    ?1 cot:value 4 .
+    ?3 cot:value 3 .
+    ?5 cot:value 20 .
+    ?7 cot:value 5 .
+    ?0 cot:turnedOn 1 .
+}
+WHERE
+{   
+    ?0 cot:objectId 101010 .
+    ?7 cot:value ?8 .
+    ?5 cot:value ?6 .
+    ?3 cot:value ?4 .
+    ?0 cot:turnedOn ?9 .
+    ?0 cot:physicalStorage ?7 .
+    ?1 cot:value ?2 .
+    ?10 cot:servingsPerMeal ?5 .
+    ?10 cot:servingSize ?3 .
+    ?10 cot:mealFrequency ?1 .
+    ?0 cot:feedingControl ?10 .
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXEMPLO DE SMART FEEDER
+{
+    "objectId": null,
+    "turnedOn": 1,
+    "physicalStorage.value": 5,
+    "feedingControl.mealFrequency.value": 4,
+    "feedingControl.servingSize.value": 3,
+    "feedingControl.servingsPerMeal.value": 20
+}
+

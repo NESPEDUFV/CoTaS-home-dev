@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 
     NodeContainer computadorNode;
     computadorNode.Create(1);
-
+    
     NodeContainer espelhoNodes;
     espelhoNodes.Create(2);
 

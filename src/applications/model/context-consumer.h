@@ -137,6 +137,9 @@ class ContextConsumer : public SourceApplication
 
     /// Callbacks for tracing the packet Rx events, includes source and destination addresses
     TracedCallback<Ptr<const Packet>, const Address&, const Address&> m_rxTraceWithAddresses;
+
+    uint32_t m_recived_messages;
+    uint32_t m_send_messages;
 };
 
 } // namespace ns3

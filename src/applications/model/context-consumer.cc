@@ -96,7 +96,9 @@ ContextConsumer::ContextConsumer()
       m_sendEvent{},
       m_state{Searching},
       m_objectAdress{},
-      m_objectId{0}
+      m_objectId{0},
+      m_recived_messages{0},
+      m_send_messages{0}
 {
     std::ifstream fm("all_data/messages3.json");
 
@@ -246,6 +248,9 @@ ContextConsumer::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    NS_LOG_INFO("Durante a simulação chegou " << m_recived_messages << " na aplicação " << m_applicationType);
+    NS_LOG_INFO("Durante a simulação foram enviadas " << m_send_messages << " da aplicação " << m_applicationType);
+
     if (m_socket)
     {
         m_socket->Close();
@@ -266,7 +271,10 @@ ContextConsumer::ScheduleTransmit(Time dt)
 void
 ContextConsumer::Send()
 {
-    NS_LOG_INFO("[App.Cli] Prepara para enviar dados");
+    // NS_LOG_INFO("[App.Cli] Prepara para enviar dados");
+
+    m_send_messages++;
+
     //[App.Cli]
     // ns3
     Ptr<Packet> p;
@@ -295,7 +303,7 @@ ContextConsumer::Send()
         uri_path = "/subscribe/application";
         request_code = COAP_REQUEST_CODE_POST;
 
-        NS_LOG_INFO("[App.Cli] Selecionou dados de inscrição de aplicação");
+        // NS_LOG_INFO("[App.Cli] Selecionou dados de inscrição de aplicação");
         break;
     
     default:
@@ -306,7 +314,7 @@ ContextConsumer::Send()
         uri_path = "/search";
         request_code = COAP_REQUEST_CODE_GET;
 
-        NS_LOG_INFO("[App.Cli] Selecionou dados de requisição consumidor");
+        // NS_LOG_INFO("[App.Cli] Selecionou dados de requisição consumidor");
     }
 
     data_pdu = EncodePduRequest(uri_path, request_code, data);
@@ -316,7 +324,7 @@ ContextConsumer::Send()
     timestampTag.SetTimestamp(Simulator::Now());
     p->AddPacketTag(timestampTag);
 
-    NS_LOG_INFO("[App.Cli] Enviando dados de requisição");
+    // NS_LOG_INFO("[App.Cli] Enviando dados de requisição");
     
     m_socket->GetSockName(localAddress);
     
@@ -353,9 +361,11 @@ ContextConsumer::Send()
 void
 ContextConsumer::HandleRead(Ptr<Socket> socket)
 {
-    NS_LOG_INFO("[App.Cli] Chegou mensagem no consumidor de contexto");
+    // NS_LOG_INFO("[App.Cli] Chegou mensagem no consumidor de contexto");
     NS_LOG_FUNCTION(this << socket);
     Address from;
+    m_recived_messages++;
+
     while (auto packet = socket->RecvFrom(from))
     {
         // recebe dados e faz parse
@@ -442,8 +452,8 @@ ContextConsumer::HandleOK(nlohmann::json response)
     {
         case Searching:
             if(response.empty()){
-                NS_LOG_INFO("[App.Cli] Chegou resposta do cotas vazio,"
-                            << "não há objetos que correspondem a pesquisa");
+                // NS_LOG_INFO("[App.Cli] Chegou resposta do cotas vazio,"
+                //             << "não há objetos que correspondem a pesquisa");
             }
             else{ // não chegou vazio, existe objeto que corresponde a pesquisa
                 // se comunica com o objeto em si (abstraido pra pedir só para o
@@ -455,11 +465,11 @@ ContextConsumer::HandleOK(nlohmann::json response)
                 
                 // atualiza o estado da aplicação
                 m_state = Find;
-                NS_LOG_INFO("[App.Cli] Chegou resposta do cotas com objeto");
+                // NS_LOG_INFO("[App.Cli] Chegou resposta do cotas com objeto");
             }
             break;
         case Find:
-            NS_LOG_INFO("[App.Cli] Chegou resposta do objeto inteligente no consumidor");
+            // NS_LOG_INFO("[App.Cli] Chegou resposta do objeto inteligente no consumidor");
             // data_json["response"]
             break;
         default:

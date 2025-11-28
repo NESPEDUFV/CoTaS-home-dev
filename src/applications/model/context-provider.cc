@@ -93,7 +93,9 @@ ContextProvider::ContextProvider()
       m_socket{nullptr},
       m_peerPort{},
       m_sendEvent{},
-      m_objectId{0}
+      m_objectId{0},
+      m_recived_messages{0},
+      m_send_messages{0}
 {
     std::ifstream fm("all_data/messages3.json");
 
@@ -243,6 +245,9 @@ ContextProvider::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    NS_LOG_INFO("Durante a simulação chegou " << m_recived_messages << " no objeto " << m_objectType);
+    NS_LOG_INFO("Durante a simulação foram enviadas " << m_send_messages << " do objeto " << m_objectType);
+
     if (m_socket)
     {
         m_socket->Close();
@@ -263,7 +268,8 @@ ContextProvider::ScheduleTransmit(Time dt)
 void
 ContextProvider::Send()
 {
-    NS_LOG_INFO("[S.O.Cli] Prepara para enviar dados");
+    m_send_messages++;
+    // NS_LOG_INFO("[S.O.Cli] Prepara para enviar dados");
     NS_LOG_FUNCTION(this);
 
     NS_ASSERT(m_sendEvent.IsExpired());
@@ -290,7 +296,7 @@ ContextProvider::Send()
         uri_path = "/subscribe/object";
         request_code = COAP_REQUEST_CODE_POST;
 
-        NS_LOG_INFO("[S.O.Cli] Selecionou dados de inscrição de objeto");
+        // NS_LOG_INFO("[S.O.Cli] Selecionou dados de inscrição de objeto");
         break;
     
     default:
@@ -298,7 +304,7 @@ ContextProvider::Send()
         uri_path = "/update/object";
         request_code = COAP_REQUEST_CODE_PUT;
 
-        NS_LOG_INFO("[S.O.Cli] Selecionou dados de atualização de objeto");
+        // NS_LOG_INFO("[S.O.Cli] Selecionou dados de atualização de objeto");
     }
 
     // configura mensagens a serem trafegadas
@@ -316,7 +322,7 @@ ContextProvider::Send()
     m_txTrace(p);
     m_txTraceWithAddresses(p, localAddress, m_peer);
     m_socket->Send(p);
-    NS_LOG_INFO("[S.O.Cli] Enviou dados do objeto inteligente cliente para cotas");
+    // NS_LOG_INFO("[S.O.Cli] Enviou dados do objeto inteligente cliente para cotas");
     ++m_sent;
 
     if (m_sent < m_count || m_count == 0)
@@ -328,9 +334,11 @@ ContextProvider::Send()
 void
 ContextProvider::HandleRead(Ptr<Socket> socket)
 {
-    NS_LOG_INFO("[S.O.Cli] Chegou resposta no objeto inteligente cliente");
+    // NS_LOG_INFO("[S.O.Cli] Chegou resposta no objeto inteligente cliente");
     NS_LOG_FUNCTION(this << socket);
     Address from;
+    m_recived_messages++;
+
     while (auto packet = socket->RecvFrom(from))
     {
         uint8_t *raw_data = new uint8_t[packet->GetSize()];

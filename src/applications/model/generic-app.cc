@@ -56,7 +56,9 @@ GenericApplication::GetTypeId()
 GenericApplication::GenericApplication()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
-      m_socket6{nullptr}
+      m_socket6{nullptr},
+      m_recived_messages{0},
+      m_send_messages{0}
 {
     NS_LOG_FUNCTION(this);
 }

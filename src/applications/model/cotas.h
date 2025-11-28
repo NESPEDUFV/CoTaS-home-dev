@@ -132,13 +132,17 @@ class CoTaS : public SinkApplication
     Ptr<Socket> m_socket;  //!< Socket
     Ptr<Socket> m_socket6; //!< IPv6 Socket (used if only port is specified)
 
+    
     httplib::Client m_cli; //!< cliente http (aqui coloca a Uri do jena fuseki)
-
+    
     /// Callbacks for tracing the packet Rx events
     TracedCallback<Ptr<const Packet>> m_rxTrace;
-
+    
     /// Callbacks for tracing the packet Rx events, includes source and destination addresses
     TracedCallback<Ptr<const Packet>, const Address&, const Address&> m_rxTraceWithAddresses;
+    
+    uint32_t m_recived_messages;
+    uint32_t m_send_messages;
 };
 
 } // namespace ns3

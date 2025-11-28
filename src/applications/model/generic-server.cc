@@ -66,7 +66,9 @@ GenericServer::GetTypeId()
 GenericServer::GenericServer()
     : SinkApplication(DEFAULT_PORT),
       m_socket{nullptr},
-      m_socket6{nullptr}
+      m_socket6{nullptr},
+      m_recived_messages{0},
+      m_send_messages{0}
 {
     NS_LOG_FUNCTION(this);
 }
@@ -155,6 +157,9 @@ GenericServer::StopApplication()
 {
     NS_LOG_FUNCTION(this);
 
+    NS_LOG_INFO("Durante a simulação chegou " << m_recived_messages << " no server do objeto " << m_objectType);
+    NS_LOG_INFO("Durante a simulação foram enviadas " << m_send_messages << " do server do objeto " << m_objectType);
+
     if (m_socket)
     {
         m_socket->Close();
@@ -170,11 +175,12 @@ GenericServer::StopApplication()
 void
 GenericServer::HandleRead(Ptr<Socket> socket)
 {
-    NS_LOG_INFO("[S.O.Srv] Chegou requisição no objeto inteligente " << m_objectType);
-
+    // NS_LOG_INFO("[S.O.Srv] Chegou requisição no objeto inteligente " << m_objectType);
     NS_LOG_FUNCTION(this << socket);
-
     Address from;
+
+    m_recived_messages++;
+
     while (auto packet = socket->RecvFrom(from))
     {
         Address localAddress;
@@ -225,8 +231,9 @@ GenericServer::HandleRead(Ptr<Socket> socket)
                 response->AddPacketTag(timestampTag);
             }
             
-            NS_LOG_INFO("[S.O.Srv] Enviando resposta do objeto inteligente");
+            // NS_LOG_INFO("[S.O.Srv] Enviando resposta do objeto inteligente");
             socket->SendTo(response, 0, from);
+            m_send_messages++;
             
             delete[] raw_data;
         }
