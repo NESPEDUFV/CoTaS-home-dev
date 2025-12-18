@@ -54,6 +54,8 @@ Para instalar o CoAP que usamos no projeto basta clonar [este fork](https://gith
 
 ```make install```
 
+onde NS3_HOME é uma variável de ambiente com o caminho até a pasta do ns3
+
 ### json e httplib
 
 Ambas bibliotecas são header only, então ao executar o script que transfere os dados para seu simulador ns3 ele irá já deixar configurado.
