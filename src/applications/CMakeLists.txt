@@ -11,15 +11,16 @@ build_lib(
     helper/three-gpp-http-helper.cc
     helper/udp-client-server-helper.cc
     helper/udp-echo-helper.cc
-    helper/generic-app-helper.cc
+    helper/broadcast-helper.cc
     model/application-packet-probe.cc
     model/bulk-send-application.cc
     model/onoff-application.cc
     model/context-provider.cc
     model/context-consumer.cc
+    model/broadcast-consumer.cc
+    model/broadcast-provider.cc
     model/cotas.cc
     model/encapsulated-coap.cc
-    model/generic-app.cc
     model/generic-server.cc
     model/packet-loss-counter.cc
     model/packet-sink.cc
@@ -41,11 +42,11 @@ build_lib(
     helper/bulk-send-helper.h
     helper/on-off-helper.h
     helper/cotas-helper.h
-    helper/generic-app-helper.h
     helper/packet-sink-helper.h
     helper/three-gpp-http-helper.h
     helper/udp-client-server-helper.h
     helper/udp-echo-helper.h
+    helper/broadcast-helper.h
     model/application-packet-probe.h
     model/json.hpp
     model/httplib.h
@@ -55,9 +56,10 @@ build_lib(
     model/packet-sink.h
     model/context-provider.h
     model/context-consumer.h
+    model/broadcast-consumer.h
+    model/broadcast-provider.h
     model/cotas.h
     model/encapsulated-coap.h
-    model/generic-app.h
     model/generic-server.h
     model/seq-ts-echo-header.h
     model/seq-ts-header.h

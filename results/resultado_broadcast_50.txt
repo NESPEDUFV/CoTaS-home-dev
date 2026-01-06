@@ -1,0 +1,2 @@
+enviadas: 2674
+recebidas: 2788 -> chegou em mais objetos e els responderam

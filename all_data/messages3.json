@@ -832,5 +832,24 @@
     "?device a ?class . ?class cot:usedFor cot:SmartMobility . FILTER (!isBlank(?device))",
     "?device a ?class . ?class cot:usedFor cot:SmartCooking . FILTER (!isBlank(?device))",
     "?device a ?class . ?class cot:usedFor cot:InventoryManagement . FILTER (!isBlank(?device))"
+  ],
+  "broadcast_messages":
+    [
+      [4, 9, 13, 27, 32],
+      [0, 2, 3 , 9, 12, 13, 27, 32],
+      [4, 14, 15],
+      [0, 3, 8, 18, 20, 21, 22, 31],
+      [4, 11, 19, 23, 29],
+      [0, 4, 26, 30],
+      [4, 9, 13, 14, 27, 32],
+      [30],
+      [9, 13, 16, 27, 32],
+      [0, 1, 2, 20, 21, 26],
+      [8, 29],
+      [23, 28],
+      [19, 29],
+      [12],
+      [10, 17, 18, 23, 24],
+      [5, 6, 7, 12, 18]
   ]
 }
